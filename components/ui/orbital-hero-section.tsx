@@ -134,6 +134,13 @@ export interface OrbitalHeroSectionProps
   showOrbits?: boolean;
   /** Draw the Sun's own straight track through space. */
   showSunTrack?: boolean;
+  /**
+   * Desenha só o campo de estrelas: sem sol, planetas, rastros ou trilha. Serve
+   * para usar o mesmo céu como textura de fundo em outras seções da página —
+   * a deriva e o paralaxe continuam idênticos aos do hero, que é o que dá
+   * continuidade visual. Muito mais barato por quadro que a cena completa.
+   */
+  starsOnly?: boolean;
   /** Let the pointer nudge the camera. */
   interactive?: boolean;
   /** Freeze on the current frame. */
@@ -250,6 +257,7 @@ export function OrbitalHeroSection({
   glow = 1,
   showOrbits = false,
   showSunTrack = true,
+  starsOnly = false,
   interactive = true,
   paused = false,
   sunColor = "#FFF2CC",
@@ -263,12 +271,12 @@ export function OrbitalHeroSection({
   const props = useRef({
     planets, yearSeconds, trailYears, compress, maxTurns, planeSpread, eccentricity, alignToCourse, driftSpeed, apex,
     viewRadius, tilt, spin, roll, lead, focus, scrim, scrimStrength, starCount, glow, showOrbits, showSunTrack,
-    interactive, paused, sunColor,
+    interactive, paused, sunColor, starsOnly,
   });
   props.current = {
     planets, yearSeconds, trailYears, compress, maxTurns, planeSpread, eccentricity, alignToCourse, driftSpeed, apex,
     viewRadius, tilt, spin, roll, lead, focus, scrim, scrimStrength, starCount, glow, showOrbits, showSunTrack,
-    interactive, paused, sunColor,
+    interactive, paused, sunColor, starsOnly,
   };
 
   useEffect(() => {
@@ -475,11 +483,15 @@ export function OrbitalHeroSection({
       const C = props.current;
       const key =
         C.compress + "/" + C.planeSpread + "/" + C.eccentricity + "/" +
-        C.alignToCourse + "/" + C.apex[0] + "," + C.apex[1] + "/" +
+        C.alignToCourse + "/" + C.apex[0] + "," + C.apex[1] + "/" + C.starsOnly + "/" +
         C.planets.map((p) => p.name + p.a + p.e + p.color).join("|");
       if (key === elemsKey) return;
       elemsKey = key;
-      elems = C.planets.map((p, idx) => elementsOf(p, idx, C.compress, C.planeSpread, C.eccentricity, C.alignToCourse));
+      // Em starsOnly a lista fica vazia, e todo laço sobre elems — órbitas,
+      // rastros, corpos — simplesmente não roda.
+      elems = C.starsOnly
+        ? []
+        : C.planets.map((p, idx) => elementsOf(p, idx, C.compress, C.planeSpread, C.eccentricity, C.alignToCourse));
     }
 
     /* --- background stars ------------------------------------------------- */
@@ -744,7 +756,7 @@ export function OrbitalHeroSection({
       }
 
       /* the Sun's own track through space ---------------------------------- */
-      if (C.showSunTrack) {
+      if (C.showSunTrack && !C.starsOnly) {
         // The planets' wakes are clipped for legibility; the Sun's is a
         // straight line, so it can run much further back without any clutter.
         const back = C.driftSpeed * C.trailYears * 1.1;
@@ -898,7 +910,7 @@ export function OrbitalHeroSection({
 
       let idx = 0;
       while (idx < shots.length && shots[idx].depth > camDist) drawShot(shots[idx++]);
-      drawSun(k, t);
+      if (!C.starsOnly) drawSun(k, t);
       while (idx < shots.length) drawShot(shots[idx++]);
 
       ctx!.globalCompositeOperation = "source-over";

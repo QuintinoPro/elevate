@@ -10,7 +10,7 @@ export function NoventaDias() {
   const total = noventaDias.marcos.length
 
   return (
-    <Section id="noventa-dias" className="border-y border-line/25 bg-surface/20">
+    <Section id="noventa-dias" stars className="border-y border-line/25">
       <SectionHeader eyebrow={noventaDias.eyebrow} headline={noventaDias.headline} />
 
       <ol className="mt-14 grid gap-10 lg:grid-cols-4 lg:gap-8">

@@ -10,7 +10,7 @@ export function ComoFunciona() {
   const total = comoFunciona.passos.length
 
   return (
-    <Section id="como-funciona" className="border-y border-line/25 bg-surface/20">
+    <Section id="como-funciona" stars className="border-y border-line/25">
       <SectionHeader eyebrow={comoFunciona.eyebrow} headline={comoFunciona.headline} />
 
       <ol className="mt-14 max-w-2xl">

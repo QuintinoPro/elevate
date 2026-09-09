@@ -5,7 +5,7 @@ import { ctaFinal } from '@/lib/content'
 
 export function CtaFinal() {
   return (
-    <Section id="cta-final" className="relative overflow-hidden">
+    <Section id="cta-final" stars>
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(30,144,255,0.14),transparent_65%)]"
