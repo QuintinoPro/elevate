@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useTexture } from '@react-three/drei'
+import { OrbitControls, useTexture } from '@react-three/drei'
 import { Suspense, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { asset } from '@/lib/constants'
@@ -96,6 +96,13 @@ export default function MoonAsset() {
       <ambientLight intensity={0.06} />
       <directionalLight position={[8, 5, 5]} intensity={1.6} color="#ffffff" />
       <directionalLight position={[-5, -3, -5]} intensity={0.25} color="#1E90FF" />
+      {/* Arrastar gira a lua. Zoom e pan ficam desligados: com eles, a roda
+          do mouse pararia de rolar a página em cima do canvas. No toque, o
+          `touch-action: pan-y` do contêiner devolve a rolagem vertical ao
+          navegador e deixa só o arrasto horizontal girar — sem isso o canvas
+          engoliria o gesto de rolar no celular. */}
+      <OrbitControls enableZoom={false} enablePan={false} makeDefault />
+
       <group rotation={[Math.PI / 8, 0, 0]}>
         <Suspense fallback={null}>
           <Moon />

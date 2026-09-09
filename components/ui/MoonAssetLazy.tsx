@@ -31,7 +31,7 @@ export function MoonAssetLazy({ className = '' }: { className?: string }) {
   }, [])
 
   return (
-    <div ref={ref} className={className} aria-hidden>
+    <div ref={ref} className={className} style={{ touchAction: 'pan-y' }} aria-hidden>
       {perto && <MoonAsset />}
     </div>
   )
