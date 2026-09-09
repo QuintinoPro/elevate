@@ -2,43 +2,53 @@
 // Regras (ver PRODUCT.md): nunca "comunidade" — sempre "liga". Nunca prometer
 // faturamento. O inimigo é crescer sozinho.
 
+// A headline é quebrada em três para o trecho do meio sair na cor da marca.
+// O grifo cai no que a pessoa ganha, não no que ela dispensa — é o lado da
+// frase que a gente quer que fique.
 export const hero = {
-  eyebrow: 'Primeira turma · 20 vagas',
-  headline: 'Você não precisa de mais um curso. Precisa de gente do seu lado.',
-  sub: 'Uma liga para quem tem entre 18 e 28 anos, já cansou de aprender sozinho no YouTube e quer estar perto de quem já está fazendo. Conteúdo é de graça. Ambiente, não.',
-  support:
-    '2h de mentoria individual com os fundadores · rede ativa no WhatsApp · encontros ao vivo toda semana',
+  headline: {
+    before: 'Você não precisa de mais um curso. Precisa de ',
+    accent: 'gente do seu lado',
+    after: '.',
+  },
+  sub: 'A liga de quem cansou de crescer sozinho. Conteúdo é de graça — ambiente, não.',
 } as const
 
 export const problema = {
   eyebrow: 'O problema',
   headline: 'Não falta conteúdo. Falta gente.',
   paragraphs: [
-    'Você já assistiu aula suficiente pra saber o que fazer. Salvou os reels, comprou o curso, anotou o passo a passo. E mesmo assim travou.',
-    'Não é falta de informação. É que você está fazendo tudo isso sozinho — sem ninguém pra revisar sua proposta antes de você mandar, pra dizer quanto cobrar, pra falar "isso aqui não vai funcionar, e é por isso".',
+    'Você já assistiu aula suficiente pra saber o que fazer. Salvou os reels, comprou o curso, anotou o passo a passo. E travou mesmo assim.',
+    'O que falta não é informação. É alguém pra revisar sua proposta antes de você mandar, dizer quanto cobrar e avisar que aquilo não vai funcionar — e por quê.',
   ],
   punchline: 'Quem cresce rápido raramente é o mais inteligente da sala. É quem está na sala certa.',
 } as const
 
+// Linha do tempo, não lista de benefícios: a pessoa precisa enxergar a
+// progressão. Texto curto de propósito — cada marco tem que caber num olhar.
 export const noventaDias = {
   eyebrow: 'O que muda',
-  headline: 'O que você leva em 90 dias dentro da liga.',
-  items: [
+  headline: 'Seus primeiros 90 dias.',
+  marcos: [
     {
-      title: 'Uma rede que você não tinha',
-      body: 'Gente no mesmo momento que o seu, que responde quando você pergunta. Vaga, parceria, indicação e cliente circulam ali dentro.',
+      quando: 'Dia 1',
+      title: 'A rede já está lá',
+      body: 'Você entra no grupo e na plataforma. Gente no mesmo momento que o seu, que responde quando você pergunta.',
     },
     {
-      title: 'Repertório pra fechar os primeiros contratos',
-      body: 'Como precificar, como apresentar, como fechar. A liga entrega o que você precisa pra fazer — fazer continua sendo com você.',
+      quando: 'Semana 1',
+      title: 'Seu projeto na mesa',
+      body: 'Calls agendadas. Onde você está no mercado, o que trava e qual é o próximo passo.',
     },
     {
-      title: 'Seu projeto analisado a fundo',
-      body: 'Duas horas de call individual olhando pro seu momento real: onde você está no mercado, o que trava e qual é o próximo passo.',
+      quando: '1º mês',
+      title: 'Repertório pra fechar',
+      body: 'Como precificar, apresentar e fechar — com quem validar antes de você mandar.',
     },
     {
+      quando: '90 dias',
       title: 'Outro padrão de referência',
-      body: 'Quando as pessoas ao seu redor mudam, o que você acha normal muda junto. É o efeito mais difícil de medir e o que mais muda o jogo.',
+      body: 'Quando quem está ao seu lado muda, o que você acha normal muda junto.',
     },
   ],
 } as const
@@ -114,25 +124,35 @@ export const paraQuem = {
   },
 } as const
 
+// TODO: confirmar com o Lucas se a call de onboarding entra nas 2h de mentoria
+// ou é um extra. Hoje o resto da página vende "2 horas" — se for extra, some.
 export const comoFunciona = {
   eyebrow: 'Como funciona',
   headline: 'Do outro lado da peneira.',
   passos: [
     {
       title: 'Você passa na peneira',
-      body: 'Responde algumas perguntas sobre o seu momento e o seu objetivo. A gente avalia o perfil. Nem todo mundo entra.',
+      body: 'Responde o quiz. A gente avalia seu momento e seu perfil — nem todo mundo entra.',
     },
     {
-      title: 'Entra no grupo e na plataforma',
-      body: 'Acesso liberado na hora. Você se apresenta no grupo, conta onde está e o que quer construir.',
+      title: 'Entra na plataforma',
+      body: 'Acesso liberado na hora às aulas gravadas, aos encontros e aos materiais.',
     },
     {
-      title: 'Agenda suas duas horas',
-      body: 'Uma com o Lucas, uma com o Khayllan. Você escolhe quando: no começo pra traçar o plano, ou mais pra frente, com algo concreto pra revisar.',
+      title: 'Entra no grupo',
+      body: 'Você se apresenta na liga: onde está hoje e o que quer construir.',
     },
     {
-      title: 'Aparece nos encontros',
-      body: 'Toda semana tem. Quem aparece é quem tira mais proveito — dentro e fora da call.',
+      title: 'Agenda sua call de onboarding',
+      body: 'Conversa curta pra entender seu momento e te direcionar dentro da liga.',
+    },
+    {
+      title: 'Agenda suas calls de alinhamento',
+      body: 'Uma hora com o Lucas e uma hora com o Khayllan, individualmente, com o seu projeto na mesa.',
+    },
+    {
+      title: 'Aparece e faz networking',
+      body: 'Encontros ao vivo toda semana. Quem aparece tira mais proveito — dentro e fora da call.',
     },
   ],
 } as const

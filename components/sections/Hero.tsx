@@ -16,20 +16,19 @@ export function Hero() {
         {/* pt-28 no mobile e py-32 no desktop mantêm a copy longe do header fixo. */}
         <div className="flex min-h-[92svh] items-start pt-28 pb-10 md:min-h-dvh md:items-center md:py-32">
           <Container>
-            <div className="max-w-[34rem]">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-accent sm:text-sm">
-                {hero.eyebrow}
-              </p>
-
-              <h1 className="mt-6 text-display-md font-bold sm:text-display-lg lg:text-display-xl">
-                {hero.headline}
+            {/* Um pouco mais largo e um degrau menor de tipo que antes: a
+                headline fecha em menos linhas e o bloco não empurra o CTA. */}
+            <div className="max-w-[36rem]">
+              <h1 className="text-display-md font-bold lg:text-display-lg">
+                {hero.headline.before}
+                <span className="text-accent">{hero.headline.accent}</span>
+                {hero.headline.after}
               </h1>
 
-              <p className="mt-7 max-w-prose text-lg leading-relaxed text-paper/70">{hero.sub}</p>
+              <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-paper/70">{hero.sub}</p>
 
-              <div className="mt-10">
+              <div className="mt-9">
                 <Button href={QUIZ_PATH}>{CTA_LABEL}</Button>
-                <p className="mt-5 max-w-prose text-sm text-paper/45">{hero.support}</p>
               </div>
             </div>
           </Container>

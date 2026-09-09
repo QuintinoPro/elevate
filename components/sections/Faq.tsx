@@ -1,5 +1,7 @@
+import { Button } from '@/components/ui/Button'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import { CTA_LABEL, QUIZ_PATH } from '@/lib/constants'
 import { faq } from '@/lib/content'
 
 export function Faq() {
@@ -23,6 +25,11 @@ export function Faq() {
             <p className="mt-4 max-w-prose leading-relaxed text-paper/55">{item.a}</p>
           </details>
         ))}
+      </div>
+
+      <div className="mt-12 flex flex-wrap items-center gap-6">
+        <Button href={QUIZ_PATH}>{CTA_LABEL}</Button>
+        <p className="text-sm text-paper/45">Leva menos de dois minutos.</p>
       </div>
     </Section>
   )

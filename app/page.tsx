@@ -25,8 +25,10 @@ export default function Home() {
         <ParaQuem />
         <ComoFunciona />
         <Vagas />
-        <Faq />
         <CtaFinal />
+        {/* Perguntas por último, a pedido do Lucas. A FAQ fecha com um CTA
+            próprio para a página não terminar num beco sem saída. */}
+        <Faq />
       </main>
       <Footer />
       <StickyCta />
