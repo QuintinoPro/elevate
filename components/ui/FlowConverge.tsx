@@ -72,13 +72,19 @@ export function FlowConverge({ className = '' }: { className?: string }) {
     const estreito = () => w < 768
 
     /**
-     * Ponto de convergência longe da copy. No desktop a copy ocupa a esquerda,
-     * então ele fica a 72% da largura. No celular a copy ocupa tudo, então ele
-     * desce para o canto inferior direito — no meio da tela, o leque cruzava o
-     * subtítulo e atrapalhava a leitura.
+     * As linhas convergem no CTA: é o único lugar da seção onde a metáfora
+     * fecha — muitos caminhos, uma entrada. A posição é medida do elemento
+     * marcado com `data-flow-target`, não fixada em porcentagem, para
+     * acompanhar a quebra de linha do texto em qualquer largura.
      */
     function alvo() {
-      return estreito() ? { x: w * 0.95, y: h * 0.8 } : { x: w * 0.72, y: h * 0.5 }
+      const marca = host!.closest('section')?.querySelector('[data-flow-target]')
+      if (marca) {
+        const a = marca.getBoundingClientRect()
+        const b = host!.getBoundingClientRect()
+        return { x: a.left - b.left + a.width / 2, y: a.top - b.top + a.height / 2 }
+      }
+      return estreito() ? { x: w * 0.9, y: h * 0.8 } : { x: w * 0.72, y: h * 0.5 }
     }
 
     function bezier(t: number, p0: P, p1: P, p2: P, p3: P) {
@@ -111,7 +117,7 @@ export function FlowConverge({ className = '' }: { className?: string }) {
         ctx!.beginPath()
         ctx!.moveTo(p0.x, p0.y)
         ctx!.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
-        ctx!.strokeStyle = estreito() ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.16)'
+        ctx!.strokeStyle = estreito() ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.11)'
         ctx!.lineWidth = 1
         ctx!.setLineDash([1, 4])
         ctx!.stroke()

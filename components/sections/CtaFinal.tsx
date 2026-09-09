@@ -24,7 +24,9 @@ export function CtaFinal() {
           {ctaFinal.headline}
         </h2>
         <p className="mt-6 max-w-prose text-lg leading-relaxed text-paper/60">{ctaFinal.sub}</p>
-        <div className="mt-10">
+        {/* data-flow-target: o FlowConverge mede este elemento e faz as
+            linhas convergirem exatamente aqui. */}
+        <div className="mt-10 inline-block" data-flow-target>
           <Button href={QUIZ_PATH}>{CTA_LABEL}</Button>
         </div>
       </div>
