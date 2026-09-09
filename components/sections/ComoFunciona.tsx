@@ -1,3 +1,4 @@
+import { GlobePulseLazy } from '@/components/ui/GlobePulseLazy'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { comoFunciona } from '@/lib/content'
@@ -13,7 +14,10 @@ export function ComoFunciona() {
     <Section id="como-funciona" stars className="border-y border-line/25">
       <SectionHeader eyebrow={comoFunciona.eyebrow} headline={comoFunciona.headline} />
 
-      <ol className="mt-14 max-w-2xl">
+      {/* Passos à esquerda, globo à direita: a coluna da direita estava vazia
+          e a rede espalhada pelo país conversa com o passo de networking. */}
+      <div className="mt-14 grid items-center gap-14 lg:grid-cols-[1fr_auto] lg:gap-16">
+      <ol className="max-w-2xl">
         {comoFunciona.passos.map((passo, i) => (
           <li key={passo.title} className="relative pb-10 pl-14 last:pb-0">
             {i < total - 1 && (
@@ -30,7 +34,10 @@ export function ComoFunciona() {
             <p className="mt-2 leading-relaxed text-paper/55">{passo.body}</p>
           </li>
         ))}
-      </ol>
+        </ol>
+
+        <GlobePulseLazy className="mx-auto w-full max-w-sm lg:w-[24rem]" />
+      </div>
     </Section>
   )
 }

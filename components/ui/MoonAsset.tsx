@@ -90,9 +90,15 @@ function Ring() {
   )
 }
 
-export default function MoonAsset() {
+export default function MoonAsset({ ativo = true }: { ativo?: boolean }) {
   return (
-    <Canvas camera={{ position: [0, 4, 10], fov: 45 }} dpr={[1, 1.5]}>
+    // frameloop="never" congela o laço de render fora da tela; sem isso a cena
+    // segue desenhando a 60fps com a pessoa dez seções abaixo.
+    <Canvas
+      frameloop={ativo ? 'always' : 'never'}
+      camera={{ position: [0, 4, 10], fov: 45 }}
+      dpr={[1, 1.5]}
+    >
       <ambientLight intensity={0.06} />
       <directionalLight position={[8, 5, 5]} intensity={1.6} color="#ffffff" />
       <directionalLight position={[-5, -3, -5]} intensity={0.25} color="#1E90FF" />
