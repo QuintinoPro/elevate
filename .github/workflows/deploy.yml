@@ -36,9 +36,10 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /elevate
           NEXT_PUBLIC_SITE_URL: https://quintinopro.github.io/elevate
 
+      # Sem enablement: true — o Pages é habilitado uma vez na mão, em
+      # Settings > Pages > Source: GitHub Actions. Tentar habilitar daqui falha,
+      # porque o GITHUB_TOKEN do workflow não tem essa permissão.
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
