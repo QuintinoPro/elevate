@@ -503,15 +503,27 @@ export function OrbitalHeroSection({
     function seedStar(k: number, depth?: number, edge?: 0 | 1 | 2 | 3) {
       const d =
         depth ?? D_NEAR * Math.pow(D_FAR / D_NEAR, Math.pow(rand(), 0.55));
-      // screen offset in px, then back out to world units at that depth
-      const halfW = (width * 0.5) * 1.15;
-      const halfH = (height * 0.5) * 1.15;
+      // Screen offset in px relative ao ponto de projeção (cx, cy), depois
+      // convertido de volta para unidades de mundo naquela profundidade.
+      //
+      // Os limites são os da TELA, não uma caixa simétrica em volta do Sol.
+      // Com focus fora do centro (o padrão aqui é 0.74 da largura), uma caixa
+      // simétrica deixa uma faixa inteira de um dos lados sem nenhuma estrela,
+      // e a borda dessa caixa aparece como uma parede vertical.
+      const padX = width * 0.15;
+      const padY = height * 0.15;
+      const loX = -cx - padX;
+      const hiX = width - cx + padX;
+      const loY = -cy - padY;
+      const hiY = height - cy + padY;
+      const spanX = () => loX + rand() * (hiX - loX);
+      const spanY = () => loY + rand() * (hiY - loY);
       let ox: number, oy: number;
-      if (edge === 0) { ox = -halfW; oy = (rand() * 2 - 1) * halfH; }
-      else if (edge === 1) { ox = halfW; oy = (rand() * 2 - 1) * halfH; }
-      else if (edge === 2) { ox = (rand() * 2 - 1) * halfW; oy = -halfH; }
-      else if (edge === 3) { ox = (rand() * 2 - 1) * halfW; oy = halfH; }
-      else { ox = (rand() * 2 - 1) * halfW; oy = (rand() * 2 - 1) * halfH; }
+      if (edge === 0) { ox = loX; oy = spanY(); }
+      else if (edge === 1) { ox = hiX; oy = spanY(); }
+      else if (edge === 2) { ox = spanX(); oy = loY; }
+      else if (edge === 3) { ox = spanX(); oy = hiY; }
+      else { ox = spanX(); oy = spanY(); }
       const scale = d / (camDist * pxPerAU);
       const vx = ox * scale;
       const vy = -oy * scale;
@@ -591,6 +603,11 @@ export function OrbitalHeroSection({
       D_FAR = camDist * 120;
       setApex(C.apex[0], C.apex[1]);
       setCamera(C.spin, C.tilt, C.roll);
+      // Centro de projeção provisório. O render refina com o empurrão do lead,
+      // mas buildStars roda antes do primeiro render — sem isto ele semearia
+      // as estrelas em volta do canto superior esquerdo.
+      cx = width * C.focus[0];
+      cy = height * C.focus[1];
     }
 
     /* --- pointer ---------------------------------------------------------- */
