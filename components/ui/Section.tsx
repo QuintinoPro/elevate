@@ -6,6 +6,7 @@ export function Section({
   id,
   className = '',
   stars = false,
+  backdrop,
 }: {
   children: React.ReactNode
   id?: string
@@ -16,13 +17,21 @@ export function Section({
    * o impacto. Usar em algumas, alternando com seções limpas.
    */
   stars?: boolean
+  /**
+   * Fundo que ocupa a seção inteira. Precisa vir por aqui, e não como filho:
+   * os filhos são embrulhados no Container, que é `relative` e limitado a
+   * max-w-6xl — um `absolute inset-0` lá dentro ancora no container do texto
+   * e o fundo aparece como um retângulo no meio da seção.
+   */
+  backdrop?: React.ReactNode
 }) {
   return (
     <section
       id={id}
-      className={`relative py-20 lg:py-28 ${stars ? 'overflow-hidden' : ''} ${className}`}
+      className={`relative py-20 lg:py-28 ${stars || backdrop ? 'overflow-hidden' : ''} ${className}`}
     >
       {stars && <SectionStars />}
+      {backdrop}
       <Container className="relative">{children}</Container>
     </section>
   )

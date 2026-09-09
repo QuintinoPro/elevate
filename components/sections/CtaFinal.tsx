@@ -6,12 +6,19 @@ import { ctaFinal } from '@/lib/content'
 
 export function CtaFinal() {
   return (
-    <Section id="cta-final" className="overflow-hidden lg:min-h-[34rem] lg:flex lg:items-center">
-      <FlowConverge />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(30,144,255,0.16),transparent_60%)]"
-      />
+    <Section
+      id="cta-final"
+      className="lg:flex lg:min-h-[34rem] lg:items-center"
+      backdrop={
+        <>
+          <FlowConverge />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(30,144,255,0.16),transparent_60%)]"
+          />
+        </>
+      }
+    >
       <div className="relative">
         <h2 className="max-w-[18ch] text-display-md font-bold sm:text-display-lg">
           {ctaFinal.headline}
