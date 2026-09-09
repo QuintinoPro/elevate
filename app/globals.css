@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink text-paper antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-accent text-ink;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-ink;
+  }
+}
+
+@layer utilities {
+  /* Textura da marca: ícone repetido em grid rotacionado.
+     Tile pequeno de propósito — em escala grande o padrão vira estampa e
+     derruba a percepção premium. Usar sempre com opacidade baixa. */
+  .bg-brand-pattern {
+    /* A variável vem do layout: CSS não enxerga o basePath, então o caminho
+       precisa ser injetado de fora quando o site não está na raiz. */
+    background-image: var(--brand-pattern);
+    background-size: 150px;
+    background-repeat: repeat;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
