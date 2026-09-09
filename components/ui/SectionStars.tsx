@@ -36,12 +36,22 @@ export function SectionStars({ className = '' }: { className?: string }) {
         focus={[0.5, 0.5]}
         lead={0}
         scrim="none"
-        // Deriva bem mais lenta que a do hero: aqui o movimento é para dar
-        // vida, não para ser notado enquanto a pessoa lê.
-        driftSpeed={0.45}
-        yearSeconds={40}
+        // O que importa é a razão driftSpeed/yearSeconds: ela dá a velocidade
+        // da câmera pelo campo. Aqui ~1,5 unidade/s, contra ~0,06 do hero.
+        //
+        // Sem os planetas, o hero-padrão fica parado demais: as estrelas dele
+        // andam ~2px/s, e quem dá vida à cena são os rastros. Mas acelerar sem
+        // limite piora: acima de ~4 unidades/s as estrelas trocam de
+        // profundidade rápido demais, acendem e apagam em vez de viajar, e o
+        // resultado lê como cintilação — mais parado, não menos.
+        driftSpeed={6}
+        yearSeconds={narrow ? 6 : 4}
+        // Campo mais fechado que o do hero: pxPerAU dobra, então a mesma
+        // deriva percorre o dobro de pixels por segundo. Acelera o que se vê
+        // sem tocar na razão de profundidade, que é o que causa cintilação.
+        viewRadius={narrow ? 1.2 : 1.6}
         starCount={narrow ? 260 : 520}
-        glow={0.55}
+        glow={0.8}
         interactive={false}
       />
     </div>
