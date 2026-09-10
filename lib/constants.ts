@@ -27,8 +27,20 @@ export const FOUNDERS = {
   },
 } as const
 
-// CTA único da página inteira. Se mudar, muda em todo lugar de uma vez.
-export const CTA_LABEL = 'Fazer a peneira'
+// O produto vendido na landing. A marca continua sendo a Elevate League.
+export const PRODUCT = 'Elevate Pro'
+
+// TODO: confirmar preço final com o Lucas antes de tirar o noindex.
+export const PRICE = 'R$497'
+
+// Os CTAs da página. Todos levam ao mesmo lugar (a peneira); o que muda é o
+// tamanho do rótulo, porque o botão do header e a barra do mobile não comportam
+// a frase inteira. Se o texto mudar, muda aqui e vale na página toda.
+export const CTA_LABEL = `Quero entrar para o ${PRODUCT}`
+export const CTA_LABEL_SHORT = 'Entrar na liga'
+export const CTA_LABEL_MOBILE = `Quero entrar — ${PRICE}`
+export const CTA_LABEL_OFERTA = `Garantir minha vaga por ${PRICE}`
+export const CTA_LABEL_FAQ = `${CTA_LABEL} — ${PRICE}`
 export const QUIZ_PATH = '/quiz/'
 
 // TODO: preencher quando o Khayllan definir a plataforma de checkout.

@@ -1,111 +1,105 @@
 // Toda a copy da landing vive aqui. Trocar headline não deve exigir tocar em JSX.
 // Regras (ver PRODUCT.md): nunca "comunidade" — sempre "liga". Nunca prometer
-// faturamento. O inimigo é crescer sozinho.
+// faturamento. O produto é o Elevate Pro; a marca é a Elevate League.
+//
+// Estrutura da página: 6 seções. Hero, o que é, o que recebe, quem está por
+// trás, oferta, FAQ. Uma ideia por bloco, frase curta, nada repetido.
 
-// A headline é quebrada em três para o trecho do meio sair na cor da marca.
-// O grifo cai no que a pessoa ganha, não no que ela dispensa — é o lado da
-// frase que a gente quer que fique.
+// Headlines vêm quebradas em três para o trecho do meio sair em azul. O grifo
+// cai sempre no que a pessoa ganha, nunca no que ela dispensa.
+export type Headline = { before?: string; accent: string; after?: string }
+
 export const hero = {
   headline: {
-    before: 'Você não precisa de mais um curso. Precisa de ',
-    accent: 'gente do seu lado',
+    before: 'Você não precisa de mais conteúdo. Precisa estar no ',
+    accent: 'ambiente certo',
     after: '.',
-  },
-  sub: 'A liga de quem cansou de crescer sozinho. Conteúdo é de graça — ambiente, não.',
+  } satisfies Headline,
+  sub: 'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos.',
+  kicker: ['Conteúdo', 'Networking', 'Estratégia', 'Execução'],
 } as const
 
-export const problema = {
-  eyebrow: 'O problema',
-  headline: 'Não falta conteúdo. Falta gente.',
-  paragraphs: [
-    'Você já assistiu aula suficiente pra saber o que fazer. Salvou os reels, comprou o curso, anotou o passo a passo. E travou mesmo assim.',
-    'O que falta não é informação. É alguém pra revisar sua proposta antes de você mandar, dizer quanto cobrar e avisar que aquilo não vai funcionar — e por quê.',
-  ],
-  punchline: 'Quem cresce rápido raramente é o mais inteligente da sala. É quem está na sala certa.',
+export const oQueE = {
+  eyebrow: 'O que é o Elevate Pro',
+  headline: {
+    before: 'Não é mais um curso. É o ',
+    accent: 'ambiente que faltava',
+    after: '.',
+  } satisfies Headline,
+  body: 'O Elevate Pro reúne empreendedores em uma liga onde você aprende estratégias aplicáveis, participa de encontros, conhece pessoas que estão executando e tem acesso direto a quem já está no mercado.',
+  pilares: ['Networking', 'Conhecimento', 'Estratégia', 'Execução'],
 } as const
 
-// Linha do tempo, não lista de benefícios: a pessoa precisa enxergar a
-// progressão. Texto curto de propósito — cada marco tem que caber num olhar.
-export const noventaDias = {
-  eyebrow: 'O que muda',
-  headline: 'Seus primeiros 90 dias.',
-  marcos: [
-    {
-      quando: 'Dia 1',
-      title: 'A rede já está lá',
-      body: 'Você entra no grupo e na plataforma. Gente no mesmo momento que o seu, que responde quando você pergunta.',
-    },
-    {
-      quando: 'Semana 1',
-      title: 'Seu projeto na mesa',
-      body: 'Calls agendadas. Onde você está no mercado, o que trava e qual é o próximo passo.',
-    },
-    {
-      quando: '1º mês',
-      title: 'Repertório pra fechar',
-      body: 'Como precificar, apresentar e fechar — com quem validar antes de você mandar.',
-    },
-    {
-      quando: '90 dias',
-      title: 'Outro padrão de referência',
-      body: 'Quando quem está ao seu lado muda, o que você acha normal muda junto.',
-    },
-  ],
-} as const
-
-export const pilares = {
+export const oQueRecebe = {
   eyebrow: 'O que você recebe',
-  headline: 'Quatro coisas. Uma delas quase ninguém entrega.',
+  headline: {
+    before: 'Tudo que você precisa para acelerar seu ',
+    accent: 'próximo nível',
+    after: '.',
+  } satisfies Headline,
+  // O card grande é o acesso aos outros membros, não a mentoria. Decisão do
+  // Lucas em 10/09/2026: a mentoria é diferencial forte, mas o que ninguém
+  // copia é a sala. Os outros quatro não são sobra — por isso vêm com o mesmo
+  // peso visual entre si.
   destaque: {
-    badge: 'O pilar principal',
-    title: '2 horas de mentoria individual',
-    body: 'Uma hora com o Lucas e uma hora com o Khayllan. Só você e a tela. Não é call em grupo, não é tira-dúvidas coletivo: é a sua situação, o seu projeto e os seus números em cima da mesa.',
+    badge: 'O principal',
+    title: 'Acesso direto aos outros membros',
+    body: 'A liga privada é onde a troca acontece todo dia. Networking, parceria, indicação, proposta revisada antes de você mandar — com gente que está executando agora.',
   },
-  outros: [
+  cards: [
     {
-      title: 'A liga no WhatsApp',
-      body: 'Grupo fechado, sem corrente e sem bom dia. Vaga, projeto, parceria, review de proposta — e gente respondendo de verdade.',
+      title: '2 horas de mentoria individual',
+      body: '1 hora com o Khayllan + 1 hora com o Lucas. Só você e a tela.',
     },
     {
-      title: 'Plataforma de aulas',
-      body: 'Marketing, tráfego pago, vendas, IA, criação de agência, posicionamento, conteúdo, cripto e trade. Gravadas por nós, por convidados e pelos próprios membros. Cresce com o tempo.',
+      title: '+15 módulos',
+      body: 'Marketing, vendas, tráfego, IA, posicionamento, agência, negócios e muito mais.',
     },
     {
-      title: 'Encontros ao vivo toda semana',
-      body: 'No mínimo um por semana. Às vezes aula, às vezes convidado, às vezes só networking. Fica gravado pra quem não puder estar.',
+      title: 'Encontros ao vivo',
+      body: 'Aulas em grupo para estratégia, execução e troca de experiências.',
+    },
+    {
+      title: 'Aulas e conteúdos',
+      body: 'Novos conteúdos e estratégias adicionados à plataforma.',
     },
   ],
 } as const
 
 export const fundadores = {
-  eyebrow: 'Quem puxa a liga',
-  headline: 'Quem vai estar do outro lado da call.',
-  // TODO: confirmar números com o Lucas antes de publicar.
+  eyebrow: 'Quem está por trás',
+  headline: {
+    before: 'Quem vai estar do ',
+    accent: 'outro lado da call',
+    after: '.',
+  } satisfies Headline,
   pessoas: [
     {
-      nome: 'Lucas Quintino',
-      papel: 'Fundador da Agência Stocks',
-      foto: '/brand/lucas.webp',
-      bio: 'Agência no ar desde 2023, com mais de 40 empresas atendidas em posicionamento digital, tráfego pago e branding. Também é head de marketing do Blockchain.RIO, o maior evento de blockchain da América Latina.',
-      instagram: 'https://www.instagram.com/quintinopro/',
-      handle: '@quintinopro',
-    },
-    {
       nome: 'Khayllan Martins',
-      papel: 'Fundador da KZ Company',
       foto: '/brand/khayllan.webp',
-      bio: 'Já trabalhou com mais de 100 empresas, com mais de R$120 milhões em faturamento gerado para elas. Opera diariamente com estratégia, aquisição e vendas no digital.',
+      bio: 'Empreendedor, estrategista e fundador de negócios digitais.',
       instagram: 'https://www.instagram.com/khayllan.midias/',
       handle: '@khayllan.midias',
     },
+    {
+      nome: 'Lucas Quintino',
+      foto: '/brand/lucas.webp',
+      bio: 'Empreendedor e especialista em negócios, estratégia e crescimento.',
+      instagram: 'https://www.instagram.com/quintinopro/',
+      handle: '@quintinopro',
+    },
   ],
   fecho:
-    'Não somos gurus de internet. Somos dois caras que operam todo dia — e que vão sentar com você por uma hora cada um.',
+    'Além de Khayllan e Lucas, o Elevate receberá convidados e especialistas de diferentes mercados.',
 } as const
 
 export const paraQuem = {
   eyebrow: 'Antes de você entrar',
-  headline: 'A liga não é pra todo mundo. E isso é de propósito.',
+  headline: {
+    before: 'A liga não é pra todo mundo. E isso é ',
+    accent: 'de propósito',
+    after: '.',
+  } satisfies Headline,
   sim: {
     title: 'É pra você se',
     items: [
@@ -126,91 +120,61 @@ export const paraQuem = {
   },
 } as const
 
-// TODO: confirmar com o Lucas se a call de onboarding entra nas 2h de mentoria
-// ou é um extra. Hoje o resto da página vende "2 horas" — se for extra, some.
-export const comoFunciona = {
-  eyebrow: 'Como funciona',
-  headline: 'Do outro lado da peneira.',
-  passos: [
-    {
-      title: 'Você passa na peneira',
-      body: 'Responde o quiz. A gente avalia seu momento e seu perfil — nem todo mundo entra.',
-    },
-    {
-      title: 'Entra na plataforma',
-      body: 'Acesso liberado na hora às aulas gravadas, aos encontros e aos materiais.',
-    },
-    {
-      title: 'Entra no grupo',
-      body: 'Você se apresenta na liga: onde está hoje e o que quer construir.',
-    },
-    {
-      title: 'Agenda sua call de onboarding',
-      body: 'Conversa curta pra entender seu momento e te direcionar dentro da liga.',
-    },
-    {
-      title: 'Agenda suas calls de alinhamento',
-      body: 'Uma hora com o Lucas e uma hora com o Khayllan, individualmente, com o seu projeto na mesa.',
-    },
-    {
-      title: 'Aparece e faz networking',
-      body: 'Encontros ao vivo toda semana. Quem aparece tira mais proveito — dentro e fora da call.',
-    },
-  ],
-} as const
-
-export const vagas = {
-  eyebrow: 'Elenco fundador',
-  headline: 'Primeira turma, 20 vagas.',
-  // TODO: confirmar preço final com o Lucas.
-  precoAtual: 'R$697',
-  precoDepois: 'R$997',
-  motivo:
-    'O limite não é estratégia de venda. São 20 alunos vezes 2 horas de mentoria: 40 horas entre nós dois. Não dá pra abrir mais sem entregar pior.',
+export const oferta = {
+  eyebrow: 'A oferta',
+  headline: {
+    before: 'Primeira turma. ',
+    accent: 'Condição especial',
+    after: '.',
+  } satisfies Headline,
+  produto: 'Elevate Pro',
+  notaPreco: 'Valor exclusivo das primeiras vagas.',
   inclui: [
-    '2 horas de mentoria individual (1h com cada fundador)',
-    'Grupo fechado no WhatsApp',
-    'Plataforma de aulas, com acesso às gravações',
-    'Encontros ao vivo toda semana',
-    'Acesso aos convidados e aos outros membros da liga',
+    'Plataforma completa',
+    '+15 módulos',
+    'Liga privada',
+    'Aulas ao vivo',
+    'Networking',
+    '1h com Khayllan',
+    '1h com Lucas',
+    'Novos conteúdos',
   ],
-  garantia:
-    '7 dias de garantia. Entrou, não fez sentido, devolvemos 100% do valor. Sem pergunta e sem letra miúda.',
-  nota: 'Preço de fundador, travado pra quem entra na primeira turma.',
+  // Ressalva honesta no lugar de contador regressivo: o preço pode mudar, e
+  // dizer isso vale mais que fabricar urgência.
+  ressalva:
+    'Essa condição é exclusiva das primeiras vagas e poderá ser alterada nas próximas turmas.',
+  garantia: '7 dias de garantia. Entrou, não fez sentido, devolvemos 100% do valor.',
 } as const
 
 export const faq = {
   eyebrow: 'Perguntas',
-  headline: 'O que costuma travar a decisão.',
+  headline: {
+    before: 'O que costuma travar a ',
+    accent: 'decisão',
+    after: '.',
+  } satisfies Headline,
   items: [
     {
-      q: 'Nunca ouvi falar da Elevate League. Por que eu confiaria?',
-      a: 'Porque é a primeira turma mesmo — e a gente prefere dizer isso do que inventar depoimento. O que existe pra você avaliar é o histórico de quem está puxando: a Agência Stocks, no ar desde 2023, e a KZ Company. Os dois perfis estão aí no Instagram, com o trabalho aparecendo todo dia.',
+      q: 'Para quem é o Elevate Pro?',
+      a: 'Para quem tem entre 18 e 28 anos e quer construir algo no digital: quem já vende e travou sozinho, e quem ainda está montando a saída do CLT. O que a gente pede é disposição de aparecer, perguntar e também ajudar os outros.',
     },
     {
-      q: 'Sou CLT e não empreendo. A liga serve pra mim?',
-      a: 'Serve, e metade da liga é gente exatamente nesse ponto. A peneira separa em duas trilhas justamente por isso: quem já vende algo tem um caminho, quem está construindo a saída do CLT tem outro. A rede e as mentorias funcionam nos dois casos.',
+      q: 'Preciso já ter uma empresa?',
+      a: 'Não. Metade da liga está exatamente no ponto anterior. Se você já vende, o caminho é um; se está começando, é outro — os dois cabem aqui.',
     },
     {
-      q: 'Não tenho muito tempo. Vale mesmo assim?',
-      a: 'Depende de quanto. As duas horas de mentoria você agenda quando quiser. Os encontros ao vivo ficam gravados. Mas se você não pretende aparecer no grupo nem participar de nada, a liga entrega bem menos do que deveria — e aí é melhor não entrar agora.',
+      q: 'Como funcionam as aulas e a liga?',
+      a: 'A plataforma fica disponível 24h com os módulos gravados, e novos conteúdos entram com o tempo. Os encontros ao vivo acontecem em grupo e ficam gravados. A liga privada é onde a troca acontece no dia a dia.',
     },
     {
-      q: 'É mais um curso gravado?',
-      a: 'Não. Tem plataforma de aulas, mas ela é o suporte, não o produto. O que você está comprando é acesso: à mentoria individual com os dois fundadores, à rede no WhatsApp e aos encontros ao vivo. Aula gravada você acha de graça na internet — o resto, não.',
+      q: 'Como funcionam as calls individuais?',
+      a: 'São 2 horas suas: 1 hora com o Khayllan e 1 hora com o Lucas, agendadas quando fizer sentido pra você. Uma de cada vez, só você e a tela, com o seu projeto e os seus números na mesa.',
     },
     {
-      q: 'E se eu não passar na peneira?',
-      a: 'Acontece, e não é um "não" pra sempre. Você fica na lista da próxima turma e a gente te avisa quando abrir. A peneira existe porque um grupo em que qualquer um entra deixa de valer pra quem está dentro.',
-    },
-    {
-      q: 'Como funciona a garantia?',
-      a: 'Você tem 7 dias depois da compra pra pedir o dinheiro de volta. Devolvemos 100%, sem perguntar por quê e sem burocracia.',
+      // TODO: Lucas precisa confirmar o prazo real antes de publicar. É promessa
+      // comercial — não pode ir ao ar no chute.
+      q: 'Por quanto tempo tenho acesso?',
+      a: 'Você tem 12 meses de acesso a partir da entrada: plataforma, encontros ao vivo, gravações e liga privada. O que entrar de conteúdo novo nesse período também é seu.',
     },
   ],
-} as const
-
-export const ctaFinal = {
-  headline: 'A peneira da primeira turma está aberta.',
-  sub: 'Leva menos de dois minutos. No fim você descobre a sua trilha e se tem perfil pra entrar agora.',
 } as const

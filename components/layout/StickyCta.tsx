@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CTA_LABEL, QUIZ_PATH } from '@/lib/constants'
+import { CTA_LABEL_MOBILE, QUIZ_PATH } from '@/lib/constants'
 
 // Só no mobile: +11% de conversão em landing de tráfego social.
 export function StickyCta() {
@@ -9,7 +9,7 @@ export function StickyCta() {
         href={QUIZ_PATH}
         className="flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-base font-bold text-ink"
       >
-        {CTA_LABEL}
+        {CTA_LABEL_MOBILE}
       </Link>
     </div>
   )

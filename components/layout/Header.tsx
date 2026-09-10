@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
-import { BRAND, CTA_LABEL, QUIZ_PATH, asset } from '@/lib/constants'
+import { BRAND, CTA_LABEL_SHORT, QUIZ_PATH, asset } from '@/lib/constants'
 
 export function Header() {
   return (
@@ -18,7 +18,7 @@ export function Header() {
           href={QUIZ_PATH}
           className="hidden rounded-full border border-line px-5 py-2.5 text-sm font-bold transition-colors hover:border-accent hover:text-accent sm:inline-flex"
         >
-          {CTA_LABEL}
+          {CTA_LABEL_SHORT}
         </Link>
       </Container>
     </header>

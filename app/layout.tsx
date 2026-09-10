@@ -13,24 +13,24 @@ const sora = Sora({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Elevate League — a liga de quem não joga sozinho',
+    default: 'Elevate Pro — você não precisa de mais conteúdo',
     template: '%s · Elevate League',
   },
   description:
-    'Uma liga para quem tem 18 a 28 anos e cansou de crescer sozinho. Mentoria individual com os fundadores, rede de verdade e conteúdo que destrava os primeiros contratos.',
+    'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e 2 horas de mentoria individual.',
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
     url: SITE_URL,
     siteName: BRAND.name,
-    title: 'Elevate League — a liga de quem não joga sozinho',
+    title: 'Elevate Pro — você não precisa de mais conteúdo',
     description:
-      'Uma liga para quem tem 18 a 28 anos e cansou de crescer sozinho. Mentoria individual com os fundadores, rede de verdade e conteúdo que destrava os primeiros contratos.',
+      'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e 2 horas de mentoria individual.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Elevate League — a liga de quem não joga sozinho',
-    description: 'Uma liga para quem tem 18 a 28 anos e cansou de crescer sozinho.',
+    title: 'Elevate Pro — você não precisa de mais conteúdo',
+    description: 'A liga de jovens empreendedores que estão construindo juntos. Primeiras vagas por R$497.',
   },
   alternates: { canonical: SITE_URL },
   // O deploy do GitHub Pages é prévia, não lançamento: sai do índice enquanto

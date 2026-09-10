@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/Button'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
-import { CTA_LABEL, QUIZ_PATH } from '@/lib/constants'
+import { CTA_LABEL_FAQ, QUIZ_PATH } from '@/lib/constants'
 import { faq } from '@/lib/content'
 
 export function Faq() {
@@ -27,9 +27,13 @@ export function Faq() {
         ))}
       </div>
 
-      <div className="mt-12 flex flex-wrap items-center gap-6">
-        <Button href={QUIZ_PATH}>{CTA_LABEL}</Button>
-        <p className="text-sm text-paper/45">Leva menos de dois minutos.</p>
+      {/* A FAQ é a última seção: ela precisa fechar com a porta de entrada,
+          senão a página termina num beco sem saída. */}
+      <div className="mt-14 text-center">
+        <Button href={QUIZ_PATH} className="w-full sm:w-auto">
+          {CTA_LABEL_FAQ}
+        </Button>
+        <p className="mt-4 text-sm text-paper/45">Leva menos de dois minutos.</p>
       </div>
     </Section>
   )

@@ -1,33 +1,34 @@
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { StickyCta } from '@/components/layout/StickyCta'
-import { ComoFunciona } from '@/components/sections/ComoFunciona'
-import { CtaFinal } from '@/components/sections/CtaFinal'
 import { Faq } from '@/components/sections/Faq'
 import { Fundadores } from '@/components/sections/Fundadores'
 import { Hero } from '@/components/sections/Hero'
-import { NoventaDias } from '@/components/sections/NoventaDias'
+import { Oferta } from '@/components/sections/Oferta'
 import { ParaQuem } from '@/components/sections/ParaQuem'
-import { Pilares } from '@/components/sections/Pilares'
-import { Problema } from '@/components/sections/Problema'
-import { Vagas } from '@/components/sections/Vagas'
+import { OQueE } from '@/components/sections/OQueE'
+import { OQueRecebe } from '@/components/sections/OQueRecebe'
 
+/**
+ * Sete seções, nessa ordem, e nada além disso. Cada uma responde uma pergunta
+ * da decisão de compra: o que é, o que eu recebo, quem está por trás, isso é
+ * pra mim, quanto custa, e o que ainda me trava. Se uma seção nova não
+ * responder uma dessas, ela não entra.
+ */
 export default function Home() {
   return (
     <>
       <Header />
       <main className="pb-24 sm:pb-0">
         <Hero />
-        <Problema />
-        <NoventaDias />
-        <Pilares />
+        <OQueE />
+        <OQueRecebe />
         <Fundadores />
+        {/* A qualificação vem logo antes do preço: quem se reconhece nela chega
+            no valor já convencido de que a liga é pra ele, e quem não se
+            reconhece sai antes — que é o ponto da seção. */}
         <ParaQuem />
-        <ComoFunciona />
-        <Vagas />
-        <CtaFinal />
-        {/* Perguntas por último, a pedido do Lucas. A FAQ fecha com um CTA
-            próprio para a página não terminar num beco sem saída. */}
+        <Oferta />
         <Faq />
       </main>
       <Footer />
