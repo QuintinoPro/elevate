@@ -23,7 +23,11 @@ export function OQueRecebe() {
     <Section id="o-que-recebe">
       <SectionHeader eyebrow={oQueRecebe.eyebrow} headline={oQueRecebe.headline} />
 
-      <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:auto-rows-[15.5rem] lg:grid-cols-3">
+      {/* As duas primeiras linhas têm altura fixa e curta: elas só abrigam os
+          dois cards que sobem 2×, e o conteúdo deles é ancorado no pé — com
+          trilha alta sobrava um vão grande no topo. A terceira é `auto` porque
+          ela abriga os três cards da base, que precisam caber no texto. */}
+      <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:grid-rows-[11.5rem_11.5rem_auto]">
         {/* Herói: 2×2. A textura da marca fica só no canto superior direito e
             quase invisível: a 0.05 sem máscara ela cobria o card inteiro e
             virava estampa, que é exatamente o que o PRODUCT.md proíbe. A
