@@ -30,7 +30,9 @@ export const FOUNDERS = {
 // O produto vendido na landing. A marca continua sendo a Elevate League.
 export const PRODUCT = 'Elevate Pro'
 
-// TODO: confirmar preço final com o Lucas antes de tirar o noindex.
+// Preço da primeira turma, assinado pelo Lucas em 10/09/2026. Aparece no hero,
+// na barra fixa do mobile, no card de oferta e no CTA de fecho do FAQ — todos
+// leem daqui, então trocar aqui troca na página inteira.
 export const PRICE = 'R$497'
 
 // Os CTAs da página. Todos levam ao mesmo lugar (a peneira); o que muda é o
