@@ -39,27 +39,34 @@ export const oQueRecebe = {
   } satisfies Headline,
   // O card grande é o acesso aos outros membros, não a mentoria. Decisão do
   // Lucas em 10/09/2026: a mentoria é diferencial forte, mas o que ninguém
-  // copia é a sala. Os outros quatro não são sobra — por isso vêm com o mesmo
-  // peso visual entre si.
+  // copia é a sala.
   destaque: {
     badge: 'O principal',
     title: 'Acesso direto aos outros membros',
     body: 'A liga privada é onde a troca acontece todo dia. Networking, parceria, indicação, proposta revisada antes de você mandar — com gente que está executando agora.',
   },
+  // A ordem aqui é a ordem de peso, e a grade respeita ela: a mentoria ocupa o
+  // card alto ao lado do herói, os três últimos fecham a base. Trocar a ordem
+  // troca o desenho, então não é lista solta.
   cards: [
     {
-      title: '2 horas de mentoria individual',
+      icone: 'mentoria',
+      alto: true,
+      title: { accent: '2 horas', after: ' de mentoria individual' } satisfies Headline,
       body: '1 hora com o Khayllan + 1 hora com o Lucas. Só você e a tela.',
     },
     {
-      title: '+15 módulos',
+      icone: 'modulos',
+      title: { accent: '+15', after: ' módulos' } satisfies Headline,
       body: 'Marketing, vendas, tráfego, IA, posicionamento, agência, negócios e muito mais.',
     },
     {
+      icone: 'aovivo',
       title: 'Encontros ao vivo',
       body: 'Aulas em grupo para estratégia, execução e troca de experiências.',
     },
     {
+      icone: 'conteudos',
       title: 'Aulas e conteúdos',
       body: 'Novos conteúdos e estratégias adicionados à plataforma.',
     },
