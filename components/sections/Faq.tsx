@@ -1,9 +1,13 @@
-import { Button } from '@/components/ui/Button'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
-import { CTA_LABEL_FAQ, QUIZ_PATH } from '@/lib/constants'
 import { faq } from '@/lib/content'
 
+/**
+ * Última seção da página, e de propósito sem CTA no fim (decisão do Lucas em
+ * 10/09/2026). No mobile a barra fixa cobre a saída; no desktop o último botão
+ * passa a ser o da oferta, logo acima. Se a conversão do desktop cair, este é
+ * o primeiro lugar a olhar.
+ */
 export function Faq() {
   return (
     <Section id="faq" className="border-t border-line/25">
@@ -25,15 +29,6 @@ export function Faq() {
             <p className="mt-4 max-w-prose leading-relaxed text-paper/55">{item.a}</p>
           </details>
         ))}
-      </div>
-
-      {/* A FAQ é a última seção: ela precisa fechar com a porta de entrada,
-          senão a página termina num beco sem saída. */}
-      <div className="mt-14 text-center">
-        <Button href={QUIZ_PATH} className="w-full sm:w-auto">
-          {CTA_LABEL_FAQ}
-        </Button>
-        <p className="mt-4 text-sm text-paper/55">Leva menos de dois minutos.</p>
       </div>
     </Section>
   )

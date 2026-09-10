@@ -47,7 +47,6 @@ export const CTA_LABEL = `Quero entrar para o ${PRODUCT}`
 export const CTA_LABEL_SHORT = 'Entrar na liga'
 export const CTA_LABEL_MOBILE = `Quero entrar — ${PRICE}`
 export const CTA_LABEL_OFERTA = `Garantir minha vaga por ${PRICE}`
-export const CTA_LABEL_FAQ = `${CTA_LABEL} — ${PRICE}`
 export const QUIZ_PATH = '/quiz/'
 
 // TODO: preencher quando o Khayllan definir a plataforma de checkout. Enquanto
