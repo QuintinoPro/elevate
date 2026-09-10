@@ -52,8 +52,11 @@ export const oQueRecebe = {
     {
       icone: 'mentoria',
       alto: true,
-      title: { accent: '2 horas', after: ' de mentoria individual' } satisfies Headline,
-      body: '1 hora com o Khayllan + 1 hora com o Lucas. Só você e a tela.',
+      // Sem número de horas aqui, a pedido do Lucas: o card é varredura, e o
+      // que convence nele é "individual" e "com os fundadores", não a conta.
+      // O detalhe de quantas horas vive na oferta e no FAQ.
+      title: { accent: 'Mentorias individuais', after: ' com os fundadores' } satisfies Headline,
+      body: 'Uma com o Khayllan e uma com o Lucas. Só você e a tela, com o seu projeto em cima da mesa.',
     },
     {
       icone: 'modulos',
