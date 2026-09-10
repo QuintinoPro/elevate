@@ -1,3 +1,5 @@
+import { UtmKeeper } from '@/components/quiz/UtmKeeper'
+import { DadosEstruturados } from '@/components/layout/DadosEstruturados'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { StickyCta } from '@/components/layout/StickyCta'
@@ -18,8 +20,15 @@ import { OQueRecebe } from '@/components/sections/OQueRecebe'
 export default function Home() {
   return (
     <>
+      <UtmKeeper />
+      <DadosEstruturados />
+      {/* Primeiro elemento focável da página: pula header e hero e joga o
+          teclado direto no conteúdo. Só aparece quando recebe foco. */}
+      <a href="#conteudo" className="skip-link">
+        Pular para o conteúdo
+      </a>
       <Header />
-      <main className="pb-24 sm:pb-0">
+      <main id="conteudo" className="pb-24 sm:pb-0">
         <Hero />
         <OQueE />
         <OQueRecebe />

@@ -89,8 +89,11 @@ export function OQueRecebe() {
                   num corpo bem maior de propósito — é ele que dá peso à coluna
                   alta. */}
               <div className={`relative ${alto ? 'mt-8' : 'mt-6'}`}>
+                {/* O corpo grande acompanha o `lg:row-span-2`, não o `alto` em
+                    si: entre 640px e 1023px o card ainda tem altura normal, e o
+                    título gigante ficava desproporcional ao lado do vizinho. */}
                 <h3
-                  className={`font-bold leading-[1.12] ${alto ? 'text-3xl sm:text-[2.1rem]' : 'text-lg'}`}
+                  className={`font-bold leading-[1.12] ${alto ? 'text-lg lg:text-[2.1rem]' : 'text-lg'}`}
                 >
                   <AccentHeadline headline={card.title} />
                 </h3>

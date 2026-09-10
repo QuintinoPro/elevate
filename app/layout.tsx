@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Sora } from 'next/font/google'
-import { asset, BASE_PATH, BRAND, SITE_URL } from '@/lib/constants'
+import { asset, BRAND, INDEXAVEL, SITE_URL } from '@/lib/constants'
 import './globals.css'
 
 const sora = Sora({
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: '%s · Elevate League',
   },
   description:
-    'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e 2 horas de mentoria individual.',
+    'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e mentorias individuais com os fundadores.',
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: BRAND.name,
     title: 'Elevate Pro — você não precisa de mais conteúdo',
     description:
-      'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e 2 horas de mentoria individual.',
+      'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e mentorias individuais com os fundadores.',
   },
   twitter: {
     card: 'summary_large_image',
@@ -33,10 +33,12 @@ export const metadata: Metadata = {
     description: 'A liga de jovens empreendedores que estão construindo juntos. Primeiras vagas por R$497.',
   },
   alternates: { canonical: SITE_URL },
-  // O deploy do GitHub Pages é prévia, não lançamento: sai do índice enquanto
-  // preço, garantia e números dos fundadores não têm sign-off. No domínio
-  // próprio não haverá BASE_PATH e a página volta a ser indexável.
-  robots: BASE_PATH ? { index: false, follow: false } : undefined,
+  // Enquanto for prévia, fica fora do índice. Amarrar isso ao BASE_PATH era
+  // uma armadilha: no dia que o domínio próprio entrasse, a página passaria a
+  // ser indexável sozinha, com pendência aberta (hoje: o prazo de acesso que o
+  // FAQ responde). Agora é uma variável explícita — pôr NEXT_PUBLIC_INDEXAVEL=1
+  // no ambiente é uma decisão consciente, não efeito colateral de deploy.
+  robots: INDEXAVEL ? undefined : { index: false, follow: false },
 }
 
 export const viewport: Viewport = {

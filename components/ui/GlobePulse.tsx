@@ -104,6 +104,15 @@ export default function GlobePulse({
     let raf = 0
     let phi = PHI_BRASIL
 
+    // A regra de movimento reduzido do globals.css só alcança animação e
+    // transição de CSS — um laço de requestAnimationFrame passa por baixo dela.
+    // Quem pediu movimento reduzido recebe o globo parado com o Brasil de
+    // frente: a imagem continua inteira, o que some é a rotação (e o gasto de
+    // bateria de manter WebGL desenhando).
+    const reduzido =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     function init() {
       const width = canvas!.offsetWidth
       if (width === 0 || globe) return
@@ -135,7 +144,7 @@ export default function GlobePulse({
           raf = requestAnimationFrame(animate)
           return
         }
-        if (!pausado.current) phi += speed
+        if (!pausado.current && !reduzido) phi += speed
         globe!.update({
           phi: phi + phiAcc.current + delta.current.phi,
           theta: 0.35 + thetaAcc.current + delta.current.theta,

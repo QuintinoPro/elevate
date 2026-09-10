@@ -41,8 +41,9 @@ export function Oferta() {
           <p className="mt-3 text-sm text-paper/60 sm:text-base">{oferta.notaPreco}</p>
         </div>
 
-        {/* Duas colunas já no celular: são oito itens curtos, e em coluna única
-            a lista empurraria o botão para fora da tela. */}
+        {/* Uma coluna no celular e duas a partir do sm. Em duas colunas num
+            aparelho estreito os itens mais longos quebram em duas linhas cada e
+            a lista fica mais alta do que empilhada. */}
         <ul className="relative mt-10 grid grid-cols-1 gap-x-8 gap-y-3.5 border-y border-line/30 py-8 text-left sm:grid-cols-2">
           {oferta.inclui.map((item) => (
             <li key={item} className="flex items-start gap-3 leading-snug text-paper/80">
@@ -64,10 +65,10 @@ export function Oferta() {
           </div>
 
           {/* Ressalva no lugar de contador regressivo: honesta e discreta. */}
-          <p className="mx-auto mt-6 max-w-[46ch] text-xs leading-relaxed text-paper/45 sm:text-sm">
+          <p className="mx-auto mt-6 max-w-[46ch] text-xs leading-relaxed text-paper/55 sm:text-sm">
             {oferta.ressalva}
           </p>
-          <p className="mx-auto mt-3 max-w-[46ch] text-xs leading-relaxed text-paper/45 sm:text-sm">
+          <p className="mx-auto mt-3 max-w-[46ch] text-xs leading-relaxed text-paper/55 sm:text-sm">
             {oferta.garantia}
           </p>
         </div>

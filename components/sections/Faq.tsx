@@ -33,7 +33,7 @@ export function Faq() {
         <Button href={QUIZ_PATH} className="w-full sm:w-auto">
           {CTA_LABEL_FAQ}
         </Button>
-        <p className="mt-4 text-sm text-paper/45">Leva menos de dois minutos.</p>
+        <p className="mt-4 text-sm text-paper/55">Leva menos de dois minutos.</p>
       </div>
     </Section>
   )

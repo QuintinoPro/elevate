@@ -26,7 +26,7 @@ export function ParaQuem() {
           <h3 className="text-xl font-bold text-paper/70">{paraQuem.nao.title}</h3>
           <ul className="mt-6 space-y-4">
             {paraQuem.nao.items.map((item) => (
-              <li key={item} className="flex gap-3 leading-relaxed text-paper/45">
+              <li key={item} className="flex gap-3 leading-relaxed text-paper/55">
                 <span aria-hidden className="mt-0.5 font-bold text-paper/30">
                   −
                 </span>

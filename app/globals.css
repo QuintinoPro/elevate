@@ -6,6 +6,28 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    /* Avisa o navegador que a página é escura. Sem isso o que ele desenha
+       sozinho — a lista aberta de um <select>, a barra de rolagem, os campos
+       com autofill — vem no tema claro e destoa. O <select> da peneira é onde
+       isso aparecia primeiro. */
+    color-scheme: dark;
+  }
+
+  /* Âncora que encosta no topo da janela lê como corte. Vale para toda seção
+     com id, que é como os CTAs internos navegam. */
+  [id] {
+    scroll-margin-top: 2rem;
+  }
+
+  /* Toque: tira o flash cinza padrão do Android/iOS e evita o atraso de 300ms
+     do duplo-toque em tudo que é clicável. */
+  a,
+  button,
+  summary,
+  label,
+  [role='button'] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   body {
@@ -19,6 +41,18 @@
 
   :focus-visible {
     @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-ink;
+  }
+}
+
+@layer components {
+  /* Primeiro item do Tab: fica fora da tela até ganhar foco. Sem ele, quem
+     navega por teclado atravessa header e hero antes de chegar no conteúdo. */
+  .skip-link {
+    @apply sr-only;
+  }
+
+  .skip-link:focus-visible {
+    @apply not-sr-only fixed left-4 top-4 z-50 rounded-full bg-accent px-5 py-3 text-sm font-bold text-ink;
   }
 }
 

@@ -1,4 +1,16 @@
+import { Fragment } from 'react'
 import type { Headline } from '@/lib/content'
+
+/** Transforma os "\n" da copy em <br> de verdade. */
+function comQuebras(texto?: string) {
+  if (!texto) return null
+  return texto.split('\n').map((parte, i) => (
+    <Fragment key={i}>
+      {i > 0 && <br />}
+      {parte}
+    </Fragment>
+  ))
+}
 
 /**
  * Headline pode vir como string ou como o objeto de três partes do content.ts.
@@ -9,9 +21,9 @@ export function AccentHeadline({ headline }: { headline: string | Headline }) {
   if (typeof headline === 'string') return <>{headline}</>
   return (
     <>
-      {headline.before}
+      {comQuebras(headline.before)}
       <span className="text-accent">{headline.accent}</span>
-      {headline.after}
+      {comQuebras(headline.after)}
     </>
   )
 }
@@ -34,9 +46,12 @@ export function SectionHeader({
       <p className="text-xs font-bold uppercase tracking-[0.22em] text-accent sm:text-sm">
         {eyebrow}
       </p>
+      {/* Uma classe de largura só. Emitir max-w-[20ch] e max-w-[22ch] juntas
+          deixava o resultado na mão da ordem das regras no CSS gerado — as duas
+          casavam, e vencia a que o Tailwind escrevesse por último. */}
       <h2
-        className={`mt-5 max-w-[20ch] text-display-md font-bold sm:text-display-lg ${
-          centered ? 'mx-auto max-w-[22ch]' : ''
+        className={`mt-5 text-balance text-display-md font-bold sm:text-display-lg ${
+          centered ? 'mx-auto max-w-[22ch]' : 'max-w-[20ch]'
         }`}
       >
         <AccentHeadline headline={headline} />

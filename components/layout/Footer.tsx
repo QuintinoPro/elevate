@@ -8,7 +8,7 @@ export function Footer() {
         <div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={asset("/brand/icon.svg")} alt={BRAND.name} width={32} height={32} className="h-8 w-8" />
-          <p className="mt-4 max-w-xs text-sm text-paper/40">{BRAND.slogan}</p>
+          <p className="mt-4 max-w-xs text-sm text-paper/55">{BRAND.slogan}</p>
         </div>
 
         <nav className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-paper/50">

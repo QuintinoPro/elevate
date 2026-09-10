@@ -273,11 +273,19 @@ export function OrbitalHeroSection({
     viewRadius, tilt, spin, roll, lead, focus, scrim, scrimStrength, starCount, glow, showOrbits, showSunTrack,
     interactive, paused, sunColor, starsOnly,
   });
-  props.current = {
-    planets, yearSeconds, trailYears, compress, maxTurns, planeSpread, eccentricity, alignToCourse, driftSpeed, apex,
-    viewRadius, tilt, spin, roll, lead, focus, scrim, scrimStrength, starCount, glow, showOrbits, showSunTrack,
-    interactive, paused, sunColor, starsOnly,
-  };
+  // Sincronizado num efeito, não durante o render: escrever em ref no corpo do
+  // componente quebra a pureza que o React concorrente assume (e o lint pega).
+  // Sem lista de dependências de propósito — roda depois de todo render, que é
+  // exatamente quando as props podem ter mudado. O laço de animação lê
+  // `props.current` a cada quadro, então no máximo um quadro sai com o valor
+  // anterior, o que é invisível a 60fps.
+  useEffect(() => {
+    props.current = {
+      planets, yearSeconds, trailYears, compress, maxTurns, planeSpread, eccentricity, alignToCourse, driftSpeed, apex,
+      viewRadius, tilt, spin, roll, lead, focus, scrim, scrimStrength, starCount, glow, showOrbits, showSunTrack,
+      interactive, paused, sunColor, starsOnly,
+    };
+  });
 
   useEffect(() => {
     const host = hostRef.current;

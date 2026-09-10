@@ -8,6 +8,11 @@ export const asset = (path: string) => `${BASE_PATH}${path}`
 
 // TODO: trocar pelo domínio próprio quando o Lucas comprar — afeta metadata, OG,
 // sitemap e o CNAME do Pages.
+// Interruptor explícito do índice do Google. Fica desligado por padrão: a
+// página só entra no índice quando alguém decidir ligar, nunca por consequência
+// de mudar de domínio.
+export const INDEXAVEL = process.env.NEXT_PUBLIC_INDEXAVEL === '1'
+
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quintinopro.github.io/elevate'
 
 export const BRAND = {
@@ -45,5 +50,13 @@ export const CTA_LABEL_OFERTA = `Garantir minha vaga por ${PRICE}`
 export const CTA_LABEL_FAQ = `${CTA_LABEL} — ${PRICE}`
 export const QUIZ_PATH = '/quiz/'
 
-// TODO: preencher quando o Khayllan definir a plataforma de checkout.
+// TODO: preencher quando o Khayllan definir a plataforma de checkout. Enquanto
+// estiver vazio, o resultado da peneira mostra o botão desativado com um aviso
+// — de propósito: um botão que leva a lugar nenhum é pior que um botão parado.
 export const CHECKOUT_URL = ''
+
+// Web App do Google Apps Script que grava as respostas da peneira na planilha.
+// O código do script vive em AUTOMACOES/PENEIRA/ — subir lá, publicar como
+// "qualquer pessoa", e colar a URL /exec aqui (ou em .env.local, que não vai
+// pro repositório público).
+export const QUIZ_ENDPOINT = process.env.NEXT_PUBLIC_QUIZ_ENDPOINT ?? ''

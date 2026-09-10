@@ -9,6 +9,11 @@
 // cai sempre no que a pessoa ganha, nunca no que ela dispensa.
 export type Headline = { before?: string; accent: string; after?: string }
 
+// Um "\n" dentro de before/after vira quebra de linha de verdade na headline.
+// Usar quando a quebra for decisão de composição, não acidente de largura:
+// sem isso a linha quebra onde a caixa mandar, e o corte costuma cair no meio
+// do trecho em azul.
+
 export const hero = {
   headline: {
     before: 'Você não precisa de mais conteúdo. Precisa estar no ',
@@ -87,6 +92,10 @@ export const fundadores = {
     {
       nome: 'Khayllan Martins',
       foto: '/brand/khayllan.webp',
+      // Cargo e empresa vêm antes da bio de propósito: é a credencial
+      // verificável, e é o que o leitor procura pra decidir se essa call vale
+      // R$497. A bio adjetiva; o cargo prova.
+      cargos: ['Fundador da KZ Company'],
       bio: 'Empreendedor, estrategista e fundador de negócios digitais.',
       instagram: 'https://www.instagram.com/khayllan.midias/',
       handle: '@khayllan.midias',
@@ -94,6 +103,7 @@ export const fundadores = {
     {
       nome: 'Lucas Quintino',
       foto: '/brand/lucas.webp',
+      cargos: ['Fundador da Agência Stocks', 'Head of Marketing na Blockchain.RIO'],
       bio: 'Empreendedor e especialista em negócios, estratégia e crescimento.',
       instagram: 'https://www.instagram.com/quintinopro/',
       handle: '@quintinopro',
@@ -106,7 +116,7 @@ export const fundadores = {
 export const paraQuem = {
   eyebrow: 'Antes de você entrar',
   headline: {
-    before: 'A liga não é pra todo mundo. E isso é ',
+    before: 'A liga não é pra todo mundo.\nE isso é ',
     accent: 'de propósito',
     after: '.',
   } satisfies Headline,
@@ -133,7 +143,7 @@ export const paraQuem = {
 export const oferta = {
   eyebrow: 'A oferta',
   headline: {
-    before: 'Primeira turma. ',
+    before: 'Primeira turma.\n',
     accent: 'Condição especial',
     after: '.',
   } satisfies Headline,
