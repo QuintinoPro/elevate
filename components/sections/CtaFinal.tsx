@@ -14,16 +14,20 @@ export function CtaFinal() {
           <FlowConverge />
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(30,144,255,0.16),transparent_60%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(30,144,255,0.16),transparent_60%)]"
           />
         </>
       }
     >
-      <div className="relative">
-        <h2 className="max-w-[18ch] text-display-md font-bold sm:text-display-lg">
+      {/* Tudo centralizado: as linhas do FlowConverge medem o botão e passam
+          a convergir simetricamente dos dois lados para o centro da seção. */}
+      <div className="relative text-center">
+        <h2 className="mx-auto max-w-[18ch] text-display-md font-bold sm:text-display-lg">
           {ctaFinal.headline}
         </h2>
-        <p className="mt-6 max-w-prose text-lg leading-relaxed text-paper/60">{ctaFinal.sub}</p>
+        <p className="mx-auto mt-6 max-w-prose text-lg leading-relaxed text-paper/60">
+          {ctaFinal.sub}
+        </p>
         {/* data-flow-target: o FlowConverge mede este elemento e faz as
             linhas convergirem exatamente aqui. */}
         <div className="mt-10 inline-block" data-flow-target>

@@ -85,6 +85,7 @@ export const fundadores = {
     {
       nome: 'Lucas Quintino',
       papel: 'Fundador da Agência Stocks',
+      foto: '/brand/lucas.webp',
       bio: 'Agência no ar desde 2023, com mais de 40 empresas atendidas em posicionamento digital, tráfego pago e branding. Também é head de marketing do Blockchain.RIO, o maior evento de blockchain da América Latina.',
       instagram: 'https://www.instagram.com/quintinopro/',
       handle: '@quintinopro',
@@ -92,6 +93,7 @@ export const fundadores = {
     {
       nome: 'Khayllan Martins',
       papel: 'Fundador da KZ Company',
+      foto: '/brand/khayllan.webp',
       bio: 'Já trabalhou com mais de 100 empresas, com mais de R$120 milhões em faturamento gerado para elas. Opera diariamente com estratégia, aquisição e vendas no digital.',
       instagram: 'https://www.instagram.com/khayllan.midias/',
       handle: '@khayllan.midias',

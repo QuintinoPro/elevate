@@ -1,4 +1,4 @@
-import { MoonAssetLazy } from '@/components/ui/MoonAssetLazy'
+import { GlobePulseLazy } from '@/components/ui/GlobePulseLazy'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { problema } from '@/lib/content'
@@ -6,7 +6,7 @@ import { problema } from '@/lib/content'
 export function Problema() {
   return (
     <Section id="problema">
-      {/* Lua sozinha na coluna da esquerda; todo o texto corrido na direita.
+      {/* Globo sozinho na coluna da esquerda; todo o texto corrido na direita.
           A ordem do DOM mantém o texto primeiro — quem usa leitor de tela
           ouve o argumento antes de chegar na ilustração. */}
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -19,7 +19,7 @@ export function Problema() {
           </div>
         </div>
 
-        <MoonAssetLazy className="aspect-square w-full max-w-lg lg:order-1" />
+        <GlobePulseLazy className="mx-auto w-full max-w-sm lg:order-1 lg:w-[24rem]" />
       </div>
 
       {/* Fecho da seção, alinhado à esquerda e fora da grade: é a frase que

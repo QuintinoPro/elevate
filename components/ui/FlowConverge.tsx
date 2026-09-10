@@ -96,13 +96,20 @@ export function FlowConverge({ className = '' }: { className?: string }) {
     }
     type P = { x: number; y: number }
 
-    function pontos(c: Caminho) {
-      const a = alvo()
+    /**
+     * Curvatura espelhada: os dois pontos de controle usam a mesma fração da
+     * distância até o alvo de cada lado. Com o CTA centralizado, qualquer
+     * diferença entre esquerda e direita vira assimetria visível no leque.
+     */
+    const CURVA_ENTRADA = 0.45
+    const CURVA_CHEGADA = 0.82
+
+    function pontos(c: Caminho, a: P) {
       const x0 = c.esquerda ? -w * 0.05 : w * 1.05
       return {
         p0: { x: x0, y: c.y },
-        p1: { x: c.esquerda ? a.x * 0.45 : w - (w - a.x) * 0.45, y: c.y },
-        p2: { x: c.esquerda ? a.x * 0.82 : w - (w - a.x) * 0.4, y: a.y },
+        p1: { x: c.esquerda ? a.x * CURVA_ENTRADA : w - (w - a.x) * CURVA_ENTRADA, y: c.y },
+        p2: { x: c.esquerda ? a.x * CURVA_CHEGADA : w - (w - a.x) * CURVA_CHEGADA, y: a.y },
         p3: a,
       }
     }
@@ -110,8 +117,12 @@ export function FlowConverge({ className = '' }: { className?: string }) {
     function desenhar() {
       ctx!.clearRect(0, 0, w, h)
 
+      // Uma medição por quadro: alvo() lê geometria do DOM, e chamá-lo dentro
+      // do laço custava uma leitura de layout por caminho a cada frame.
+      const a = alvo()
+
       for (const c of caminhos) {
-        const { p0, p1, p2, p3 } = pontos(c)
+        const { p0, p1, p2, p3 } = pontos(c, a)
 
         // Trilho pontilhado, bem apagado: é o caminho, não o assunto.
         ctx!.beginPath()
