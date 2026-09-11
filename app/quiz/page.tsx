@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Peneira } from '@/components/quiz/Peneira'
 import { Container } from '@/components/ui/Container'
+import { Logo } from '@/components/ui/Logo'
 import { SectionStars } from '@/components/ui/SectionStars'
-import { BRAND, asset } from '@/lib/constants'
+import { BRAND } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'A peneira',
@@ -26,10 +27,10 @@ export default function QuizPage() {
 
       <header className="relative z-10">
         <Container className="py-6">
-          <Link href="/" className="inline-flex items-center gap-3" aria-label={BRAND.name}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={asset('/brand/icon.svg')} alt="" width={28} height={28} className="h-7 w-7" />
-            <span className="text-sm font-bold uppercase tracking-[0.28em]">Elevate</span>
+          {/* Mesmo lockup e mesma altura do header da landing: quem clica no CTA
+              e cai aqui tem que reconhecer o lugar na hora. */}
+          <Link href="/" className="inline-flex items-center" aria-label={BRAND.name}>
+            <Logo height={30} />
           </Link>
         </Container>
       </header>

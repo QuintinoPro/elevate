@@ -1,17 +1,18 @@
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
-import { BRAND, CTA_LABEL_SHORT, QUIZ_PATH, asset } from '@/lib/constants'
+import { Logo } from '@/components/ui/Logo'
+import { BRAND, CTA_LABEL_SHORT, QUIZ_PATH } from '@/lib/constants'
 
 export function Header() {
   return (
     <header className="absolute inset-x-0 top-0 z-20">
       <Container className="flex items-center justify-between py-6">
-        <Link href="/" className="flex items-center gap-3" aria-label={BRAND.name}>
-          {/* Ícone é vetor outline de verdade. O wordmark horizontal da marca ainda
-              não existe vetorizado (fonte Tanjiro ausente), então o nome vai em Sora. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={asset("/brand/icon.svg")} alt="" width={28} height={28} className="h-7 w-7" />
-          <span className="text-sm font-bold uppercase tracking-[0.28em]">Elevate</span>
+        {/* O lockup da marca, não o ícone com o nome em Sora ao lado: o
+            "ELEVATE" tem letreiro próprio (Tanjiro contornado) e escrever o
+            nome com a fonte de texto era logo errada na porta de entrada.
+            O aria-label fica no link — é ele que o leitor de tela anuncia. */}
+        <Link href="/" className="flex items-center" aria-label={BRAND.name}>
+          <Logo height={30} />
         </Link>
 
         <Link
