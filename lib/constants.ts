@@ -49,10 +49,10 @@ export const CTA_LABEL_MOBILE = `Quero entrar — ${PRICE}`
 export const CTA_LABEL_OFERTA = `Garantir minha vaga por ${PRICE}`
 export const QUIZ_PATH = '/quiz/'
 
-// TODO: preencher quando o Khayllan definir a plataforma de checkout. Enquanto
-// estiver vazio, o resultado da peneira mostra o botão desativado com um aviso
-// — de propósito: um botão que leva a lugar nenhum é pior que um botão parado.
-export const CHECKOUT_URL = ''
+// Checkout da primeira turma, na Hubla (link do Lucas, 10/09/2026). Não é
+// segredo — é o link de compra, e o repositório é público de qualquer forma.
+// Preenchido, o botão do resultado da peneira sai do estado desativado sozinho.
+export const CHECKOUT_URL = 'https://pay.hub.la/rtaV0GK8PicrmE9JsGTf'
 
 // Web App do Google Apps Script que grava as respostas da peneira na planilha.
 // O código do script vive em AUTOMACOES/PENEIRA/ — subir lá, publicar como

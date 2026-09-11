@@ -133,10 +133,13 @@ export async function enviarParaPlanilha(linha: Record<string, string | number>)
 }
 
 /**
- * URL do checkout com trilha, contato e campanha. Os nomes dos parâmetros
- * seguem o que Kiwify, Cakto e Hotmart aceitam pra pré-preencher o formulário
- * — TODO: conferir com o Khayllan quando a plataforma estiver escolhida, cada
- * uma usa um nome diferente pro campo de telefone.
+ * URL do checkout com trilha, contato e campanha.
+ *
+ * A plataforma é a Hubla. Os nomes dos parâmetros (`name`, `phone`, `sck`)
+ * vêm da convenção de Kiwify/Cakto/Hotmart e **ainda não foram confirmados na
+ * Hubla** — parâmetro que ela não reconhece é ignorado, então nada quebra, mas
+ * o pré-preenchimento pode simplesmente não acontecer. TODO: fazer uma compra
+ * de teste e ver o que chega no formulário e no relatório de vendas.
  */
 export function montarUrlCheckout(dados: DadosPeneira): string | null {
   if (!CHECKOUT_URL) return null
