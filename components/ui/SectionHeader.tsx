@@ -1,12 +1,19 @@
 import { Fragment } from 'react'
 import type { Headline } from '@/lib/content'
 
-/** Transforma os "\n" da copy em <br> de verdade. */
-function comQuebras(texto?: string) {
+/**
+ * Transforma os "\n" da copy em <br> de verdade.
+ *
+ * Com `quebra: 'md'` o <br> nasce `display:none` e só passa a quebrar a partir
+ * do md — um <br> escondido não quebra linha, então abaixo disso o texto volta
+ * a se arranjar sozinho. Serve para headline cuja linha só cabe inteira em
+ * tela grande: no celular, forçar o corte deixaria uma palavra órfã embaixo.
+ */
+function comQuebras(texto: string | undefined, quebra: Headline['quebra']) {
   if (!texto) return null
   return texto.split('\n').map((parte, i) => (
     <Fragment key={i}>
-      {i > 0 && <br />}
+      {i > 0 && <br className={quebra === 'md' ? 'hidden md:inline' : undefined} />}
       {parte}
     </Fragment>
   ))
@@ -21,9 +28,9 @@ export function AccentHeadline({ headline }: { headline: string | Headline }) {
   if (typeof headline === 'string') return <>{headline}</>
   return (
     <>
-      {comQuebras(headline.before)}
+      {comQuebras(headline.before, headline.quebra)}
       <span className="text-accent">{headline.accent}</span>
-      {comQuebras(headline.after)}
+      {comQuebras(headline.after, headline.quebra)}
     </>
   )
 }

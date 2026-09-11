@@ -7,12 +7,25 @@
 
 // Headlines vêm quebradas em três para o trecho do meio sair em azul. O grifo
 // cai sempre no que a pessoa ganha, nunca no que ela dispensa.
-export type Headline = { before?: string; accent: string; after?: string }
+export type Headline = {
+  before?: string
+  accent: string
+  after?: string
+  /**
+   * A partir de onde o "\n" vira quebra de verdade. 'sempre' é o padrão;
+   * 'md' segura a quebra no celular, onde a coluna é estreita demais para a
+   * linha inteira caber e forçar o corte só produz uma linha órfã.
+   */
+  quebra?: 'sempre' | 'md'
+}
 
 // Um "\n" dentro de before/after vira quebra de linha de verdade na headline.
 // Usar quando a quebra for decisão de composição, não acidente de largura:
 // sem isso a linha quebra onde a caixa mandar, e o corte costuma cair no meio
-// do trecho em azul.
+// do trecho em azul. Se a linha resultante só couber a partir de certa
+// largura, marcar `quebra: 'md'` — abaixo disso ela volta a quebrar sozinha.
+// Nesse caso, deixar um espaço antes do "\n": ele é o que separa as palavras
+// quando a quebra não está valendo.
 
 export const hero = {
   headline: {
@@ -27,9 +40,15 @@ export const hero = {
 export const oQueE = {
   eyebrow: 'O que é o Elevate Pro',
   headline: {
-    before: 'Não é mais um curso. É o ',
+    // Uma frase por linha. Só a partir do md: no celular a segunda frase não
+    // cabe inteira e o corte forçado quebraria em quatro linhas.
+    // O espaço antes do "\n" é obrigatório: quando a quebra está escondida,
+    // é ele que separa as duas frases. Sem ele sai "curso.É o". Com a quebra
+    // visível ele não aparece — espaço no fim da linha é descartado.
+    before: 'Não é mais um curso. \nÉ o ',
     accent: 'ambiente que faltava',
     after: '.',
+    quebra: 'md',
   } satisfies Headline,
   body: 'O Elevate Pro reúne empreendedores em uma liga onde você aprende estratégias aplicáveis, participa de encontros, conhece pessoas que estão executando e tem acesso direto a quem já está no mercado.',
   pilares: ['Networking', 'Conhecimento', 'Estratégia', 'Execução'],

@@ -12,7 +12,12 @@ import { oQueE } from '@/lib/content'
 export function OQueE() {
   return (
     <Section id="o-que-e">
-      <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+      {/* Duas colunas só a partir do xl, e com a coluna de texto bem mais larga
+          que antes: a headline é uma frase por linha, e a segunda ("É o ambiente
+          que faltava.") mede ~626px em 52px. Na proporção antiga a coluna dava
+          548px e a frase quebrava no meio; entre lg e xl não existe largura que
+          comporte as duas colunas, então ali a seção empilha. */}
+      <div className="grid items-center gap-12 xl:grid-cols-[1.65fr_1fr]">
         {/* Texto primeiro no DOM: o argumento vem antes da ilustração para
             quem usa leitor de tela. */}
         <div>
