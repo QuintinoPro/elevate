@@ -36,16 +36,15 @@ export const FOUNDERS = {
 export const PRODUCT = 'Elevate Pro'
 
 // Preço da primeira turma, assinado pelo Lucas em 10/09/2026. Aparece no hero,
-// na barra fixa do mobile, no card de oferta e no CTA de fecho do FAQ — todos
-// leem daqui, então trocar aqui troca na página inteira.
+// no card de oferta e no CTA de fecho do FAQ — todos leem daqui, então trocar
+// aqui troca na página inteira.
 export const PRICE = 'R$497'
 
 // Os CTAs da página. Todos levam ao mesmo lugar (a peneira); o que muda é o
-// tamanho do rótulo, porque o botão do header e a barra do mobile não comportam
-// a frase inteira. Se o texto mudar, muda aqui e vale na página toda.
+// tamanho do rótulo, porque o botão do header não comporta a frase inteira.
+// Se o texto mudar, muda aqui e vale na página toda.
 export const CTA_LABEL = `Quero entrar para o ${PRODUCT}`
 export const CTA_LABEL_SHORT = 'Entrar na liga'
-export const CTA_LABEL_MOBILE = `Quero entrar — ${PRICE}`
 export const CTA_LABEL_OFERTA = `Garantir minha vaga por ${PRICE}`
 export const QUIZ_PATH = '/quiz/'
 

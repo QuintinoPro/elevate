@@ -2,7 +2,6 @@ import { UtmKeeper } from '@/components/quiz/UtmKeeper'
 import { DadosEstruturados } from '@/components/layout/DadosEstruturados'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
-import { StickyCta } from '@/components/layout/StickyCta'
 import { Faq } from '@/components/sections/Faq'
 import { Fundadores } from '@/components/sections/Fundadores'
 import { Hero } from '@/components/sections/Hero'
@@ -28,7 +27,7 @@ export default function Home() {
         Pular para o conteúdo
       </a>
       <Header />
-      <main id="conteudo" className="pb-24 sm:pb-0">
+      <main id="conteudo">
         <Hero />
         <OQueE />
         <OQueRecebe />
@@ -41,7 +40,6 @@ export default function Home() {
         <Faq />
       </main>
       <Footer />
-      <StickyCta />
     </>
   )
 }
