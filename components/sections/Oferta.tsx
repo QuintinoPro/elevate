@@ -2,7 +2,14 @@ import { Button } from '@/components/ui/Button'
 import { FlowConverge } from '@/components/ui/FlowConverge'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
-import { CTA_LABEL_OFERTA, PRICE, PRODUCT, QUIZ_PATH } from '@/lib/constants'
+import {
+  CTA_LABEL_OFERTA,
+  PRICE,
+  PRICE_PARCELA,
+  PRICE_PARCELAS,
+  PRODUCT,
+  QUIZ_PATH,
+} from '@/lib/constants'
 import { oferta } from '@/lib/content'
 
 /**
@@ -36,9 +43,19 @@ export function Oferta() {
         <div className="relative text-center">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-accent">{PRODUCT}</p>
 
-          {/* O preço é o maior tipo da página depois das headlines. */}
-          <p className="mt-5 text-6xl font-bold tracking-[-0.03em] sm:text-7xl">{PRICE}</p>
-          <p className="mt-3 text-sm text-paper/60 sm:text-base">{oferta.notaPreco}</p>
+          {/* O número grande é a parcela, e o valor à vista vem abaixo. No
+              celular o tipo cai um degrau (text-5xl): "12x de R$41,42" é mais
+              que o dobro de caracteres do valor cheio e no text-6xl estourava a
+              largura do card em 360px. items-baseline alinha o "12x de" pela
+              base dos dígitos, não pelo topo da caixa. */}
+          <p className="mt-5 flex flex-wrap items-baseline justify-center gap-x-2.5 font-bold tracking-[-0.03em]">
+            <span className="text-xl text-paper/65 sm:text-3xl">{PRICE_PARCELAS}x de</span>
+            <span className="text-5xl sm:text-7xl">{PRICE_PARCELA}</span>
+          </p>
+          <p className="mt-3 text-base text-paper/75 sm:text-lg">
+            ou <strong className="font-bold text-paper">{PRICE}</strong> à vista
+          </p>
+          <p className="mt-2 text-sm text-paper/60 sm:text-base">{oferta.notaPreco}</p>
         </div>
 
         {/* Uma coluna no celular e duas a partir do sm. Em duas colunas num

@@ -35,10 +35,22 @@ export const FOUNDERS = {
 // O produto vendido na landing. A marca continua sendo a Elevate League.
 export const PRODUCT = 'Elevate Pro'
 
-// Preço da primeira turma, assinado pelo Lucas em 10/09/2026. Aparece no hero,
-// no card de oferta e no CTA de fecho do FAQ — todos leem daqui, então trocar
-// aqui troca na página inteira.
+// Preço da primeira turma, assinado pelo Lucas em 10/09/2026. Saiu do hero em
+// 11/09; hoje aparece no card de oferta, no rótulo do botão e na peneira —
+// todos leem daqui, então trocar aqui troca na página inteira.
 export const PRICE = 'R$497'
+
+// Parcelamento exibido no card de oferta (11/09/2026). O número grande passou a
+// ser a parcela, e o valor à vista entra abaixo, como na referência que o Lucas
+// trouxe (laje-ac.com.br).
+//
+// ATENÇÃO: R$41,42 é R$497 dividido por 12 **sem juros** — só é verdade se o
+// checkout da Hubla estiver configurado para absorver os juros. Se a Hubla
+// repassar, a parcela real sobe (costuma ficar na casa dos R$50) e a página
+// passa a anunciar um valor que o checkout não cobra. Conferir antes de indexar
+// e ajustar as duas linhas abaixo.
+export const PRICE_PARCELAS = 12
+export const PRICE_PARCELA = 'R$41,42'
 
 // Os CTAs da página. Todos levam ao mesmo lugar (a peneira); o que muda é o
 // tamanho do rótulo, porque o botão do header não comporta a frase inteira.
