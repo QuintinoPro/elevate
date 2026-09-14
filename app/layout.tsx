@@ -11,7 +11,11 @@ const sora = Sora({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  // Só a origem, sem caminho. O Next já prefixa o basePath nos arquivos de
+  // metadata (opengraph-image, ícones); com o SITE_URL inteiro aqui, a imagem de
+  // compartilhamento saía em /elevate/elevate/ no Pages. No domínio próprio as
+  // duas formas dão no mesmo.
+  metadataBase: new URL(new URL(SITE_URL).origin),
   title: {
     default: 'Elevate Pro — você não precisa de mais conteúdo',
     template: '%s · Elevate League',
