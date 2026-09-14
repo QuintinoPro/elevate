@@ -6,14 +6,15 @@ export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 
 export const asset = (path: string) => `${BASE_PATH}${path}`
 
-// TODO: trocar pelo domínio próprio quando o Lucas comprar — afeta metadata, OG,
-// sitemap e o CNAME do Pages.
+// Domínio próprio, comprado na Hostinger e apontado em 14/09/2026. Vale para
+// metadata, OG, canonical, sitemap e robots. O arquivo public/CNAME tem que
+// dizer a mesma coisa.
 // Interruptor explícito do índice do Google. Fica desligado por padrão: a
 // página só entra no índice quando alguém decidir ligar, nunca por consequência
 // de mudar de domínio.
 export const INDEXAVEL = process.env.NEXT_PUBLIC_INDEXAVEL === '1'
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://quintinopro.github.io/elevate'
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://elevateleague.com.br'
 
 export const BRAND = {
   name: 'Elevate League',

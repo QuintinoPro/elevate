@@ -139,11 +139,12 @@ export async function enviarParaPlanilha(linha: Record<string, string | number>)
 /**
  * URL do checkout com trilha, contato e campanha.
  *
- * A plataforma é a Hubla. Os nomes dos parâmetros (`name`, `phone`, `sck`)
- * vêm da convenção de Kiwify/Cakto/Hotmart e **ainda não foram confirmados na
- * Hubla** — parâmetro que ela não reconhece é ignorado, então nada quebra, mas
- * o pré-preenchimento pode simplesmente não acontecer. TODO: fazer uma compra
- * de teste e ver o que chega no formulário e no relatório de vendas.
+ * A plataforma é a Hubla — confirmado pelo Lucas em 14/09/2026. Os nomes dos
+ * parâmetros (`name`, `phone`, `sck`) vêm da convenção de Kiwify/Cakto/Hotmart
+ * e **ainda não foram confirmados na Hubla** — parâmetro que ela não reconhece
+ * é ignorado, então nada quebra, mas o pré-preenchimento pode simplesmente não
+ * acontecer. TODO: fazer uma compra de teste e ver o que chega no formulário e
+ * no relatório de vendas.
  */
 export function montarUrlCheckout(dados: DadosPeneira): string | null {
   if (!CHECKOUT_URL) return null

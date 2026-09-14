@@ -28,13 +28,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # O Pages serve este repo em /elevate/, então o build precisa saber disso.
-      # Quando houver domínio próprio: apagar as duas env e adicionar o CNAME.
+      # Domínio próprio desde 14/09/2026: o site vive na raiz, então não há
+      # BASE_PATH. Quem diz ao Pages qual é o domínio é o public/CNAME, que o
+      # export copia pra dentro de out/ — apagar aquele arquivo derruba o
+      # domínio no próximo deploy.
+      #
+      # NEXT_PUBLIC_INDEXAVEL segue fora: a página só entra no Google quando
+      # alguém puser `NEXT_PUBLIC_INDEXAVEL: '1'` aqui, de propósito. Hoje ela
+      # ainda anuncia parcela não confirmada no checkout e a peneira não grava
+      # lead nenhum.
       - name: Build
         run: npm run build
         env:
-          NEXT_PUBLIC_BASE_PATH: /elevate
-          NEXT_PUBLIC_SITE_URL: https://quintinopro.github.io/elevate
+          NEXT_PUBLIC_SITE_URL: https://elevateleague.com.br
 
       # Sem enablement: true — o Pages é habilitado uma vez na mão, em
       # Settings > Pages > Source: GitHub Actions. Tentar habilitar daqui falha,
