@@ -21,6 +21,20 @@ export const BRAND = {
   instagram: 'https://www.instagram.com/elevate.league/',
 } as const
 
+// E-mail de contato do rodapé e da política de privacidade. É a caixa da
+// própria liga, trocada pelo Lucas em 13/09/2026 (antes era o da Agência Stocks).
+export const CONTATO_EMAIL = 'elevateleague07@gmail.com'
+
+// Quem responde legalmente pelo site e pelos dados da peneira. O Lucas vai
+// mandar o CNPJ. Enquanto os campos estiverem vazios, o rodapé e a política
+// simplesmente não mostram a linha — nada de "[CNPJ]" publicado.
+export const EMPRESA = {
+  razaoSocial: '',
+  cnpj: '',
+} as const
+
+export const PRIVACIDADE_PATH = '/privacidade/'
+
 export const FOUNDERS = {
   lucas: {
     name: 'Lucas Quintino',
