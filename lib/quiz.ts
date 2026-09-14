@@ -91,7 +91,10 @@ export const abertura = {
     after: '.',
   },
   body: '7 perguntas, 1 minuto. No fim você sabe se entra — e em qual trilha.',
-  nota: 'A peneira reprova de verdade. Suas respostas ficam só com o Khayllan e o Lucas.',
+  // "time da Elevate League", não os dois nomes: decisão do Lucas em
+  // 14/09/2026 — quem guarda o dado é a marca, não duas pessoas. A regra vale
+  // pra toda copy de custódia (ver a política de privacidade).
+  nota: 'A peneira reprova de verdade. Suas respostas ficam só com o time da Elevate League.',
   cta: 'Começar a peneira',
 } as const
 

@@ -8,6 +8,9 @@
 //   data de atualização junto.
 // - `{email}` vira link de e-mail na renderização.
 // - Nunca "comunidade", sempre "liga" — vale aqui também.
+// - Quem guarda e responde pelo dado é a **Elevate League**, não o Khayllan e o
+//   Lucas em nome próprio (decisão do Lucas em 14/09/2026). Citar os dois aqui
+//   fazia a liga parecer duas pessoas com uma planilha.
 
 export type SecaoPrivacidade = {
   titulo: string
@@ -26,7 +29,7 @@ export const privacidade = {
     {
       titulo: 'Quem cuida dos seus dados',
       paragrafos: [
-        'Este site é da Elevate League, a liga criada por Khayllan Martins e Lucas Quintino. É a Elevate League que decide o que é feito com os dados descritos aqui. Na linguagem da LGPD, é a controladora.',
+        'Este site é da Elevate League. É ela que decide o que é feito com os dados descritos aqui — na linguagem da LGPD, é a controladora.',
         'Qualquer dúvida sobre esta política ou sobre os seus dados, fale com a gente em {email}.',
       ],
     },
@@ -60,7 +63,7 @@ export const privacidade = {
     {
       titulo: 'Com quem compartilhamos',
       itens: [
-        'Google: as respostas ficam numa planilha do Google, com acesso restrito aos fundadores. Os servidores do Google podem ficar fora do Brasil.',
+        'Google: as respostas ficam numa planilha do Google, com acesso restrito ao time da Elevate League. Os servidores do Google podem ficar fora do Brasil.',
         'Plataforma de pagamento: se você clicar pra ir ao checkout, seu nome e seu WhatsApp seguem no link, só pra você não precisar digitar tudo de novo.',
         'WhatsApp: a conversa com a gente acontece lá, sob as regras do próprio aplicativo.',
       ],
@@ -103,7 +106,7 @@ export const privacidade = {
     {
       titulo: 'Segurança',
       paragrafos: [
-        'Só os fundadores acessam as respostas. Nenhum sistema é 100% seguro. Se acontecer algum incidente que possa te afetar, a gente avisa você e a ANPD.',
+        'Só o time da Elevate League acessa as respostas. Nenhum sistema é 100% seguro. Se acontecer algum incidente que possa te afetar, a gente avisa você e a ANPD.',
       ],
     },
     {
