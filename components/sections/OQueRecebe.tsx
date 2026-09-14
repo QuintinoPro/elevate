@@ -16,7 +16,7 @@ import { oQueRecebe } from '@/lib/content'
  */
 
 const CARD_BASE =
-  'group relative flex flex-col overflow-hidden rounded-2xl border p-7 transition-colors duration-300 sm:p-8'
+  'group relative flex flex-col overflow-hidden rounded-2xl border p-6 transition-colors duration-300 sm:p-8'
 
 export function OQueRecebe() {
   return (
@@ -77,27 +77,29 @@ export function OQueRecebe() {
                 className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(ellipse_at_top,rgba(30,144,255,0.12),transparent_65%)]"
               />
 
-              <div className="relative">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent transition-colors duration-300 group-hover:border-accent/50">
-                  <Icone className="h-5 w-5" />
-                </span>
-              </div>
+              {/* No celular o ícone fica ao lado do título, numa linha só: com
+                  o ícone em cima, cada card gastava ~70px só nele, e os quatro
+                  empilhados somavam duas telas inteiras de rolagem. Do sm pra
+                  cima a grade volta ao bloco de antes, ícone em cima.
 
-              {/* No card alto tudo desce para o pé, como no herói ao lado: o
+                  No card alto tudo desce para o pé, como no herói ao lado: o
                   espaço sobra em cima, onde lê como respiro, em vez de abrir um
                   vão entre o ícone e o título, onde lia como erro. O título vai
                   num corpo bem maior de propósito — é ele que dá peso à coluna
                   alta. */}
-              <div className={`relative ${alto ? 'mt-8' : 'mt-6'}`}>
+              <div className="relative grid grid-cols-[2.75rem_1fr] items-center gap-x-4 sm:block">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-accent/25 bg-accent/10 text-accent transition-colors duration-300 group-hover:border-accent/50">
+                  <Icone className="h-5 w-5" />
+                </span>
                 {/* O corpo grande acompanha o `lg:row-span-2`, não o `alto` em
                     si: entre 640px e 1023px o card ainda tem altura normal, e o
                     título gigante ficava desproporcional ao lado do vizinho. */}
                 <h3
-                  className={`font-bold leading-[1.12] ${alto ? 'text-lg lg:text-[2.1rem]' : 'text-lg'}`}
+                  className={`font-bold leading-[1.12] ${alto ? 'text-lg sm:mt-8 lg:text-[2.1rem]' : 'text-lg sm:mt-6'}`}
                 >
                   <AccentHeadline headline={card.title} />
                 </h3>
-                <p className={`mt-3 leading-relaxed text-paper/65 ${alto ? 'sm:text-lg' : ''}`}>
+                <p className={`col-span-2 mt-3 leading-relaxed text-paper/65 ${alto ? 'sm:text-lg' : ''}`}>
                   {card.body}
                 </p>
               </div>

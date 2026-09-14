@@ -12,6 +12,14 @@ import { hero } from '@/lib/content'
 export function Hero() {
   return (
     <section className="relative min-h-[92svh] w-full md:min-h-dvh">
+      {/* Esmaece o pé do hero. Sem isso, os rastros das órbitas terminavam num
+          corte reto onde a seção acaba — no celular, onde o sol fica embaixo, a
+          linha aparecia inteira. A altura é a mesma do pb-20 do conteúdo: o
+          degradê nunca chega no botão, nem na tela curta do Instagram. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-b from-transparent to-ink md:h-32"
+      />
       <HeroBackdrop>
         {/* pt-28 no mobile mantém a copy longe do header fixo; o pb menor
             entrou quando o preço saiu do hero (11/09) — não há mais nada
@@ -24,9 +32,13 @@ export function Hero() {
               {/* Três degraus de tipo: no celular a headline tem 62 caracteres
                   e a display-md quebraria em seis linhas, empurrando o CTA
                   para fora da primeira tela. */}
-              <h1 className="text-[1.875rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-display-md lg:text-display-lg">
+              {/* text-balance + grifo sem quebra: no celular de 390px a quebra
+                  gulosa partia "ambiente / certo" e deixava a última linha com
+                  uma palavra só. Balanceado, cada linha fica com ~17 caracteres
+                  e o trecho azul chega inteiro. */}
+              <h1 className="text-balance text-[1.875rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-display-md lg:text-display-lg">
                 {hero.headline.before}
-                <span className="text-accent">{hero.headline.accent}</span>
+                <span className="whitespace-nowrap text-accent">{hero.headline.accent}</span>
                 {hero.headline.after}
               </h1>
 
@@ -34,11 +46,11 @@ export function Hero() {
                 {hero.sub}
               </p>
 
-              {/* Os quatro pilares como assinatura, não como lista. No celular as
-                  quatro palavras quebram em duas linhas, e aí o separador some:
-                  senão a segunda linha começa com um "•" órfão. Do sm para cima
-                  tudo cabe numa linha só e o bullet volta. */}
-              <ul className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-[0.16em] text-paper/60 sm:gap-x-3 sm:text-sm">
+              {/* Os quatro pilares como assinatura, não como lista. No celular
+                  viram grade 2×2 e o separador some: soltas no flex-wrap, em 390px
+                  caíam três numa linha e "EXECUÇÃO" sozinha na outra. Do sm para
+                  cima tudo cabe numa linha só e o bullet volta. */}
+              <ul className="mt-7 grid w-fit grid-cols-2 gap-x-6 gap-y-2 text-xs font-bold uppercase tracking-[0.16em] text-paper/60 sm:flex sm:flex-wrap sm:items-center sm:gap-x-3 sm:text-sm">
                 {hero.kicker.map((palavra, i) => (
                   <li key={palavra} className="flex items-center gap-x-3">
                     {i > 0 && (

@@ -11,7 +11,7 @@ export function Header() {
             "ELEVATE" tem letreiro próprio (Tanjiro contornado) e escrever o
             nome com a fonte de texto era logo errada na porta de entrada.
             O aria-label fica no link — é ele que o leitor de tela anuncia. */}
-        <Link href="/" className="flex items-center" aria-label={BRAND.name}>
+        <Link href="/" className="-my-2 flex items-center py-2" aria-label={BRAND.name}>
           <Logo height={30} />
         </Link>
 

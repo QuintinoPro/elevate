@@ -122,6 +122,10 @@ export const fundadores = {
     {
       nome: 'Lucas Quintino',
       foto: '/brand/lucas.webp',
+      // O rosto do Lucas fica mais baixo na foto. No topo, o recorte 5:4
+      // mostrava mais o letreiro do slide ("uintino", "ad of Marketing") que
+      // ele; a 35% entra o rosto e o crachá da Blockchain.RIO, que é a prova.
+      enquadramento: '50% 35%',
       cargos: ['Fundador da Agência Stocks', 'Head of Marketing na Blockchain.RIO'],
       bio: 'Empreendedor e especialista em negócios, estratégia e crescimento.',
       instagram: 'https://www.instagram.com/quintinopro/',
@@ -210,8 +214,8 @@ export const faq = {
       a: 'São 2 horas suas: 1 hora com o Khayllan e 1 hora com o Lucas, agendadas quando fizer sentido pra você. Uma de cada vez, só você e a tela, com o seu projeto e os seus números na mesa.',
     },
     {
-      // TODO: Lucas precisa confirmar o prazo real antes de publicar. É promessa
-      // comercial — não pode ir ao ar no chute.
+      // Prazo confirmado pelo Lucas em 13/09/2026: 12 meses. É promessa
+      // comercial — se mudar, muda também na plataforma de checkout.
       q: 'Por quanto tempo tenho acesso?',
       a: 'Você tem 12 meses de acesso a partir da entrada: plataforma, encontros ao vivo, gravações e liga privada. O que entrar de conteúdo novo nesse período também é seu.',
     },

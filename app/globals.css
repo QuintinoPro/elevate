@@ -30,6 +30,22 @@
     touch-action: manipulation;
   }
 
+  /* Evita palavra sozinha na última linha de parágrafo, item e pergunta. No
+     celular a coluna é estreita e isso acontecia em várias seções. Onde o
+     navegador não suporta, nada muda. */
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  /* Título curto de duas linhas: o pretty não mexe (só evita órfã a partir de
+     três), e "Como funcionam as calls / individuais?" continuava com uma
+     palavra sozinha. O balance divide em duas metades. */
+  summary,
+  h3 {
+    text-wrap: balance;
+  }
+
   body {
     @apply bg-ink text-paper antialiased;
     text-rendering: optimizeLegibility;

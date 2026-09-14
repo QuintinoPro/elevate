@@ -1,6 +1,10 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  // hover: só vale em aparelho com mouse. Sem isso, no celular o toque deixa o
+  // estado de hover grudado — o card de "o que você recebe" ficava aceso e o
+  // botão clareado depois do dedo sair.
+  future: { hoverOnlyWhenSupported: true },
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
     extend: {

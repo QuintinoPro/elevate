@@ -16,8 +16,11 @@ export function Faq() {
       {/* <details> nativo: acessível, funciona sem JS e não custa bundle. */}
       <div className="mt-12 divide-y divide-line/25 border-y border-line/25">
         {faq.items.map((item) => (
-          <details key={item.q} className="group py-6">
-            <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-lg font-bold [&::-webkit-details-marker]:hidden">
+          // O respiro vive no <summary>, não no <details>: com o py-6 no
+          // details, a área de toque era só a linha do texto (32px de altura) e
+          // quem tocava no espaço em volta não abria nada.
+          <details key={item.q} className="group">
+            <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-6 text-lg font-bold [&::-webkit-details-marker]:hidden">
               {item.q}
               <span
                 aria-hidden
@@ -26,7 +29,7 @@ export function Faq() {
                 +
               </span>
             </summary>
-            <p className="mt-4 max-w-prose leading-relaxed text-paper/55">{item.a}</p>
+            <p className="-mt-2 max-w-prose pb-6 leading-relaxed text-paper/55">{item.a}</p>
           </details>
         ))}
       </div>

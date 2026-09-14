@@ -34,7 +34,10 @@ export function Oferta() {
     >
       <SectionHeader eyebrow={oferta.eyebrow} headline={oferta.headline} align="center" />
 
-      <article className="relative mx-auto mt-14 max-w-2xl overflow-hidden rounded-2xl border border-accent/40 bg-ink/70 p-7 backdrop-blur-sm sm:p-12">
+      {/* px-5 no celular, não p-7: com 28px de cada lado sobravam 236px pro
+          botão e "Garantir minha vaga por R$497" quebrava em duas linhas. Com
+          20px e o botão compacto, cabe numa linha a partir de 360px. */}
+      <article className="relative mx-auto mt-14 max-w-2xl overflow-hidden rounded-2xl border border-accent/40 bg-ink/70 px-5 py-8 backdrop-blur-sm sm:p-12">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(30,144,255,0.16),transparent_60%)]"
@@ -76,7 +79,7 @@ export function Oferta() {
           {/* data-flow-target: o FlowConverge mede este elemento e faz as
               linhas convergirem exatamente aqui. */}
           <div className="block sm:inline-block" data-flow-target>
-            <Button href={QUIZ_PATH} className="w-full sm:w-auto">
+            <Button href={QUIZ_PATH} compacto className="w-full sm:w-auto">
               {CTA_LABEL_OFERTA}
             </Button>
           </div>

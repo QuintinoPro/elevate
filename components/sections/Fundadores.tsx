@@ -33,7 +33,10 @@ export function Fundadores() {
                 width={600}
                 height={480}
                 loading="lazy"
-                className="h-full w-full object-cover object-top"
+                className="h-full w-full object-cover"
+                // Cada retrato tem o rosto numa altura: ver `enquadramento` no
+                // content.ts. O padrão é o topo.
+                style={{ objectPosition: 'enquadramento' in p ? p.enquadramento : '50% 0%' }}
               />
               <div
                 aria-hidden
@@ -64,7 +67,9 @@ export function Fundadores() {
                 // mt-auto: um dos dois tem dois cargos, então sem isso o
                 // handle de cada card para numa altura diferente e o par
                 // parece desalinhado.
-                className="mt-auto inline-block pt-4 text-sm text-paper/55 transition-colors hover:text-accent"
+                // min-h-11 com o texto no pé: área de toque de 44px sem mudar
+                // onde o @ aparece.
+                className="mt-auto inline-flex min-h-11 items-end self-start pt-4 text-sm text-paper/55 transition-colors hover:text-accent"
               >
                 {p.handle}
               </a>
