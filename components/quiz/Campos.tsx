@@ -1,10 +1,10 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { Pergunta } from '@/lib/quiz'
 
 const cartao =
-  'relative flex cursor-pointer items-center gap-4 rounded-2xl border border-line/40 bg-surface/30 px-5 py-4 text-left transition-colors duration-150 hover:border-line'
+  'relative flex cursor-pointer items-center gap-4 rounded-2xl border border-line/40 bg-surface/30 px-5 py-3.5 text-left transition-colors duration-150 hover:border-line sm:py-4'
 const cartaoMarcado = 'peer-checked:border-accent peer-checked:bg-accent/10'
 const foco = 'peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-ink'
 
@@ -17,23 +17,46 @@ const foco = 'peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focu
 export function GrupoOpcoes({
   pergunta,
   valor,
+  textoOutro,
   onEscolher,
+  onTextoOutro,
+  onConfirmarOutro,
 }: {
   pergunta: Pergunta
   valor: string | string[] | undefined
+  textoOutro: string
   /** `porPonteiro` diz se a escolha veio de clique/toque — só aí vale avançar sozinho. */
   onEscolher: (valor: string | string[], porPonteiro: boolean) => void
+  onTextoOutro: (texto: string) => void
+  onConfirmarOutro: () => void
 }) {
   // Avançar sozinho é bom no dedo e péssimo no teclado: quem navega com as
   // setas trocaria de tela ao passar pela segunda opção, sem nunca chegar na
   // terceira. Então a origem da interação decide.
   const porPonteiro = useRef(false)
+  const campoOutro = useRef<HTMLInputElement>(null)
+  // Pedido de foco no campo do "Outro", feito no clique e cumprido depois que
+  // o campo existe na tela.
+  const focarOutro = useRef(false)
 
   const multipla = pergunta.tipo === 'multipla'
   const marcados = multipla ? ((valor as string[]) ?? []) : valor ? [valor as string] : []
   const noTeto = multipla && !!pergunta.max && marcados.length >= pergunta.max
+  const opcaoOutro = pergunta.opcoes.find((o) => o.outro)
+  const outroMarcado = !!opcaoOutro && marcados.includes(opcaoOutro.value)
+
+  // Foco só quando o "Outro" veio de clique ou toque. Pelo teclado, as setas
+  // passam pelo "Outro" a caminho de outra opção, e roubar o foco pro campo
+  // prenderia a pessoa ali.
+  useEffect(() => {
+    if (outroMarcado && focarOutro.current) {
+      focarOutro.current = false
+      campoOutro.current?.focus()
+    }
+  }, [outroMarcado])
 
   const alternar = (opcao: string) => {
+    if (opcaoOutro?.value === opcao && porPonteiro.current) focarOutro.current = true
     if (!multipla) {
       onEscolher(opcao, porPonteiro.current)
       return
@@ -47,7 +70,7 @@ export function GrupoOpcoes({
 
   return (
     <fieldset
-      className="mt-8"
+      className="mt-6 sm:mt-8"
       onPointerDown={() => (porPonteiro.current = true)}
       onKeyDown={() => (porPonteiro.current = false)}
     >
@@ -84,41 +107,31 @@ export function GrupoOpcoes({
             </label>
           )
         })}
+
+        {/* Aparece colado embaixo do "Outro", que é sempre a última opção. Fica
+            dentro do fieldset pra continuar pertencendo à pergunta. */}
+        {outroMarcado && (
+          <input
+            ref={campoOutro}
+            type="text"
+            value={textoOutro}
+            onChange={(e) => onTextoOutro(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                onConfirmarOutro()
+              }
+            }}
+            maxLength={80}
+            enterKeyHint="next"
+            autoComplete="off"
+            aria-label={`Qual? ${pergunta.pergunta}`}
+            placeholder="Qual? Escreve aqui"
+            className="w-full rounded-2xl border border-accent/60 bg-surface/30 px-5 py-3.5 text-left text-base text-paper placeholder:text-paper/40 focus-visible:border-accent sm:py-4"
+          />
+        )}
       </div>
     </fieldset>
-  )
-}
-
-export function CampoSelect({
-  label,
-  name,
-  valor,
-  onChange,
-  opcoes,
-}: {
-  label: string
-  name?: string
-  valor: string
-  onChange: (v: string) => void
-  opcoes: { value: string; label: string }[]
-}) {
-  return (
-    <label className="block text-left">
-      <span className="text-sm font-bold uppercase tracking-[0.16em] text-paper/50">{label}</span>
-      <select
-        name={name}
-        value={valor}
-        onChange={(e) => onChange(e.target.value)}
-        className="mt-3 w-full appearance-none rounded-2xl border border-line/40 bg-surface/30 px-5 py-4 text-base text-paper focus-visible:border-accent"
-      >
-        <option value="">Selecione</option>
-        {opcoes.map((o) => (
-          <option key={o.value} value={o.value} className="bg-ink">
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </label>
   )
 }
 
@@ -155,7 +168,7 @@ export function CampoTexto({
         placeholder={placeholder}
         inputMode={inputMode}
         autoComplete={autoComplete}
-        className="mt-3 w-full rounded-2xl border border-line/40 bg-surface/30 px-5 py-4 text-base text-paper placeholder:text-paper/30 focus-visible:border-accent"
+        className="mt-2 w-full rounded-2xl border border-line/40 bg-surface/30 px-5 py-3.5 text-base text-paper placeholder:text-paper/30 focus-visible:border-accent sm:mt-3 sm:py-4"
       />
     </label>
   )

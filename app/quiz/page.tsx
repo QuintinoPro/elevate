@@ -8,7 +8,7 @@ import { BRAND } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'A peneira',
-  description: 'Onze perguntas. No fim você descobre em qual trilha entra — ou que ainda não é a sua hora.',
+  description: 'Sete perguntas. No fim você descobre em qual trilha entra — ou que ainda não é a sua hora.',
   robots: { index: false },
 }
 
@@ -26,16 +26,18 @@ export default function QuizPage() {
       <SectionStars />
 
       <header className="relative z-10">
-        <Container className="py-6">
+        <Container className="py-4 sm:py-6">
           {/* Mesmo lockup e mesma altura do header da landing: quem clica no CTA
               e cai aqui tem que reconhecer o lugar na hora. */}
-          <Link href="/" className="inline-flex items-center" aria-label={BRAND.name}>
+          <Link href="/" className="-my-2 inline-flex items-center py-2" aria-label={BRAND.name}>
             <Logo height={30} />
           </Link>
         </Container>
       </header>
 
-      <main className="relative z-10 flex flex-1 items-center py-12 sm:py-16">
+      {/* pt-4 no celular: com py-12, pergunta de 6 opções deixava o botão
+          abaixo da dobra num Android de 360×740. */}
+      <main className="relative z-10 flex flex-1 items-center pb-12 pt-4 sm:py-16">
         <Container>
           <Peneira />
         </Container>

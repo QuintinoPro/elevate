@@ -6,17 +6,24 @@
 //
 // COMO A CONDIÇÃO FUNCIONA
 // Existe UM único ponto de ramificação: a pergunta 2 ("o que você faz hoje").
-// Ela define a trilha, e a trilha decide quais 5 perguntas do miolo aparecem.
+// Ela define a trilha, e a trilha decide quais 3 perguntas do miolo aparecem.
 // O resto é comum a todo mundo. Isso é de propósito: um motor de condições
 // genérico (regras encadeadas, dependências entre respostas) seria mais
 // poderoso e impossível de manter a dois. Se um dia precisar de uma condição
 // que não seja a trilha, adicionar um campo `visivelSe` — não antes.
 //
 // ORÇAMENTO DE PERGUNTAS
-// Todo mundo responde exatamente 11 perguntas + 1 tela de ficha + 1 de contato.
-// Mudam as perguntas, não a quantidade — por isso a barra de progresso pode
-// dizer "3 de 11" sem mentir em nenhuma trilha. Pergunta nova só entra
-// substituindo outra.
+// Todo mundo responde exatamente 7 perguntas + 1 tela de contato. Mudam as
+// perguntas, não a quantidade — por isso a barra de progresso pode dizer
+// "3 de 7" sem mentir em nenhuma trilha. Pergunta nova só entra substituindo
+// outra.
+//
+// Eram 11 perguntas e uma tela de ficha até 13/09/2026. O Lucas achou longo
+// ("o cara acaba achando chato") e pediu no máximo 7, com as mais úteis. O
+// critério do corte: ficou o que qualifica a compra (idade, dinheiro, tempo,
+// investimento) e o que alimenta o resultado (a trava, que volta como eco).
+// Saiu o que só segmentava. As perguntas cortadas estão no histórico do Git,
+// no commit bbb0ee4, se alguma precisar voltar.
 
 import { CTA_LABEL_OFERTA, PRICE } from '@/lib/constants'
 
@@ -36,11 +43,18 @@ export type Opcao = {
   score?: number
   /** Frase que o resultado devolve pra pessoa, provando que a gente leu. */
   eco?: string
+  /**
+   * Opção "Outro": marcada, abre um campo pra pessoa escrever a resposta dela
+   * e segura o avanço automático até ela escrever. Só em pergunta de categoria
+   * — em pergunta de faixa (idade, faturamento, horas) as opções já cobrem
+   * todos os casos, e um "Outro" ali só produz dado que não soma com nada.
+   */
+  outro?: true
 }
 
 export type Pergunta = {
   id: string
-  /** 1 a 11. Duas perguntas podem ter o mesmo passo se forem de trilhas diferentes. */
+  /** 1 a 7. Duas perguntas podem ter o mesmo passo se forem de trilhas diferentes. */
   passo: number
   /** Ausente = todo mundo vê. Presente = só essas trilhas. */
   trilhas?: Trilha[]
@@ -52,7 +66,15 @@ export type Pergunta = {
   opcoes: Opcao[]
 }
 
-export const TOTAL_PASSOS = 11
+export const TOTAL_PASSOS = 7
+
+/**
+ * Opção "Outro" pronta. Rótulo de uma palavra, sem score e sem eco fixo: o eco
+ * do resultado passa a ser o que a pessoa escreveu (ver `Peneira.tsx`).
+ * Fica fora do teto de 5 opções — é a saída de quem não se viu na lista, não
+ * uma opção a mais pra ler.
+ */
+const OUTRO: Opcao = { value: 'outro', label: 'Outro', outro: true }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ABERTURA
@@ -68,7 +90,7 @@ export const abertura = {
     accent: 'quem você é',
     after: '.',
   },
-  body: '11 perguntas, 2 minutos. No fim você sabe se entra — e em qual trilha.',
+  body: '7 perguntas, 1 minuto. No fim você sabe se entra — e em qual trilha.',
   nota: 'A peneira reprova de verdade. Suas respostas ficam só com o Khayllan e o Lucas.',
   cta: 'Começar a peneira',
 } as const
@@ -113,19 +135,28 @@ const momento: Pergunta = {
     { value: 'clt', label: 'Sou CLT', trilha: 'carreira', score: 10 },
     { value: 'estudante', label: 'Sou estudante', trilha: 'inicio', score: 5 },
     { value: 'transicao', label: 'Estou em transição', trilha: 'inicio', score: 0 },
+    // Quem não se vê em nenhuma cai na Trilha Início: é a única cujas perguntas
+    // (renda, se já tentou no digital, trava) servem pra qualquer situação.
+    { ...OUTRO, trilha: 'inicio' },
   ],
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PASSOS 3-7 — TRILHA EMPREENDEDOR
+// PASSOS 3-5 — O MIOLO DE CADA TRILHA
+//
+// Três perguntas por trilha, sempre na mesma ordem de papel: CONTEXTO (onde a
+// pessoa está), DINHEIRO (capacidade de pagar) e TRAVA (o que ela diz que
+// segura — é o que volta como eco no resultado).
 //
 // Teto de 5 opções por pergunta, rótulo de até 4 palavras. Regra fechada com o
-// Lucas em 10/09 depois de ele preencher a peneira inteira: o cansaço não vem
-// do número de perguntas, vem de quantas palavras a tela pede pra ler. Lista
-// de 7 opções longas vira parágrafo, e parágrafo com radio do lado ninguém lê —
-// escolhe a primeira que serve e segue. Opção nova entra tirando outra.
+// Lucas em 10/09 depois de ele preencher a peneira inteira: o cansaço também
+// vem de quantas palavras a tela pede pra ler. Lista de 7 opções longas vira
+// parágrafo, e parágrafo com radio do lado ninguém lê — escolhe a primeira que
+// serve e segue. Opção nova entra tirando outra. O "Outro" não conta no teto.
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Empreendedor. Saíram "há quanto tempo" e "sozinho ou com time": o
+// faturamento já diz o estágio do negócio, e o time vira assunto da mentoria.
 const empreendedor: Pergunta[] = [
   {
     id: 'e-oque',
@@ -138,25 +169,12 @@ const empreendedor: Pergunta[] = [
       { value: 'agencia', label: 'Agência' },
       { value: 'infoproduto', label: 'Infoproduto ou mentoria' },
       { value: 'produto', label: 'Produto ou e-commerce' },
-      { value: 'outro', label: 'Outra coisa' },
-    ],
-  },
-  {
-    id: 'e-tempo',
-    passo: 4,
-    trilhas: ['empreendedor'],
-    pergunta: 'Há quanto tempo?',
-    tipo: 'unica',
-    opcoes: [
-      { value: '<6m', label: 'Menos de 6 meses' },
-      { value: '6-12m', label: 'Até 1 ano', score: 5 },
-      { value: '1-3a', label: 'De 1 a 3 anos', score: 10 },
-      { value: '3a+', label: 'Mais de 3 anos', score: 10 },
+      OUTRO,
     ],
   },
   {
     id: 'e-faturamento',
-    passo: 5,
+    passo: 4,
     trilhas: ['empreendedor'],
     pergunta: 'Quanto entra por mês?',
     // As faixas caíram de 6 pra 5 mantendo os dois cortes que decidem alguma
@@ -173,21 +191,8 @@ const empreendedor: Pergunta[] = [
     ],
   },
   {
-    id: 'e-time',
-    passo: 6,
-    trilhas: ['empreendedor'],
-    pergunta: 'Você toca sozinho?',
-    tipo: 'unica',
-    opcoes: [
-      { value: 'sozinho', label: 'Sozinho' },
-      { value: 'freelas', label: 'Tenho 1 ou 2 freelas', score: 5 },
-      { value: 'socio', label: 'Tenho sócio', score: 5 },
-      { value: 'time', label: 'Tenho time fixo', score: 10 },
-    ],
-  },
-  {
     id: 'e-gargalo',
-    passo: 7,
+    passo: 5,
     trilhas: ['empreendedor'],
     pergunta: 'O que mais te trava hoje?',
     tipo: 'unica',
@@ -197,27 +202,26 @@ const empreendedor: Pergunta[] = [
       { value: 'conteudo', label: 'Aparecer e postar', eco: 'constância de conteúdo' },
       { value: 'sozinho', label: 'Decidir sozinho', eco: 'decidir sozinho' },
       { value: 'direcao', label: 'Saber o próximo passo', eco: 'falta de direção' },
+      OUTRO,
     ],
   },
 ]
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PASSOS 3-7 — TRILHA CARREIRA
-// ─────────────────────────────────────────────────────────────────────────────
-
+// Carreira. Saíram "área" e "onde quer estar em 12 meses". Ficou "já tenta
+// algo por fora", que separa o CLT curioso do CLT que já executa — é a que
+// mais diz sobre quem compra.
 const carreira: Pergunta[] = [
   {
-    id: 'c-area',
+    id: 'c-porfora',
     passo: 3,
     trilhas: ['carreira'],
-    pergunta: 'Em que área você trabalha?',
+    pergunta: 'Já tenta algo por fora?',
     tipo: 'unica',
     opcoes: [
-      { value: 'tech', label: 'Tecnologia' },
-      { value: 'marketing', label: 'Marketing ou vendas' },
-      { value: 'admin', label: 'Administrativo ou financeiro' },
-      { value: 'operacional', label: 'Operacional ou varejo' },
-      { value: 'outra', label: 'Outra' },
+      { value: 'renda', label: 'Sim, já tiro renda extra', score: 15 },
+      { value: 'tentando', label: 'Sim, mas não virou dinheiro', score: 10 },
+      { value: 'estudando', label: 'Só estudando ainda', score: 5 },
+      { value: 'nao', label: 'Ainda não comecei', score: 0 },
     ],
   },
   {
@@ -236,35 +240,8 @@ const carreira: Pergunta[] = [
     ],
   },
   {
-    id: 'c-porfora',
-    passo: 5,
-    trilhas: ['carreira'],
-    pergunta: 'Já tenta algo por fora?',
-    tipo: 'unica',
-    opcoes: [
-      { value: 'renda', label: 'Sim, já tiro renda extra', score: 15 },
-      { value: 'tentando', label: 'Sim, mas não virou dinheiro', score: 10 },
-      { value: 'estudando', label: 'Só estudando ainda', score: 5 },
-      { value: 'nao', label: 'Ainda não comecei', score: 0 },
-    ],
-  },
-  {
-    id: 'c-objetivo',
-    passo: 6,
-    trilhas: ['carreira'],
-    pergunta: 'Onde você quer estar em 12 meses?',
-    tipo: 'unica',
-    opcoes: [
-      { value: 'renda-extra', label: 'Renda extra sem largar o CLT', score: 10 },
-      { value: 'sair', label: 'Fora do CLT, no meu negócio', score: 10 },
-      { value: 'mudar', label: 'Em outra área', score: 5 },
-      { value: 'subir', label: 'Crescendo na carreira atual', score: 5 },
-      { value: 'nao-sei', label: 'Ainda não sei', score: 0 },
-    ],
-  },
-  {
     id: 'c-trava',
-    passo: 7,
+    passo: 5,
     trilhas: ['carreira'],
     pergunta: 'O que mais te trava hoje?',
     tipo: 'unica',
@@ -274,35 +251,37 @@ const carreira: Pergunta[] = [
       { value: 'ninguem', label: 'Não conheço ninguém do meio', eco: 'não conhecer ninguém que já fez' },
       { value: 'constancia', label: 'Começo e paro', eco: 'constância' },
       { value: 'medo', label: 'Medo de largar o certo', eco: 'o risco de largar o certo' },
+      OUTRO,
     ],
   },
 ]
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PASSOS 3-7 — TRILHA INÍCIO (estudante e quem está em transição)
-// É a trilha de quem ainda não tem negócio nem carreira formada: estudante,
-// desempregado, quem está trocando de vida. Existe separada porque a objeção
-// dessa pessoa é dinheiro e direção, não escala — o resultado e a mentoria
-// precisam falar outra coisa.
+// TRILHA INÍCIO (estudante, quem está em transição e quem marcou "Outro")
+// É a trilha de quem ainda não tem negócio nem carreira formada. Existe
+// separada porque a objeção dessa pessoa é dinheiro e direção, não escala — o
+// resultado e a mentoria precisam falar outra coisa.
 //
-// Chamava "Trilha Base" (de categoria de base) até 10/09/2026. O Lucas não
-// entendeu o nome de primeira, e nome que precisa de explicação não sobrevive
-// numa tela de resultado: virou "Início".
+// Chamava "Trilha Base" até 10/09/2026. O Lucas não entendeu o nome de
+// primeira, e nome que precisa de explicação não sobrevive numa tela de
+// resultado: virou "Início".
+//
+// Saíram "estudos" e "o que você quer primeiro". Ficou "já tentou no digital",
+// que é o que separa quem executa de quem só consome.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const inicio: Pergunta[] = [
   {
-    id: 'i-estudo',
+    id: 'i-tentou',
     passo: 3,
     trilhas: ['inicio'],
-    pergunta: 'Como estão seus estudos?',
+    pergunta: 'Já tentou ganhar dinheiro no digital?',
     tipo: 'unica',
     opcoes: [
-      { value: 'medio', label: 'Ensino médio' },
-      { value: 'tecnico', label: 'Curso técnico' },
-      { value: 'faculdade', label: 'Faculdade em andamento', score: 5 },
-      { value: 'formado', label: 'Já formado', score: 5 },
-      { value: 'parei', label: 'Parei ou nunca comecei' },
+      { value: 'ganhei', label: 'Já ganhei meus primeiros reais', score: 15 },
+      { value: 'tentei', label: 'Tentei, não deu certo', score: 10 },
+      { value: 'estudei', label: 'Só estudei', score: 5 },
+      { value: 'nunca', label: 'Nunca tentei', score: 0 },
     ],
   },
   {
@@ -317,37 +296,12 @@ const inicio: Pergunta[] = [
       { value: 'meio', label: 'Meio período', score: 5 },
       { value: 'freelas', label: 'Freelas e bicos', score: 10 },
       { value: 'ajuda', label: 'Dependo da família', score: 0 },
-    ],
-  },
-  {
-    id: 'i-tentou',
-    passo: 5,
-    trilhas: ['inicio'],
-    pergunta: 'Já tentou ganhar dinheiro no digital?',
-    tipo: 'unica',
-    opcoes: [
-      { value: 'ganhei', label: 'Já ganhei meus primeiros reais', score: 15 },
-      { value: 'tentei', label: 'Tentei, não deu certo', score: 10 },
-      { value: 'estudei', label: 'Só estudei', score: 5 },
-      { value: 'nunca', label: 'Nunca tentei', score: 0 },
-    ],
-  },
-  {
-    id: 'i-objetivo',
-    passo: 6,
-    trilhas: ['inicio'],
-    pergunta: 'O que você quer primeiro?',
-    tipo: 'unica',
-    opcoes: [
-      { value: 'primeira-renda', label: 'Meu primeiro dinheiro no digital', score: 10 },
-      { value: 'negocio', label: 'Montar um negócio meu', score: 10 },
-      { value: 'emprego', label: 'Um emprego melhor', score: 5 },
-      { value: 'direcao', label: 'Descobrir o que eu quero', score: 0 },
+      OUTRO,
     ],
   },
   {
     id: 'i-trava',
-    passo: 7,
+    passo: 5,
     trilhas: ['inicio'],
     pergunta: 'O que mais te trava hoje?',
     tipo: 'unica',
@@ -357,53 +311,23 @@ const inicio: Pergunta[] = [
       { value: 'ninguem', label: 'Ninguém do meu círculo faz isso', eco: 'estar cercado de quem não faz isso' },
       { value: 'constancia', label: 'Começo e paro', eco: 'constância' },
       { value: 'medo', label: 'Medo de não dar certo', eco: 'o medo de tentar' },
+      OUTRO,
     ],
   },
 ]
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PASSOS 8-11 — COMUM A TODAS AS TRILHAS
+// PASSOS 6-7 — COMUM A TODAS AS TRILHAS
+// "Erros que já custaram tempo" e "temas de interesse" saíram em 13/09: um
+// servia pra anúncio e o outro pra fila de gravação, e nenhum dos dois ajuda a
+// decidir quem entra. Os temas dá pra perguntar dentro da liga, depois da
+// compra, quando responder custa zero.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const comuns: Pergunta[] = [
   {
-    id: 'erros',
-    passo: 8,
-    pergunta: 'O que já te custou mais tempo?',
-    ajuda: 'Escolha até 2.',
-    tipo: 'multipla',
-    max: 2,
-    opcoes: [
-      { value: 'pulei', label: 'Pulei de projeto em projeto' },
-      { value: 'curso', label: 'Comprei curso e não apliquei' },
-      { value: 'sozinho', label: 'Tentei fazer tudo sozinho' },
-      { value: 'estudar', label: 'Estudei muito e vendi pouco' },
-      { value: 'demorei', label: 'Demorei demais pra começar' },
-    ],
-  },
-  {
-    id: 'temas',
-    passo: 9,
-    pergunta: 'O que você quer aprender?',
-    // Os dez temas da plataforma agrupados em seis. A granularidade fina não
-    // servia pra nada: ninguém decide a fila de gravação com base na diferença
-    // entre "posicionamento" e "conteúdo", e a lista de dez era de longe a tela
-    // mais pesada da peneira.
-    ajuda: 'Até 3.',
-    tipo: 'multipla',
-    max: 3,
-    opcoes: [
-      { value: 'marketing', label: 'Marketing e tráfego' },
-      { value: 'vendas', label: 'Vendas' },
-      { value: 'ia', label: 'Inteligência artificial' },
-      { value: 'negocios', label: 'Agência e negócios' },
-      { value: 'conteudo', label: 'Conteúdo e posicionamento' },
-      { value: 'cripto', label: 'Cripto e trade' },
-    ],
-  },
-  {
     id: 'tempo-semana',
-    passo: 10,
+    passo: 6,
     pergunta: 'Quantas horas por semana você tem pra isso?',
     ajuda: 'Responde de verdade. A liga funciona pra quem aparece.',
     tipo: 'unica',
@@ -418,7 +342,7 @@ const comuns: Pergunta[] = [
   },
   {
     id: 'investimento',
-    passo: 11,
+    passo: 7,
     // O preço já está na landing. Repetir aqui, antes do resultado, é o que
     // separa lead qualificado de curioso — e cumpre a promessa da seção
     // "Antes de você entrar": avisar cedo em vez de empurrar pro checkout.
@@ -435,55 +359,9 @@ const comuns: Pergunta[] = [
 
 export const perguntas: Pergunta[] = [idade, momento, ...empreendedor, ...carreira, ...inicio, ...comuns]
 
-/** As 11 perguntas de uma trilha, em ordem. */
+/** As 7 perguntas de uma trilha, em ordem. */
 export const perguntasDaTrilha = (trilha: Trilha): Pergunta[] =>
   perguntas.filter((p) => !p.trilhas || p.trilhas.includes(trilha)).sort((a, b) => a.passo - b.passo)
-
-// ─────────────────────────────────────────────────────────────────────────────
-// FICHA DO ELENCO — uma tela só, três seletores, nada de digitação.
-// Nada aqui qualifica ou reprova ninguém. É segmentação: cidade pro encontro
-// presencial e pro globo do site, formação pro nível de conteúdo, viagem pro
-// produto de viagem em grupo que o Lucas quer lançar depois.
-// Se a peneira precisar encurtar, esta é a primeira tela a cair.
-// ─────────────────────────────────────────────────────────────────────────────
-
-export const ficha = {
-  titulo: 'Última coisa antes do resultado.',
-  ajuda: 'Três toques e acabou.',
-  campos: [
-    {
-      id: 'estado',
-      label: 'De onde você é?',
-      tipo: 'estado' as const, // UF + "Fora do Brasil"
-    },
-    {
-      id: 'formacao',
-      label: 'Sua formação',
-      tipo: 'select' as const,
-      // Quem veio pela trilha início já respondeu isso no passo 3.
-      ocultarNasTrilhas: ['inicio'] as Trilha[],
-      opcoes: [
-        { value: 'medio', label: 'Ensino médio' },
-        { value: 'tecnico', label: 'Técnico' },
-        { value: 'superior-cursando', label: 'Superior cursando' },
-        { value: 'superior', label: 'Superior completo' },
-        { value: 'pos', label: 'Pós ou MBA' },
-        { value: 'autodidata', label: 'Aprendi na prática' },
-      ],
-    },
-    {
-      id: 'viagem',
-      label: 'Você já saiu do Brasil?',
-      tipo: 'select' as const,
-      opcoes: [
-        { value: 'nunca', label: 'Nunca saí' },
-        { value: 'passeio', label: 'Já viajei a passeio' },
-        { value: 'frequencia', label: 'Viajo com frequência' },
-        { value: 'morei', label: 'Já morei fora' },
-      ],
-    },
-  ],
-} as const
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONTATO — dois campos. E-mail sai no checkout, não aqui: cada campo a mais
@@ -499,6 +377,15 @@ export const contato = {
   ],
   cta: 'Ver meu resultado',
   nota: 'Sem spam. Sem lista. Só a gente.',
+  // Consentimento da LGPD (13/09/2026). Caixa desmarcada de propósito:
+  // consentimento pré-marcado não vale. O link abre em aba nova, senão a
+  // pessoa perde a peneira inteira — o progresso vive só na memória da página.
+  aceite: {
+    antes: 'Li a ',
+    link: 'política de privacidade',
+    depois:
+      ' e aceito que a Elevate League use minhas respostas pra avaliar minha entrada e fale comigo pelo WhatsApp.',
+  },
 } as const
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -658,16 +545,19 @@ export const resultados: Record<string, Resultado> = {
 // que o Khayllan e o Lucas chamam no WhatsApp. Com ~20 vagas, atender na ordem
 // de chegada é desperdiçar agenda.
 //
-// A escala não é 0-100: o teto real fica em ~120-125 e varia um pouco por
-// trilha, porque as perguntas do miolo não valem o mesmo. Isso é de propósito —
-// quem empreende e fatura pontua mais que quem está começando, e é essa a ordem
-// de atendimento que se quer. Comparar dentro da mesma trilha é o uso honesto.
+// O teto fica entre 100 e 115 e varia um pouco por trilha, porque as perguntas
+// do miolo não valem o mesmo. Comparar dentro da mesma trilha é o uso honesto.
+//
+// Os cortes eram 70/45 com 11 perguntas e teto de ~120. O corte de 13/09 tirou
+// só perguntas que somavam, então a mesma pessoa passou a pontuar uns 15% menos;
+// os cortes desceram na mesma proporção pra "quente" continuar querendo dizer a
+// mesma coisa: pode pagar e tem tempo.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type Temperatura = 'quente' | 'morno' | 'frio'
 
 export const classificar = (score: number): Temperatura =>
-  score >= 70 ? 'quente' : score >= 45 ? 'morno' : 'frio'
+  score >= 60 ? 'quente' : score >= 40 ? 'morno' : 'frio'
 
 /** Soma os pontos das opções escolhidas. Multiplas contam só a de maior peso. */
 export const somarScore = (respostas: Record<string, string | string[]>): number =>

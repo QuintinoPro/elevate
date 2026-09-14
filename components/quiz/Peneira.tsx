@@ -5,7 +5,6 @@ import {
   TelaAbertura,
   TelaApuracao,
   TelaContato,
-  TelaFicha,
   TelaPergunta,
   TelaResultado,
 } from '@/components/quiz/Telas'
@@ -26,7 +25,7 @@ import {
 } from '@/lib/quiz-envio'
 import { capturarUtms } from '@/lib/utm'
 
-type Etapa = 'abertura' | 'perguntas' | 'ficha' | 'contato' | 'apuracao' | 'resultado'
+type Etapa = 'abertura' | 'perguntas' | 'contato' | 'apuracao' | 'resultado'
 
 /** As duas primeiras perguntas, antes de existir trilha. */
 const COMECO = perguntas.filter((p) => !p.trilhas).sort((a, b) => a.passo - b.passo).slice(0, 2)
@@ -43,8 +42,12 @@ export function Peneira() {
   const [respostas, setRespostas] = useState<Respostas>({})
   const [trilha, setTrilha] = useState<Trilha | null>(null)
   const [saida, setSaida] = useState<Saida | null>(null)
-  const [ficha, setFicha] = useState<Record<string, string>>({})
+  // O texto de cada "Outro", por pergunta. Fica guardado mesmo se a pessoa
+  // trocar de opção — se ela voltar pro "Outro", o que escreveu continua lá.
+  // Quem decide se vale é a opção marcada, na hora de montar a linha.
+  const [outros, setOutros] = useState<Record<string, string>>({})
   const [contato, setContato] = useState({ nome: '', whatsapp: '' })
+  const [aceite, setAceite] = useState(false)
   const [urlCheckout, setUrlCheckout] = useState<string | null>(null)
 
   const foco = useRef<HTMLDivElement>(null)
@@ -52,7 +55,7 @@ export function Peneira() {
   // A trilha também vive num ref porque o avanço por clique é agendado: quando
   // o timeout dispara, o `trilha` capturado na renderização do clique ainda é o
   // anterior (null, na pergunta 2), e o fluxo calculado a partir dele teria 2
-  // perguntas em vez de 11 — a peneira pulava o miolo inteiro e caía na ficha.
+  // perguntas em vez de 7 — a peneira pulava o miolo inteiro e caía no contato.
   const trilhaRef = useRef<Trilha | null>(null)
 
   useEffect(() => {
@@ -84,13 +87,15 @@ export function Peneira() {
       respostas,
       trilha,
       resultadoId: saida ?? trilha ?? 'inicio',
-      ficha,
+      outros,
       contato,
     }),
-    [respostas, trilha, saida, ficha, contato],
+    [respostas, trilha, saida, outros, contato],
   )
 
-  const irParaFicha = useCallback(() => setEtapa('ficha'), [])
+  // A tela da ficha (estado, formação, viagem) saiu em 13/09/2026: a última
+  // pergunta leva direto ao contato, e o estado vem do DDD.
+  const irParaContato = useCallback(() => setEtapa('contato'), [])
 
   const avancar = useCallback(
     (idPergunta?: string, valorEscolhido?: string | string[]) => {
@@ -117,10 +122,10 @@ export function Peneira() {
       }
 
       const ultima = indice >= fluxoAtual().length - 1
-      if (ultima) irParaFicha()
+      if (ultima) irParaContato()
       else setIndice((i) => i + 1)
     },
-    [fluxoAtual, indice, irParaFicha],
+    [fluxoAtual, indice, irParaContato],
   )
 
   const escolher = useCallback(
@@ -149,7 +154,11 @@ export function Peneira() {
         setTrilha(novaTrilha)
       }
 
-      if (porPonteiro && pergunta.tipo === 'unica') {
+      // O "Outro" nunca avança sozinho: a pessoa ainda precisa escrever.
+      const marcouOutro =
+        typeof valor === 'string' && !!pergunta.opcoes.find((o) => o.value === valor)?.outro
+
+      if (porPonteiro && pergunta.tipo === 'unica' && !marcouOutro) {
         // Pausa curta só pra dar tempo de a opção acender antes da tela trocar.
         avancoAgendado.current = setTimeout(() => avancar(id, valor), 220)
       }
@@ -159,8 +168,7 @@ export function Peneira() {
 
   const voltar = useCallback(() => {
     if (avancoAgendado.current) clearTimeout(avancoAgendado.current)
-    if (etapa === 'contato') return setEtapa('ficha')
-    if (etapa === 'ficha') {
+    if (etapa === 'contato') {
       setEtapa('perguntas')
       return setIndice(fluxo.length - 1)
     }
@@ -177,15 +185,29 @@ export function Peneira() {
 
   // A frase do resultado devolve a trava que a pessoa marcou. Se ela saiu antes
   // de chegar lá, cai no inimigo que a página inteira nomeia.
+  //
+  // No "Outro", o eco é o que ela escreveu, entre aspas. As aspas são o que faz
+  // qualquer texto caber na frase: "o que te trava é “grana curta”" lê como
+  // citação, e é exatamente isso — a gente repetindo o que ela disse. Sem aspas,
+  // a gramática de um texto livre quebraria a frase metade das vezes.
   const eco = useMemo(() => {
     for (const id of ['e-gargalo', 'c-trava', 'i-trava']) {
       const escolhido = respostas[id]
       if (typeof escolhido !== 'string') continue
       const opcao = perguntas.find((p) => p.id === id)?.opcoes.find((o) => o.value === escolhido)
+      if (opcao?.outro) {
+        const texto = outros[id]?.trim().replace(/[.!?]+$/, '')
+        // Minúscula na primeira letra, porque a citação cai no meio da frase.
+        // Sigla fica como veio: "TI" não vira "tI".
+        if (texto) {
+          const sigla = texto.length > 1 && texto[1] === texto[1].toUpperCase() && /\p{L}/u.test(texto[1])
+          return `“${sigla ? texto : texto[0].toLowerCase() + texto.slice(1)}”`
+        }
+      }
       if (opcao?.eco) return opcao.eco
     }
     return 'crescer sozinho'
-  }, [respostas])
+  }, [respostas, outros])
 
   return (
     // O foco vem daqui a cada tela — é o que avisa leitor de tela e teclado de
@@ -204,7 +226,9 @@ export function Peneira() {
           key={pergunta.id}
           pergunta={pergunta}
           valor={respostas[pergunta.id]}
+          textoOutro={outros[pergunta.id] ?? ''}
           onEscolher={escolher}
+          onTextoOutro={(texto) => setOutros((o) => ({ ...o, [pergunta.id]: texto }))}
           onContinuar={() => {
             const valor = respostas[pergunta.id]
             avancar(pergunta.id, typeof valor === 'string' ? valor : undefined)
@@ -213,20 +237,12 @@ export function Peneira() {
         />
       )}
 
-      {etapa === 'ficha' && (
-        <TelaFicha
-          trilha={trilha}
-          valores={ficha}
-          onChange={(id, valor) => setFicha((f) => ({ ...f, [id]: valor }))}
-          onContinuar={() => setEtapa('contato')}
-          onVoltar={voltar}
-        />
-      )}
-
       {etapa === 'contato' && (
         <TelaContato
           valores={contato}
+          aceite={aceite}
           onChange={(id, valor) => setContato((c) => ({ ...c, [id]: valor }))}
+          onAceite={setAceite}
           onEnviar={enviar}
           onVoltar={voltar}
         />

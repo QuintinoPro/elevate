@@ -3,24 +3,26 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AccentHeadline } from '@/components/ui/SectionHeader'
-import { CampoSelect, CampoTexto, GrupoOpcoes, formatarTelefone } from '@/components/quiz/Campos'
-import { BRAND } from '@/lib/constants'
-import { ESTADOS, FORA_DO_BRASIL } from '@/lib/estados'
+import { CampoTexto, GrupoOpcoes, formatarTelefone } from '@/components/quiz/Campos'
+import { BRAND, PRIVACIDADE_PATH } from '@/lib/constants'
 import {
   abertura,
   apuracao,
   contato as copyContato,
-  ficha as copyFicha,
   TOTAL_PASSOS,
   type Pergunta,
   type Resultado,
-  type Trilha,
 } from '@/lib/quiz'
 
 const botao =
   'inline-flex items-center justify-center rounded-full px-7 py-4 text-base font-bold transition-[filter,background-color,border-color,opacity] duration-200'
 const primario = `${botao} bg-accent text-ink hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:brightness-100`
 const fantasma = `${botao} border border-line text-paper hover:border-accent hover:text-accent`
+
+// Título das telas de pergunta e contato. Um degrau menor no celular: em 36px
+// "O que você faz hoje?" ocupava três linhas em 360px e, somado às 6 opções,
+// jogava o botão pra fora da tela.
+const tituloTela = 'text-balance text-[1.75rem] font-bold leading-[1.15] tracking-[-0.02em] sm:text-display-md'
 
 // ─── Abertura ────────────────────────────────────────────────────────────────
 
@@ -46,12 +48,13 @@ export function TelaAbertura({ onComecar }: { onComecar: () => void }) {
 
 function Progresso({ passo, onVoltar }: { passo: number; onVoltar: () => void }) {
   return (
-    <div className="mb-10">
+    <div className="mb-6 sm:mb-10">
       <div className="flex items-center justify-between gap-4">
+        {/* py-3 com -my-2: área de toque de 44px sem empurrar a barra. */}
         <button
           type="button"
           onClick={onVoltar}
-          className="-ml-2 rounded-full px-2 py-1 text-sm text-paper/50 transition-colors hover:text-paper"
+          className="-my-2 -ml-3 rounded-full px-3 py-3 text-sm text-paper/50 transition-colors hover:text-paper"
         >
           ← Voltar
         </button>
@@ -81,25 +84,44 @@ function Progresso({ passo, onVoltar }: { passo: number; onVoltar: () => void })
 export function TelaPergunta({
   pergunta,
   valor,
+  textoOutro,
   onEscolher,
+  onTextoOutro,
   onContinuar,
   onVoltar,
 }: {
   pergunta: Pergunta
   valor: string | string[] | undefined
+  textoOutro: string
   onEscolher: (valor: string | string[], porPonteiro: boolean) => void
+  onTextoOutro: (texto: string) => void
   onContinuar: () => void
   onVoltar: () => void
 }) {
-  const respondida = Array.isArray(valor) ? valor.length > 0 : !!valor
+  const valorOutro = pergunta.opcoes.find((o) => o.outro)?.value
+  const marcouOutro =
+    !!valorOutro && (Array.isArray(valor) ? valor.includes(valorOutro) : valor === valorOutro)
+  // "Outro" sem texto não é resposta: é a pessoa dizendo que nenhuma serve e
+  // não dizendo qual serve. Duas letras bastam — "TI" é resposta.
+  const respondida =
+    (Array.isArray(valor) ? valor.length > 0 : !!valor) &&
+    (!marcouOutro || textoOutro.trim().length >= 2)
 
   return (
     <div className="mx-auto max-w-2xl text-center">
       <Progresso passo={pergunta.passo} onVoltar={onVoltar} />
-      <h1 className="text-balance text-display-md font-bold">{pergunta.pergunta}</h1>
-      {pergunta.ajuda && <p className="mt-4 text-base text-paper/50">{pergunta.ajuda}</p>}
+      <h1 className={tituloTela}>{pergunta.pergunta}</h1>
+      {pergunta.ajuda && <p className="mt-3 text-base text-paper/50 sm:mt-4">{pergunta.ajuda}</p>}
 
-      <GrupoOpcoes pergunta={pergunta} valor={valor} onEscolher={onEscolher} />
+      <GrupoOpcoes
+        pergunta={pergunta}
+        valor={valor}
+        textoOutro={textoOutro}
+        onEscolher={onEscolher}
+        onTextoOutro={onTextoOutro}
+        // Enter no campo do "Outro" faz o mesmo que o botão, se já der.
+        onConfirmarOutro={() => respondida && onContinuar()}
+      />
 
       {/* Sempre presente, mesmo quando o clique já avança sozinho: é o caminho
           de quem navega por teclado e a saída de quem marcou duas na múltipla. */}
@@ -107,63 +129,8 @@ export function TelaPergunta({
         type="button"
         onClick={onContinuar}
         disabled={!respondida}
-        className={`${primario} mt-8`}
+        className={`${primario} mt-6 sm:mt-8`}
       >
-        Continuar
-      </button>
-    </div>
-  )
-}
-
-// ─── Ficha ───────────────────────────────────────────────────────────────────
-
-export function TelaFicha({
-  trilha,
-  valores,
-  onChange,
-  onContinuar,
-  onVoltar,
-}: {
-  trilha: Trilha | null
-  valores: Record<string, string>
-  onChange: (id: string, valor: string) => void
-  onContinuar: () => void
-  onVoltar: () => void
-}) {
-  const campos = copyFicha.campos.filter(
-    (c) => !('ocultarNasTrilhas' in c) || !trilha || !c.ocultarNasTrilhas.includes(trilha),
-  )
-  const completo = campos.every((c) => valores[c.id])
-
-  return (
-    <div className="mx-auto max-w-2xl text-center">
-      <Progresso passo={TOTAL_PASSOS} onVoltar={onVoltar} />
-      <h1 className="text-balance text-display-md font-bold">{copyFicha.titulo}</h1>
-      <p className="mt-4 text-base text-paper/50">{copyFicha.ajuda}</p>
-
-      <div className="mt-8 grid gap-5">
-        {campos.map((campo) =>
-          campo.tipo === 'estado' ? (
-            <CampoSelect
-              key={campo.id}
-              label={campo.label}
-              valor={valores[campo.id] ?? ''}
-              onChange={(v) => onChange(campo.id, v)}
-              opcoes={[...ESTADOS, FORA_DO_BRASIL].map((uf) => ({ value: uf, label: uf }))}
-            />
-          ) : (
-            <CampoSelect
-              key={campo.id}
-              label={campo.label}
-              valor={valores[campo.id] ?? ''}
-              onChange={(v) => onChange(campo.id, v)}
-              opcoes={'opcoes' in campo ? [...campo.opcoes] : []}
-            />
-          ),
-        )}
-      </div>
-
-      <button type="button" onClick={onContinuar} disabled={!completo} className={`${primario} mt-8`}>
         Continuar
       </button>
     </div>
@@ -174,26 +141,30 @@ export function TelaFicha({
 
 export function TelaContato({
   valores,
+  aceite,
   onChange,
+  onAceite,
   onEnviar,
   onVoltar,
 }: {
   valores: { nome: string; whatsapp: string }
+  aceite: boolean
   onChange: (id: 'nome' | 'whatsapp', valor: string) => void
+  onAceite: (aceite: boolean) => void
   onEnviar: () => void
   onVoltar: () => void
 }) {
   const digitos = valores.whatsapp.replace(/\D/g, '')
-  const valido = valores.nome.trim().length >= 2 && digitos.length >= 10
+  const valido = valores.nome.trim().length >= 2 && digitos.length >= 10 && aceite
 
   return (
     <div className="mx-auto max-w-2xl text-center">
       <Progresso passo={TOTAL_PASSOS} onVoltar={onVoltar} />
-      <h1 className="text-balance text-display-md font-bold">{copyContato.titulo}</h1>
-      <p className="mt-4 text-base text-paper/50">{copyContato.ajuda}</p>
+      <h1 className={tituloTela}>{copyContato.titulo}</h1>
+      <p className="mt-3 text-base text-paper/50 sm:mt-4">{copyContato.ajuda}</p>
 
       <form
-        className="mt-8 grid gap-5"
+        className="mt-6 grid gap-4 sm:mt-8 sm:gap-5"
         onSubmit={(e) => {
           e.preventDefault()
           if (valido) onEnviar()
@@ -217,6 +188,43 @@ export function TelaContato({
           inputMode="tel"
           autoComplete="tel"
         />
+        {/* Mesmo desenho das opções de múltipla escolha: checkbox nativo em
+            sr-only, caixa desenhada ao lado. Fica colado no botão de propósito,
+            porque é o último requisito dele — quem vê o botão apagado enxerga
+            a caixa vazia logo acima. */}
+        <label className="flex cursor-pointer items-start gap-3 text-left text-sm leading-relaxed text-paper/70">
+          <input
+            type="checkbox"
+            name="aceite"
+            checked={aceite}
+            onChange={(e) => onAceite(e.target.checked)}
+            className="peer sr-only"
+          />
+          <span
+            aria-hidden
+            className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-ink ${
+              aceite ? 'border-accent bg-accent' : 'border-line'
+            }`}
+          >
+            {aceite && (
+              <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 text-ink" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <path d="m3.5 8.5 3 3 6-7" />
+              </svg>
+            )}
+          </span>
+          <span>
+            {copyContato.aceite.antes}
+            <Link
+              href={PRIVACIDADE_PATH}
+              target="_blank"
+              rel="noopener"
+              className="text-accent underline underline-offset-4 hover:brightness-110"
+            >
+              {copyContato.aceite.link}
+            </Link>
+            {copyContato.aceite.depois}
+          </span>
+        </label>
         <div>
           <button type="submit" disabled={!valido} className={primario}>
             {copyContato.cta}
@@ -332,7 +340,7 @@ export function TelaResultado({
       </div>
 
       <p className="mt-12 text-sm text-paper/30">
-        <Link href="/" className="underline underline-offset-4 hover:text-paper/60">
+        <Link href="/" className="inline-block py-3 underline underline-offset-4 hover:text-paper/60">
           Voltar para a página da liga
         </Link>
       </p>

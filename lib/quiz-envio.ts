@@ -1,7 +1,9 @@
 // Saída da peneira: o que vai pra planilha e o que vai pro checkout.
 
 import { CHECKOUT_URL, QUIZ_ENDPOINT } from '@/lib/constants'
-import { classificar, ficha as copyFicha, perguntas, somarScore, type Trilha } from '@/lib/quiz'
+import { ufPeloWhatsapp } from '@/lib/estados'
+import { classificar, perguntas, somarScore, type Trilha } from '@/lib/quiz'
+import { privacidade } from '@/lib/privacidade'
 import { lerUtms } from '@/lib/utm'
 
 export type Respostas = Record<string, string | string[]>
@@ -11,45 +13,42 @@ export type Respostas = Record<string, string | string[]>
 // Colunas de trilhas diferentes ficam vazias nas linhas das outras trilhas, e
 // tudo bem: é isso que permite filtrar "quem fatura mais de 10k" sem cruzar
 // planilha nenhuma.
+//
+// Colunas de perguntas que saíram em 13/09 (tempo de negócio, time, área,
+// objetivo, estudos, erros, temas, formação, viagem) continuam na planilha com
+// as linhas antigas. O Apps Script só acrescenta coluna, nunca apaga.
 const COLUNAS: Record<string, string> = {
   idade: 'Idade',
   momento: 'O que faz hoje',
   'e-oque': 'O que vende',
-  'e-tempo': 'Tempo de negócio',
   'e-faturamento': 'Faturamento mensal',
-  'e-time': 'Sozinho ou com time',
   'e-gargalo': 'Gargalo',
-  'c-area': 'Área de trabalho',
-  'c-salario': 'Salário',
   'c-porfora': 'Tenta algo por fora',
-  'c-objetivo': 'Objetivo em 12 meses',
+  'c-salario': 'Salário',
   'c-trava': 'Trava',
-  'i-estudo': 'Estudos',
-  'i-renda': 'Trabalho e renda',
   'i-tentou': 'Já tentou no digital',
-  'i-objetivo': 'O que quer primeiro',
+  'i-renda': 'Trabalho e renda',
   'i-trava': 'Trava',
-  erros: 'Erros que já custaram tempo',
-  temas: 'Temas de interesse',
   'tempo-semana': 'Horas por semana',
   investimento: 'Sobre os R$497',
 }
 
-/** Converte o valor guardado no rótulo que a pessoa leu na tela. */
-const rotular = (perguntaId: string, valor: string | string[]): string => {
+/**
+ * Converte o valor guardado no rótulo que a pessoa leu na tela. No "Outro", o
+ * que interessa é o que ela escreveu: sai "Outro: servidor público", não só
+ * "Outro", que numa planilha não diz nada.
+ */
+const rotular = (perguntaId: string, valor: string | string[], textoOutro?: string): string => {
   const pergunta = perguntas.find((p) => p.id === perguntaId)
   if (!pergunta) return Array.isArray(valor) ? valor.join(' · ') : valor
   const valores = Array.isArray(valor) ? valor : [valor]
   return valores
-    .map((v) => pergunta.opcoes.find((o) => o.value === v)?.label ?? v)
+    .map((v) => {
+      const opcao = pergunta.opcoes.find((o) => o.value === v)
+      if (opcao?.outro && textoOutro?.trim()) return `${opcao.label}: ${textoOutro.trim()}`
+      return opcao?.label ?? v
+    })
     .join(' · ')
-}
-
-/** O select da ficha guarda o value; quem lê a planilha quer o rótulo. */
-const rotularFicha = (campoId: string, valor: string): string => {
-  const campo = copyFicha.campos.find((c) => c.id === campoId)
-  if (!campo || !('opcoes' in campo)) return valor
-  return campo.opcoes.find((o) => o.value === valor)?.label ?? valor
 }
 
 /**
@@ -67,7 +66,8 @@ export type DadosPeneira = {
   respostas: Respostas
   trilha: Trilha | null
   resultadoId: string
-  ficha: Record<string, string>
+  /** Texto do "Outro", por id de pergunta. Só vale se a opção marcada for o "Outro". */
+  outros: Record<string, string>
   contato: { nome: string; whatsapp: string }
 }
 
@@ -90,13 +90,17 @@ export function montarLinha(dados: DadosPeneira): Record<string, string | number
     'Score': score,
     'Temperatura': classificar(score),
     'Link WhatsApp': linkWhatsapp(dados.contato.whatsapp),
-    'Estado': dados.ficha.estado ?? '',
-    'Formação': dados.ficha.formacao ? rotularFicha('formacao', dados.ficha.formacao) : '',
-    'Já saiu do Brasil': dados.ficha.viagem ? rotularFicha('viagem', dados.ficha.viagem) : '',
+    // Pelo DDD, não perguntado — ver lib/estados.ts.
+    'Estado': ufPeloWhatsapp(dados.contato.whatsapp),
+    // Prova do consentimento da LGPD: o ônus de provar que a pessoa aceitou é
+    // de quem guarda o dado. Só existe linha se a caixa foi marcada — a tela de
+    // contato não envia sem ela —, então a coluna registra a data da política
+    // que estava valendo no aceite, que é o que importa se ela mudar.
+    'Aceite da política': `Sim (versão de ${privacidade.atualizacao})`,
   }
 
   for (const [id, valor] of Object.entries(dados.respostas)) {
-    linha[COLUNAS[id] ?? id] = rotular(id, valor)
+    linha[COLUNAS[id] ?? id] = rotular(id, valor, dados.outros[id])
   }
 
   for (const [chave, valor] of Object.entries(lerUtms())) {
