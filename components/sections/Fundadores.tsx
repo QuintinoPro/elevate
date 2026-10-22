@@ -10,13 +10,17 @@ export function Fundadores() {
 
       {/* A grade é estreitada de propósito (max-w-4xl dentro do container de
           6xl): em 2 colunas cheias o card passava de 600px de altura e a foto
-          virava o assunto da seção. Aqui os dois cards ainda cabem lado a lado,
-          mas o retrato para de competir com a headline. */}
-      <div className="mt-14 grid max-w-4xl gap-6 sm:grid-cols-2">
+          virava o assunto da seção. Com o terceiro card (21/10/2026), a partir
+          do lg são 3 colunas na largura toda — cada card fica mais estreito que
+          os de antes, então a foto continua sem competir com a headline. */}
+      <div className="mt-14 grid max-w-4xl gap-6 sm:grid-cols-2 lg:max-w-none lg:grid-cols-3">
         {fundadores.pessoas.map((p) => (
+          // Entre sm e lg a grade tem 2 colunas e o terceiro card sobra sozinho
+          // na segunda linha: centralizado, na largura de uma coluna, em vez de
+          // colado à esquerda com um buraco do lado.
           <article
             key={p.nome}
-            className="flex flex-col overflow-hidden rounded-2xl border border-line/30 bg-ink"
+            className="flex flex-col overflow-hidden rounded-2xl border border-line/30 bg-ink sm:max-lg:odd:last:col-span-2 sm:max-lg:odd:last:mx-auto sm:max-lg:odd:last:w-[calc(50%-0.75rem)]"
           >
             {/* Retrato real dos dois. As fotos nasceram com temperaturas de cor
                 opostas (palco azul / estúdio laranja): foram dessaturadas de
@@ -64,9 +68,9 @@ export function Fundadores() {
                 href={p.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                // mt-auto: um dos dois tem dois cargos, então sem isso o
-                // handle de cada card para numa altura diferente e o par
-                // parece desalinhado.
+                // mt-auto: os cards têm número de cargos diferente, então sem
+                // isso o handle de cada um para numa altura diferente e a
+                // fileira parece desalinhada.
                 // min-h-11 com o texto no pé: área de toque de 44px sem mudar
                 // onde o @ aparece.
                 className="mt-auto inline-flex min-h-11 items-end self-start pt-4 text-sm text-paper/55 transition-colors hover:text-accent"

@@ -5,17 +5,21 @@ import Link from 'next/link'
 import { AccentHeadline } from '@/components/ui/SectionHeader'
 import { CampoTexto, GrupoOpcoes, formatarTelefone } from '@/components/quiz/Campos'
 import { BRAND, PRIVACIDADE_PATH } from '@/lib/constants'
+import { ufPeloWhatsapp } from '@/lib/estados'
 import {
   abertura,
   apuracao,
   contato as copyContato,
+  falhaEnvio,
   TOTAL_PASSOS,
   type Pergunta,
   type Resultado,
 } from '@/lib/quiz'
 
+// select-none: um clique duplo no botão selecionava o texto, e a seleção
+// atravessava a troca de tela e pintava o resultado inteiro de azul.
 const botao =
-  'inline-flex items-center justify-center rounded-full px-7 py-4 text-base font-bold transition-[filter,background-color,border-color,opacity] duration-200'
+  'inline-flex select-none items-center justify-center rounded-full px-7 py-4 text-base font-bold transition-[filter,background-color,border-color,opacity] duration-200'
 const primario = `${botao} bg-accent text-ink hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:brightness-100`
 const fantasma = `${botao} border border-line text-paper hover:border-accent hover:text-accent`
 
@@ -154,8 +158,21 @@ export function TelaContato({
   onEnviar: () => void
   onVoltar: () => void
 }) {
+  // Os avisos só aparecem depois da primeira tentativa de enviar: avisar
+  // enquanto a pessoa ainda está digitando é cobrar o que ela ia fazer.
+  const [tentou, setTentou] = useState(false)
   const digitos = valores.whatsapp.replace(/\D/g, '')
-  const valido = valores.nome.trim().length >= 2 && digitos.length >= 10 && aceite
+  const erros = {
+    nome: valores.nome.trim().length < 2 ? copyContato.erros.nome : '',
+    whatsapp:
+      digitos.length < 10
+        ? copyContato.erros.whatsapp
+        : !ufPeloWhatsapp(digitos)
+          ? copyContato.erros.ddd
+          : '',
+    aceite: aceite ? '' : copyContato.erros.aceite,
+  }
+  const visivel = (erro: string) => (tentou ? erro : '')
 
   return (
     <div className="mx-auto max-w-2xl text-center">
@@ -165,9 +182,15 @@ export function TelaContato({
 
       <form
         className="mt-6 grid gap-4 sm:mt-8 sm:gap-5"
+        noValidate
         onSubmit={(e) => {
           e.preventDefault()
-          if (valido) onEnviar()
+          const primeiro = (['nome', 'whatsapp', 'aceite'] as const).find((campo) => erros[campo])
+          if (!primeiro) return onEnviar()
+          setTentou(true)
+          // Leva o foco (e o teclado do celular) pro primeiro campo que falta.
+          const campo = e.currentTarget.elements.namedItem(primeiro)
+          if (campo instanceof HTMLElement) campo.focus()
         }}
       >
         <CampoTexto
@@ -177,6 +200,8 @@ export function TelaContato({
           placeholder="Como te chamam"
           name="nome"
           autoComplete="name"
+          maxLength={80}
+          erro={visivel(erros.nome)}
         />
         <CampoTexto
           label="WhatsApp com DDD"
@@ -187,23 +212,25 @@ export function TelaContato({
           name="whatsapp"
           inputMode="tel"
           autoComplete="tel"
+          erro={visivel(erros.whatsapp)}
         />
         {/* Mesmo desenho das opções de múltipla escolha: checkbox nativo em
             sr-only, caixa desenhada ao lado. Fica colado no botão de propósito,
-            porque é o último requisito dele — quem vê o botão apagado enxerga
-            a caixa vazia logo acima. */}
+            porque é o último requisito dele. */}
         <label className="flex cursor-pointer items-start gap-3 text-left text-sm leading-relaxed text-paper/70">
           <input
             type="checkbox"
             name="aceite"
             checked={aceite}
             onChange={(e) => onAceite(e.target.checked)}
+            aria-invalid={!!visivel(erros.aceite)}
+            aria-describedby={visivel(erros.aceite) ? 'aceite-erro' : undefined}
             className="peer sr-only"
           />
           <span
             aria-hidden
             className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md border peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-ink ${
-              aceite ? 'border-accent bg-accent' : 'border-line'
+              aceite ? 'border-accent bg-accent' : visivel(erros.aceite) ? 'border-red-400' : 'border-line'
             }`}
           >
             {aceite && (
@@ -225,8 +252,13 @@ export function TelaContato({
             {copyContato.aceite.depois}
           </span>
         </label>
+        {visivel(erros.aceite) && (
+          <p id="aceite-erro" className="-mt-2 text-left text-sm text-red-400">
+            {erros.aceite}
+          </p>
+        )}
         <div>
-          <button type="submit" disabled={!valido} className={primario}>
+          <button type="submit" className={primario}>
             {copyContato.cta}
           </button>
           <p className="mt-4 text-sm text-paper/55">{copyContato.nota}</p>
@@ -283,14 +315,21 @@ export function TelaResultado({
   resultado,
   eco,
   nome,
-  urlCheckout,
+  envio,
+  onReenviar,
 }: {
   resultado: Resultado
   eco: string
   nome: string
-  urlCheckout: string | null
+  /** null quando nada foi enviado (menor de idade sai antes do contato). */
+  envio: 'enviando' | 'ok' | 'falhou' | null
+  onReenviar: () => void
 }) {
   const primeiroNome = nome.trim().split(' ')[0]
+  // Depois de um "Enviar de novo", o aviso fica na tela até a resposta, com o
+  // botão em "Enviando…" — sumir e voltar daria a impressão de que deu certo.
+  const [reenviando, setReenviando] = useState(false)
+  const falhou = envio === 'falhou' || (reenviando && envio === 'enviando')
 
   return (
     <div className="mx-auto max-w-2xl text-center">
@@ -301,6 +340,28 @@ export function TelaResultado({
       <h1 className="mt-5 text-balance text-display-md font-bold sm:text-display-lg">
         <AccentHeadline headline={resultado.headline} />
       </h1>
+
+      {/* Logo abaixo da manchete, e não junto do próximo passo lá embaixo: no
+          celular o fim da tela fica fora da vista, e esse aviso é o único jeito
+          de o lead não se perder. */}
+      {falhou && (
+        <div role="alert" className="mx-auto mt-8 max-w-[44ch] rounded-2xl border border-red-400/60 px-5 py-5 text-left">
+          <p className="font-bold">{falhaEnvio.titulo}</p>
+          <p className="mt-2 text-sm text-paper/70">{falhaEnvio.texto}</p>
+          <button
+            type="button"
+            disabled={envio === 'enviando'}
+            onClick={() => {
+              setReenviando(true)
+              onReenviar()
+            }}
+            className={`${primario} mt-4 w-full sm:w-auto`}
+          >
+            {envio === 'enviando' ? falhaEnvio.enviando : falhaEnvio.cta}
+          </button>
+        </div>
+      )}
+
       <p className="mt-6 text-pretty text-lg text-paper/70">{resultado.leitura.replace('{eco}', eco)}</p>
 
       <ul className="mt-10 grid gap-4">
@@ -312,30 +373,16 @@ export function TelaResultado({
         ))}
       </ul>
 
+      {/* Sem checkout desde 21/10/2026: o fim da peneira é o cadastro. O
+          próximo passo vem antes do botão porque é a informação que a pessoa
+          precisa levar daqui; o Instagram é só o que fazer enquanto espera. */}
       <div className="mt-10">
-        {resultado.aprovado && resultado.cta ? (
-          urlCheckout ? (
-            <a href={urlCheckout} className={primario}>
-              {resultado.cta}
-            </a>
-          ) : (
-            // Botão parado é melhor que botão que leva a lugar nenhum. Some
-            // sozinho no minuto em que o CHECKOUT_URL for preenchido.
-            <div>
-              <button type="button" disabled className={primario}>
-                {resultado.cta}
-              </button>
-              <p className="mt-4 text-sm text-paper/55">
-                Checkout em configuração — preencher <code>CHECKOUT_URL</code> em{' '}
-                <code>lib/constants.ts</code>.
-              </p>
-            </div>
-          )
-        ) : (
-          <a href={BRAND.instagram} target="_blank" rel="noopener noreferrer" className={fantasma}>
-            Seguir a gente no Instagram
-          </a>
+        {resultado.proximoPasso && !falhou && (
+          <p className="mx-auto mb-8 max-w-[40ch] text-pretty text-lg font-bold">{resultado.proximoPasso}</p>
         )}
+        <a href={BRAND.instagram} target="_blank" rel="noopener noreferrer" className={fantasma}>
+          Seguir a gente no Instagram
+        </a>
         {resultado.rodape && <p className="mt-6 text-sm text-paper/55">{resultado.rodape}</p>}
       </div>
 

@@ -12,8 +12,8 @@ import { OQueRecebe } from '@/components/sections/OQueRecebe'
 
 /**
  * Sete seções, nessa ordem, e nada além disso. Cada uma responde uma pergunta
- * da decisão de compra: o que é, o que eu recebo, quem está por trás, isso é
- * pra mim, quanto custa, e o que ainda me trava. Se uma seção nova não
+ * da decisão: o que é, o que eu recebo, quem está por trás, isso é pra mim,
+ * como eu entro, e o que ainda me trava. Se uma seção nova não
  * responder uma dessas, ela não entra.
  */
 export default function Home() {
@@ -32,8 +32,8 @@ export default function Home() {
         <OQueE />
         <OQueRecebe />
         <Fundadores />
-        {/* A qualificação vem logo antes do preço: quem se reconhece nela chega
-            no valor já convencido de que a liga é pra ele, e quem não se
+        {/* A qualificação vem logo antes do cadastro: quem se reconhece nela
+            chega no botão já convencido de que a liga é pra ele, e quem não se
             reconhece sai antes — que é o ponto da seção. */}
         <ParaQuem />
         <Oferta />

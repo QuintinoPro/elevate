@@ -22,7 +22,7 @@ export type SecaoPrivacidade = {
 
 export const privacidade = {
   titulo: 'Política de privacidade',
-  atualizacao: '13 de setembro de 2026',
+  atualizacao: '21 de outubro de 2026',
   resumo:
     'Em uma frase: a gente guarda o que você responde na peneira e o seu contato, usa isso pra avaliar sua entrada e falar com você pelo WhatsApp, e não vende nem repassa seus dados pra ninguém fazer propaganda.',
   secoes: [
@@ -36,12 +36,12 @@ export const privacidade = {
     {
       titulo: 'O que coletamos',
       itens: [
-        'Suas respostas da peneira: idade, o que você faz hoje, sua renda ou faturamento (depende da trilha), o que te trava, horas por semana e como você enxerga o investimento. Se você marcar "Outro", guardamos também o que escreveu.',
+        'Suas respostas da peneira: idade, o que você faz hoje, sua renda ou faturamento (depende da trilha), o que te trava, horas por semana e quando você quer começar. Se você marcar "Outro", guardamos também o que escreveu.',
         'Seu contato: nome e WhatsApp. Pelo DDD, anotamos também o seu estado.',
         'A origem da visita, quando o link trouxer: parâmetros de campanha (como utm_source) e identificadores de clique do Google e do Meta.',
       ],
       fecho: [
-        'Não pedimos CPF, endereço nem dados de cartão. O pagamento acontece na plataforma de checkout, que tem a política de privacidade dela.',
+        'Não pedimos CPF, endereço nem dados de cartão.',
       ],
     },
     {
@@ -52,7 +52,6 @@ export const privacidade = {
         'Organizar a ordem de atendimento, já que a agenda das mentorias é limitada.',
         'Entender quais campanhas trazem as pessoas certas pra liga.',
       ],
-      fecho: ['Nada disso muda o preço ou as condições que aparecem pra você.'],
     },
     {
       titulo: 'Com base em quê',
@@ -63,8 +62,7 @@ export const privacidade = {
     {
       titulo: 'Com quem compartilhamos',
       itens: [
-        'Google: as respostas ficam numa planilha do Google, com acesso restrito ao time da Elevate League. Os servidores do Google podem ficar fora do Brasil.',
-        'Plataforma de pagamento: se você clicar pra ir ao checkout, seu nome e seu WhatsApp seguem no link, só pra você não precisar digitar tudo de novo.',
+        'Google: as respostas ficam numa planilha do Google, e o time recebe um aviso por e-mail (Gmail) a cada cadastro, com acesso restrito ao time da Elevate League. Os servidores do Google podem ficar fora do Brasil.',
         'WhatsApp: a conversa com a gente acontece lá, sob as regras do próprio aplicativo.',
       ],
       fecho: ['Não vendemos, não alugamos e não cedemos seus dados pra terceiros fazerem publicidade.'],

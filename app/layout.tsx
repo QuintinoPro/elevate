@@ -10,6 +10,11 @@ const sora = Sora({
   variable: '--font-sora',
 })
 
+// Até ~155 caracteres: acima disso o Google corta no resultado de busca. A
+// versão anterior tinha 190 (revisão de 21/10/2026).
+const DESCRICAO =
+  'Uma liga de jovens empreendedores construindo, vendendo e crescendo juntos. Plataforma, encontros ao vivo, networking e mentorias com os fundadores.'
+
 export const metadata: Metadata = {
   // Só a origem, sem caminho. O Next já prefixa o basePath nos arquivos de
   // metadata (opengraph-image, ícones); com o SITE_URL inteiro aqui, a imagem de
@@ -17,24 +22,22 @@ export const metadata: Metadata = {
   // duas formas dão no mesmo.
   metadataBase: new URL(new URL(SITE_URL).origin),
   title: {
-    default: 'Elevate Pro — você não precisa de mais conteúdo',
+    default: 'Elevate League — você não precisa de mais conteúdo',
     template: '%s · Elevate League',
   },
-  description:
-    'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e mentorias individuais com os fundadores.',
+  description: DESCRICAO,
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
     url: SITE_URL,
     siteName: BRAND.name,
-    title: 'Elevate Pro — você não precisa de mais conteúdo',
-    description:
-      'Entre para uma liga de jovens empreendedores que estão construindo, vendendo, criando e crescendo juntos. Plataforma, encontros ao vivo, networking e mentorias individuais com os fundadores.',
+    title: 'Elevate League — você não precisa de mais conteúdo',
+    description: DESCRICAO,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Elevate Pro — você não precisa de mais conteúdo',
-    description: 'A liga de jovens empreendedores que estão construindo juntos. Primeiras vagas por R$497.',
+    title: 'Elevate League — você não precisa de mais conteúdo',
+    description: 'A liga de jovens empreendedores que estão construindo juntos. Cadastro aberto pra primeira turma.',
   },
   alternates: { canonical: SITE_URL },
   // Enquanto for prévia, fica fora do índice. Amarrar isso ao BASE_PATH era

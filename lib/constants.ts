@@ -50,38 +50,30 @@ export const FOUNDERS = {
 // O produto vendido na landing. A marca continua sendo a Elevate League.
 export const PRODUCT = 'Elevate Pro'
 
-// Preço da primeira turma, assinado pelo Lucas em 10/09/2026. Saiu do hero em
-// 11/09; hoje aparece no card de oferta, no rótulo do botão e na peneira —
-// todos leem daqui, então trocar aqui troca na página inteira.
-export const PRICE = 'R$497'
-
-// Parcelamento exibido no card de oferta (11/09/2026). O número grande passou a
-// ser a parcela, e o valor à vista entra abaixo, como na referência que o Lucas
-// trouxe (laje-ac.com.br).
+// SEM PREÇO NO SITE desde 21/10/2026. Decisão do Lucas: a estratégia mudou, e a
+// página deixou de vender. A pessoa faz o cadastro pela peneira, o lead vai pra
+// planilha, e o time da Elevate League chama no WhatsApp pra decidir se ela
+// entra — valor e pagamento são assunto dessa conversa, nunca da página.
+// Nada aqui pode dar indício de que entrar custa dinheiro: nem valor, nem
+// parcela, nem garantia de reembolso, nem link de checkout.
 //
-// ATENÇÃO: R$41,42 é R$497 dividido por 12 **sem juros** — só é verdade se o
-// checkout da Hubla estiver configurado para absorver os juros. Se a Hubla
-// repassar, a parcela real sobe (costuma ficar na casa dos R$50) e a página
-// passa a anunciar um valor que o checkout não cobra. Conferir antes de indexar
-// e ajustar as duas linhas abaixo.
-export const PRICE_PARCELAS = 12
-export const PRICE_PARCELA = 'R$41,42'
+// O que existia antes está no Git: R$497 / 12x de R$41,42 (commit bbb0ee4) e o
+// checkout da Hubla, https://pay.hub.la/rtaV0GK8PicrmE9JsGTf (commit ad57524).
 
 // Os CTAs da página. Todos levam ao mesmo lugar (a peneira); o que muda é o
 // tamanho do rótulo, porque o botão do header não comporta a frase inteira.
 // Se o texto mudar, muda aqui e vale na página toda.
 export const CTA_LABEL = `Quero entrar para o ${PRODUCT}`
 export const CTA_LABEL_SHORT = 'Entrar na liga'
-export const CTA_LABEL_OFERTA = `Garantir minha vaga por ${PRICE}`
+export const CTA_LABEL_OFERTA = 'Fazer meu cadastro'
 export const QUIZ_PATH = '/quiz/'
 
-// Checkout da primeira turma, na Hubla (link do Lucas, 10/09/2026). Não é
-// segredo — é o link de compra, e o repositório é público de qualquer forma.
-// Preenchido, o botão do resultado da peneira sai do estado desativado sozinho.
-export const CHECKOUT_URL = 'https://pay.hub.la/rtaV0GK8PicrmE9JsGTf'
-
-// Web App do Google Apps Script que grava as respostas da peneira na planilha.
-// O código do script vive em AUTOMACOES/PENEIRA/ — subir lá, publicar como
-// "qualquer pessoa", e colar a URL /exec aqui (ou em .env.local, que não vai
-// pro repositório público).
-export const QUIZ_ENDPOINT = process.env.NEXT_PUBLIC_QUIZ_ENDPOINT ?? ''
+// Web App do Google Apps Script que grava as respostas da peneira na planilha
+// "Elevate — Peneira", na conta stocksservicosti@gmail.com (publicado em
+// 21/10/2026). O código e o passo a passo pra atualizar vivem em
+// AUTOMACOES/PENEIRA/. Não é segredo: a URL vai no JavaScript da página de
+// qualquer jeito. Atualizar o script com `clasp update-deployment` mantém esta
+// URL; criar uma implantação nova muda a URL e exige trocar aqui.
+export const QUIZ_ENDPOINT =
+  process.env.NEXT_PUBLIC_QUIZ_ENDPOINT ??
+  'https://script.google.com/macros/s/AKfycbyST8Jfi0jWvq2AHp1RYBAvZjs8c94p09k6u7XM5WV4lmG9BrF4r_dbGxVLYJrAU3I/exec'

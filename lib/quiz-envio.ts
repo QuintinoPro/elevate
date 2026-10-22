@@ -1,6 +1,7 @@
-// Saída da peneira: o que vai pra planilha e o que vai pro checkout.
+// Saída da peneira: o que vai pra planilha. Até 21/10/2026 também montava a
+// URL do checkout; desde que o preço saiu do site, a planilha é o único destino.
 
-import { CHECKOUT_URL, QUIZ_ENDPOINT } from '@/lib/constants'
+import { QUIZ_ENDPOINT } from '@/lib/constants'
 import { ufPeloWhatsapp } from '@/lib/estados'
 import { classificar, perguntas, somarScore, type Trilha } from '@/lib/quiz'
 import { privacidade } from '@/lib/privacidade'
@@ -16,7 +17,8 @@ export type Respostas = Record<string, string | string[]>
 //
 // Colunas de perguntas que saíram em 13/09 (tempo de negócio, time, área,
 // objetivo, estudos, erros, temas, formação, viagem) continuam na planilha com
-// as linhas antigas. O Apps Script só acrescenta coluna, nunca apaga.
+// as linhas antigas. O Apps Script só acrescenta coluna, nunca apaga. O mesmo
+// vale pra "Sobre os R$497", que saiu em 21/10 com o preço.
 const COLUNAS: Record<string, string> = {
   idade: 'Idade',
   momento: 'O que faz hoje',
@@ -30,7 +32,7 @@ const COLUNAS: Record<string, string> = {
   'i-renda': 'Trabalho e renda',
   'i-trava': 'Trava',
   'tempo-semana': 'Horas por semana',
-  investimento: 'Sobre os R$497',
+  quando: 'Quando quer começar',
 }
 
 /**
@@ -110,61 +112,42 @@ export function montarLinha(dados: DadosPeneira): Record<string, string | number
   return linha
 }
 
+/** Espera entre tentativas: a rede do celular costuma voltar em segundos. */
+const ESPERAS_MS = [0, 1500, 4000]
+
 /**
- * Manda a linha pra planilha e segue a vida. Três decisões aqui:
+ * Manda a linha pra planilha. Quatro decisões aqui:
  *
  * - `text/plain` no Content-Type: é o que evita o preflight OPTIONS, que o Web
  *   App do Apps Script não responde. O script faz o JSON.parse do corpo.
- * - `keepalive`: a pessoa vai clicar em "ir pro checkout" segundos depois, e a
- *   navegação cancelaria um fetch normal no meio.
- * - Nunca lança. Se a planilha estiver fora do ar, a pessoa ainda vê o
- *   resultado dela — perder o dado é ruim, perder a venda é pior.
+ * - `keepalive`: a pessoa pode fechar a aba ou ir pro Instagram segundos
+ *   depois, e a navegação cancelaria um fetch normal no meio.
+ * - Três tentativas. Em `no-cors` o fetch só falha quando a rede cai (a
+ *   resposta do script é opaca), e é exatamente o caso de rede ruim e do
+ *   navegador do Instagram. Se a conexão cair depois de o script gravar, a
+ *   repetição pode gerar uma linha duplicada — melhor que um lead perdido.
+ * - Nunca lança: devolve false se as três falharem, e a tela de resultado
+ *   oferece "Enviar de novo" em vez de dizer "Cadastro feito" (revisão de
+ *   21/10/2026: antes o lead sumia sem ninguém saber). Sem QUIZ_ENDPOINT,
+ *   devolve false de cara.
  */
 export async function enviarParaPlanilha(linha: Record<string, string | number>): Promise<boolean> {
   if (!QUIZ_ENDPOINT) return false
-  try {
-    await fetch(QUIZ_ENDPOINT, {
-      method: 'POST',
-      mode: 'no-cors',
-      keepalive: true,
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(linha),
-    })
-    return true
-  } catch {
-    return false
-  }
-}
-
-/**
- * URL do checkout com trilha, contato e campanha.
- *
- * A plataforma é a Hubla — confirmado pelo Lucas em 14/09/2026. Os nomes dos
- * parâmetros (`name`, `phone`, `sck`) vêm da convenção de Kiwify/Cakto/Hotmart
- * e **ainda não foram confirmados na Hubla** — parâmetro que ela não reconhece
- * é ignorado, então nada quebra, mas o pré-preenchimento pode simplesmente não
- * acontecer. TODO: fazer uma compra de teste e ver o que chega no formulário e
- * no relatório de vendas.
- */
-export function montarUrlCheckout(dados: DadosPeneira): string | null {
-  if (!CHECKOUT_URL) return null
-  try {
-    const url = new URL(CHECKOUT_URL)
-    if (dados.contato.nome) url.searchParams.set('name', dados.contato.nome)
-    // Só dígitos: nenhuma plataforma de checkout aceita "(11) 99999-9999".
-    const digitos = dados.contato.whatsapp.replace(/\D/g, '')
-    if (digitos) url.searchParams.set('phone', digitos)
-    if (dados.trilha) {
-      url.searchParams.set('trilha', dados.trilha)
-      // Parâmetro de rastreio livre da maioria das plataformas: faz a trilha
-      // aparecer no relatório de vendas sem depender de cruzar planilha.
-      url.searchParams.set('sck', `peneira-${dados.trilha}`)
+  const corpo = JSON.stringify(linha)
+  for (const espera of ESPERAS_MS) {
+    if (espera) await new Promise((r) => setTimeout(r, espera))
+    try {
+      await fetch(QUIZ_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: corpo,
+      })
+      return true
+    } catch {
+      // Rede caiu: a próxima volta do laço tenta de novo.
     }
-    for (const [chave, valor] of Object.entries(lerUtms())) {
-      url.searchParams.set(chave, valor)
-    }
-    return url.toString()
-  } catch {
-    return CHECKOUT_URL
   }
+  return false
 }

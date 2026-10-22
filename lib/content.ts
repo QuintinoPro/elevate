@@ -103,8 +103,10 @@ export const oQueRecebe = {
 export const fundadores = {
   eyebrow: 'Quem está por trás',
   headline: {
+    // Era "Quem vai estar do outro lado da call" até 21/10/2026, quando entrou
+    // um terceiro card (Victoria) que não faz as calls individuais.
     before: 'Quem vai estar do ',
-    accent: 'outro lado da call',
+    accent: 'seu lado',
     after: '.',
   } satisfies Headline,
   pessoas: [
@@ -113,8 +115,14 @@ export const fundadores = {
       foto: '/brand/khayllan.webp',
       // Cargo e empresa vêm antes da bio de propósito: é a credencial
       // verificável, e é o que o leitor procura pra decidir se essa call vale
-      // R$497. A bio adjetiva; o cargo prova.
-      cargos: ['Fundador da KZ Company'],
+      // a pena. A bio adjetiva; o cargo prova.
+      // Cargos revistos pelo Lucas em 21/10/2026: além da KZ, Move CRM e Dash
+      // Up (negócios que o Khayllan toca em paralelo) e a própria liga.
+      cargos: [
+        'Fundador da KZ Company',
+        'Head of Sales na Move CRM e na Dash Up',
+        'Cofundador da Elevate League',
+      ],
       bio: 'Empreendedor, estrategista e fundador de negócios digitais.',
       instagram: 'https://www.instagram.com/khayllan.midias/',
       handle: '@khayllan.midias',
@@ -126,14 +134,31 @@ export const fundadores = {
       // mostrava mais o letreiro do slide ("uintino", "ad of Marketing") que
       // ele; a 35% entra o rosto e o crachá da Blockchain.RIO, que é a prova.
       enquadramento: '50% 35%',
-      cargos: ['Fundador da Agência Stocks', 'Head of Marketing na Blockchain.RIO'],
+      // "Fundador da Agência Stocks" saiu a pedido do Lucas em 21/10/2026.
+      cargos: [
+        'Head of Marketing na Blockchain.RIO',
+        'Head of Operations na KZ Company',
+        'Cofundador da Elevate League',
+      ],
       bio: 'Empreendedor e especialista em negócios, estratégia e crescimento.',
       instagram: 'https://www.instagram.com/quintinopro/',
       handle: '@quintinopro',
     },
+    {
+      // Entrou em 21/10/2026, a pedido do Lucas. Não é fundadora da liga nem
+      // faz as calls individuais — por isso a headline deixou de ser "do outro
+      // lado da call".
+      nome: 'Victoria Natasha',
+      foto: '/brand/victoria.webp',
+      enquadramento: '50% 45%',
+      cargos: ['Fundadora da VT Vision', 'Account Manager na KZ Company'],
+      bio: 'Designer e especialista em posicionamento estratégico de marcas.',
+      instagram: 'https://www.instagram.com/natashantsc/',
+      handle: '@natashantsc',
+    },
   ],
   fecho:
-    'Além de Khayllan e Lucas, o Elevate receberá convidados e especialistas de diferentes mercados.',
+    'Além do time, o Elevate receberá convidados e especialistas de diferentes mercados.',
 } as const
 
 export const paraQuem = {
@@ -158,20 +183,25 @@ export const paraQuem = {
       'Procura fórmula pronta pra ficar rico em 30 dias',
       'Só quer mais um login com aula gravada pra assistir e esquecer',
       'Não pretende participar, só observar de longe',
-      'Não tem condição de investir agora — melhor a gente te falar isso já',
+      // Era "Não tem condição de investir agora" até 21/10/2026 — saiu junto com
+      // o preço, porque avisava que entrar custa dinheiro.
+      'Espera que alguém faça o trabalho por você',
     ],
   },
 } as const
 
+// Sem preço desde 21/10/2026 (ver lib/constants.ts). O card mostra o que a
+// primeira turma recebe e o que acontece depois do cadastro — nada de valor,
+// parcela, garantia de reembolso ou "condição especial".
 export const oferta = {
-  eyebrow: 'A oferta',
+  eyebrow: 'Como entrar',
   headline: {
     before: 'Primeira turma.\n',
-    accent: 'Condição especial',
+    accent: 'Faça seu cadastro',
     after: '.',
   } satisfies Headline,
   produto: 'Elevate Pro',
-  notaPreco: 'Valor exclusivo das primeiras vagas.',
+  titulo: 'O que a primeira turma recebe',
   inclui: [
     'Plataforma completa',
     '+15 módulos',
@@ -182,11 +212,10 @@ export const oferta = {
     '1h com Lucas',
     'Novos conteúdos',
   ],
-  // Ressalva honesta no lugar de contador regressivo: o preço pode mudar, e
-  // dizer isso vale mais que fabricar urgência.
-  ressalva:
-    'Essa condição é exclusiva das primeiras vagas e poderá ser alterada nas próximas turmas.',
-  garantia: '7 dias de garantia. Entrou, não fez sentido, devolvemos 100% do valor.',
+  // Sem checkout no fim da peneira, a pessoa precisa saber antes de clicar o
+  // que acontece depois — senão o botão parece levar a uma cobrança.
+  processo:
+    '7 perguntas, 1 minuto. Depois, o time da Elevate League analisa seu perfil e fala com você pelo WhatsApp.',
 } as const
 
 export const faq = {

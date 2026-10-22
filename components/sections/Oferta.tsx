@@ -2,21 +2,18 @@ import { Button } from '@/components/ui/Button'
 import { FlowConverge } from '@/components/ui/FlowConverge'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
-import {
-  CTA_LABEL_OFERTA,
-  PRICE,
-  PRICE_PARCELA,
-  PRICE_PARCELAS,
-  PRODUCT,
-  QUIZ_PATH,
-} from '@/lib/constants'
+import { CTA_LABEL_OFERTA, PRODUCT, QUIZ_PATH } from '@/lib/constants'
 import { oferta } from '@/lib/content'
 
 /**
- * A seção de decisão. Tudo centralizado e num card só: preço, o que inclui e
- * o botão no mesmo campo de visão, sem o olho ter que ir e voltar entre duas
- * colunas. Os caminhos do FlowConverge medem o botão e convergem nele — a
- * metáfora fecha exatamente no ponto da conversão.
+ * A seção de decisão. Tudo centralizado e num card só: o que inclui e o botão
+ * no mesmo campo de visão, sem o olho ter que ir e voltar entre duas colunas.
+ * Os caminhos do FlowConverge medem o botão e convergem nele — a metáfora
+ * fecha exatamente no ponto da conversão.
+ *
+ * Sem preço desde 21/10/2026: o número grande saiu e o card passou a dizer o
+ * que a primeira turma recebe e o que acontece depois do cadastro. Ver a
+ * regra em lib/constants.ts antes de trazer qualquer valor de volta.
  */
 export function Oferta() {
   return (
@@ -34,9 +31,8 @@ export function Oferta() {
     >
       <SectionHeader eyebrow={oferta.eyebrow} headline={oferta.headline} align="center" />
 
-      {/* px-5 no celular, não p-7: com 28px de cada lado sobravam 236px pro
-          botão e "Garantir minha vaga por R$497" quebrava em duas linhas. Com
-          20px e o botão compacto, cabe numa linha a partir de 360px. */}
+      {/* px-5 no celular, não p-7: com 28px de cada lado a lista de duas
+          colunas e o botão ficavam espremidos em 360px. */}
       <article className="relative mx-auto mt-14 max-w-2xl overflow-hidden rounded-2xl border border-accent/40 bg-ink/70 px-5 py-8 backdrop-blur-sm sm:p-12">
         <div
           aria-hidden
@@ -45,20 +41,9 @@ export function Oferta() {
 
         <div className="relative text-center">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-accent">{PRODUCT}</p>
-
-          {/* O número grande é a parcela, e o valor à vista vem abaixo. No
-              celular o tipo cai um degrau (text-5xl): "12x de R$41,42" é mais
-              que o dobro de caracteres do valor cheio e no text-6xl estourava a
-              largura do card em 360px. items-baseline alinha o "12x de" pela
-              base dos dígitos, não pelo topo da caixa. */}
-          <p className="mt-5 flex flex-wrap items-baseline justify-center gap-x-2.5 font-bold tracking-[-0.03em]">
-            <span className="text-xl text-paper/65 sm:text-3xl">{PRICE_PARCELAS}x de</span>
-            <span className="text-5xl sm:text-7xl">{PRICE_PARCELA}</span>
-          </p>
-          <p className="mt-3 text-base text-paper/75 sm:text-lg">
-            ou <strong className="font-bold text-paper">{PRICE}</strong> à vista
-          </p>
-          <p className="mt-2 text-sm text-paper/60 sm:text-base">{oferta.notaPreco}</p>
+          <h3 className="mt-4 text-balance text-2xl font-bold tracking-[-0.02em] sm:text-4xl">
+            {oferta.titulo}
+          </h3>
         </div>
 
         {/* Uma coluna no celular e duas a partir do sm. Em duas colunas num
@@ -84,12 +69,8 @@ export function Oferta() {
             </Button>
           </div>
 
-          {/* Ressalva no lugar de contador regressivo: honesta e discreta. */}
-          <p className="mx-auto mt-6 max-w-[46ch] text-xs leading-relaxed text-paper/55 sm:text-sm">
-            {oferta.ressalva}
-          </p>
-          <p className="mx-auto mt-3 max-w-[46ch] text-xs leading-relaxed text-paper/55 sm:text-sm">
-            {oferta.garantia}
+          <p className="mx-auto mt-6 max-w-[46ch] text-sm leading-relaxed text-paper/60">
+            {oferta.processo}
           </p>
         </div>
       </article>

@@ -8,7 +8,7 @@ import { BRAND } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'A peneira',
-  description: 'Sete perguntas. No fim você descobre em qual trilha entra — ou que ainda não é a sua hora.',
+  description: 'Sete perguntas, um minuto. No fim você descobre sua trilha e faz seu cadastro na primeira turma da Elevate League.',
   robots: { index: false },
 }
 

@@ -144,6 +144,8 @@ export function CampoTexto({
   placeholder,
   inputMode,
   autoComplete,
+  maxLength,
+  erro,
 }: {
   label: string
   name?: string
@@ -153,7 +155,11 @@ export function CampoTexto({
   placeholder?: string
   inputMode?: 'text' | 'tel'
   autoComplete?: string
+  maxLength?: number
+  /** Texto do aviso. Vazio = sem aviso. */
+  erro?: string
 }) {
+  const idErro = name ? `${name}-erro` : undefined
   return (
     <label className="block text-left">
       <span className="text-sm font-bold uppercase tracking-[0.16em] text-paper/50">{label}</span>
@@ -168,8 +174,18 @@ export function CampoTexto({
         placeholder={placeholder}
         inputMode={inputMode}
         autoComplete={autoComplete}
-        className="mt-2 w-full rounded-2xl border border-line/40 bg-surface/30 px-5 py-3.5 text-base text-paper placeholder:text-paper/30 focus-visible:border-accent sm:mt-3 sm:py-4"
+        maxLength={maxLength}
+        aria-invalid={!!erro}
+        aria-describedby={erro ? idErro : undefined}
+        className={`mt-2 w-full rounded-2xl border bg-surface/30 px-5 py-3.5 text-base text-paper placeholder:text-paper/30 focus-visible:border-accent sm:mt-3 sm:py-4 ${
+          erro ? 'border-red-400/70' : 'border-line/40'
+        }`}
       />
+      {erro && (
+        <span id={idErro} className="mt-2 block text-sm text-red-400">
+          {erro}
+        </span>
+      )}
     </label>
   )
 }

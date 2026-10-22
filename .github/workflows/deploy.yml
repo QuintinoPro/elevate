@@ -34,9 +34,9 @@ jobs:
       # domínio no próximo deploy.
       #
       # NEXT_PUBLIC_INDEXAVEL segue fora: a página só entra no Google quando
-      # alguém puser `NEXT_PUBLIC_INDEXAVEL: '1'` aqui, de propósito. Hoje ela
-      # ainda anuncia parcela não confirmada no checkout e a peneira não grava
-      # lead nenhum.
+      # alguém puser `NEXT_PUBLIC_INDEXAVEL: '1'` aqui, de propósito. As duas
+      # pendências que seguravam caíram em 21/10/2026: o preço saiu do site e a
+      # peneira passou a gravar na planilha. Ligar agora é decisão do Lucas.
       - name: Build
         run: npm run build
         env:

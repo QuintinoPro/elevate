@@ -24,13 +24,16 @@
 // investimento) e o que alimenta o resultado (a trava, que volta como eco).
 // Saiu o que só segmentava. As perguntas cortadas estão no histórico do Git,
 // no commit bbb0ee4, se alguma precisar voltar.
-
-import { CTA_LABEL_OFERTA, PRICE } from '@/lib/constants'
+//
+// DESDE 21/10/2026 A PENEIRA NÃO VENDE. O preço saiu do site (ver
+// lib/constants.ts): a peneira virou o cadastro. Ninguém é aprovado na tela —
+// o resultado mostra a trilha, o lead vai pra planilha, e quem decide a
+// entrada é o time da Elevate League, na conversa pelo WhatsApp.
 
 export type Trilha = 'empreendedor' | 'carreira' | 'inicio'
 
 // Saídas que uma resposta pode forçar, independente do resto da peneira.
-export type Saida = 'recusa-menor' | 'espera-idade' | 'espera-investimento'
+export type Saida = 'recusa-menor' | 'espera-idade'
 
 export type Opcao = {
   value: string
@@ -90,7 +93,7 @@ export const abertura = {
     accent: 'quem você é',
     after: '.',
   },
-  body: '7 perguntas, 1 minuto. No fim você sabe se entra — e em qual trilha.',
+  body: '7 perguntas, 1 minuto. No fim você descobre sua trilha, e a gente fala com você pelo WhatsApp.',
   // "time da Elevate League", não os dois nomes: decisão do Lucas em
   // 14/09/2026 — quem guarda o dado é a marca, não duas pessoas. A regra vale
   // pra toda copy de custódia (ver a política de privacidade).
@@ -310,7 +313,11 @@ const inicio: Pergunta[] = [
     tipo: 'unica',
     opcoes: [
       { value: 'comeco', label: 'Não sei por onde começar', eco: 'não saber por onde começar' },
-      { value: 'dinheiro', label: 'Não tenho dinheiro', eco: 'dinheiro pra investir' },
+      // O eco era "dinheiro pra investir" até 21/10/2026, e a leitura da
+      // Trilha Início respondia que "é exatamente o que ambiente resolve" —
+      // prometer resolver falta de dinheiro quebra a regra da marca. Começar
+      // com pouco é o que a liga de fato ajuda: gente que já começou do zero.
+      { value: 'dinheiro', label: 'Não tenho dinheiro', eco: 'começar com pouco dinheiro' },
       { value: 'ninguem', label: 'Ninguém do meu círculo faz isso', eco: 'estar cercado de quem não faz isso' },
       { value: 'constancia', label: 'Começo e paro', eco: 'constância' },
       { value: 'medo', label: 'Medo de não dar certo', eco: 'o medo de tentar' },
@@ -344,18 +351,20 @@ const comuns: Pergunta[] = [
     ],
   },
   {
-    id: 'investimento',
+    id: 'quando',
     passo: 7,
-    // O preço já está na landing. Repetir aqui, antes do resultado, é o que
-    // separa lead qualificado de curioso — e cumpre a promessa da seção
-    // "Antes de você entrar": avisar cedo em vez de empurrar pro checkout.
-    pergunta: `A primeira turma custa ${PRICE}. Isso pra você é:`,
+    // Era "A primeira turma custa R$497. Isso pra você é:" até 21/10/2026, com
+    // uma saída pra lista de espera em "não tenho como agora". Saiu com o preço.
+    // A que entrou mede prontidão sem citar dinheiro — a capacidade de pagar
+    // fica com a pergunta 4 (faturamento, salário ou renda) e com a conversa.
+    // Herdou os pesos (até 40), então os cortes de temperatura continuam valendo.
+    pergunta: 'Se a sua entrada for aprovada, quando quer começar?',
     tipo: 'unica',
     opcoes: [
-      { value: 'tranquilo', label: 'Tranquilo, se fizer sentido eu entro', score: 40 },
-      { value: 'entender', label: 'Consigo, quero entender o que recebo', score: 30 },
-      { value: 'apertado', label: 'Apertado, mas dou um jeito', score: 15 },
-      { value: 'nao', label: 'Não tenho como agora', saida: 'espera-investimento' },
+      { value: 'agora', label: 'Agora, assim que der', score: 40 },
+      { value: 'semanas', label: 'Nas próximas semanas', score: 30 },
+      { value: 'meses', label: 'Daqui a alguns meses', score: 15 },
+      { value: 'conhecendo', label: 'Só estou conhecendo', score: 0 },
     ],
   },
 ]
@@ -367,7 +376,7 @@ export const perguntasDaTrilha = (trilha: Trilha): Pergunta[] =>
   perguntas.filter((p) => !p.trilhas || p.trilhas.includes(trilha)).sort((a, b) => a.passo - b.passo)
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CONTATO — dois campos. E-mail sai no checkout, não aqui: cada campo a mais
+// CONTATO — dois campos. E-mail fica pra conversa, não aqui: cada campo a mais
 // nessa tela custa lead, e o WhatsApp é onde o produto acontece.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -389,6 +398,24 @@ export const contato = {
     depois:
       ' e aceito que a Elevate League use minhas respostas pra avaliar minha entrada e fale comigo pelo WhatsApp.',
   },
+  // Até 21/10/2026 o botão ficava apagado sem dizer o que faltava, e quem
+  // digitava o WhatsApp incompleto travava na última tela. Agora o botão fica
+  // sempre ativo e o clique aponta o campo.
+  erros: {
+    nome: 'Escreve seu nome.',
+    whatsapp: 'Falta número: coloca o DDD e o número completo.',
+    ddd: 'Esse DDD não existe. Confere o número.',
+    aceite: 'Marca a caixa pra gente poder falar com você no WhatsApp.',
+  },
+} as const
+
+// Quando as três tentativas de envio falham (ver quiz-envio.ts). Aparece no
+// lugar do "Cadastro feito", que nesse caso seria mentira.
+export const falhaEnvio = {
+  titulo: 'Seu cadastro não chegou até a gente.',
+  texto: 'A conexão caiu no caminho. Confere a internet e envia de novo — suas respostas continuam aqui.',
+  cta: 'Enviar de novo',
+  enviando: 'Enviando…',
 } as const
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -414,15 +441,23 @@ export type Resultado = {
   /** `{eco}` é substituído pela resposta de gargalo/trava da pessoa. */
   leitura: string
   bullets: { titulo: string; body: string }[]
-  cta?: string
+  /** O que acontece agora. Aparece em destaque, antes do botão. */
+  proximoPasso?: string
   rodape?: string
 }
+
+// Os três resultados de trilha terminavam num botão pro checkout da Hubla até
+// 21/10/2026. Agora terminam no próximo passo: o time chama no WhatsApp. Por
+// isso a manchete diz "seu perfil é da trilha", não "você entra" — quem decide
+// a entrada é a conversa, não a tela.
+const PROXIMO_PASSO =
+  'Cadastro feito. Agora o time da Elevate League analisa seu perfil e chama você no WhatsApp.'
 
 export const resultados: Record<string, Resultado> = {
   empreendedor: {
     aprovado: true,
     eyebrow: 'Peneira concluída',
-    headline: { before: 'Você entra pela ', accent: 'Trilha Empreendedor', after: '.' },
+    headline: { before: 'Seu perfil é da ', accent: 'Trilha Empreendedor', after: '.' },
     leitura:
       'Você já vende. O que te segura não é conteúdo — é {eco}, e isso é decisão, não informação. Decisão sozinho é a parte cara.',
     bullets: [
@@ -439,13 +474,13 @@ export const resultados: Record<string, Resultado> = {
         body: 'Você cai perto de quem está no mesmo ponto do jogo. É de onde saem parceria e indicação.',
       },
     ],
-    cta: CTA_LABEL_OFERTA,
+    proximoPasso: PROXIMO_PASSO,
   },
 
   carreira: {
     aprovado: true,
     eyebrow: 'Peneira concluída',
-    headline: { before: 'Você entra pela ', accent: 'Trilha Carreira', after: '.' },
+    headline: { before: 'Seu perfil é da ', accent: 'Trilha Carreira', after: '.' },
     leitura:
       'Você tem estabilidade e falta de saída — as duas ao mesmo tempo. Você disse que o que trava é {eco}. Ninguém resolve isso assistindo mais aula: resolve estando perto de quem já fez a travessia.',
     bullets: [
@@ -462,13 +497,13 @@ export const resultados: Record<string, Resultado> = {
         body: 'A liga tem quem saiu do CLT e quem ainda está dentro. Os dois falam com você.',
       },
     ],
-    cta: CTA_LABEL_OFERTA,
+    proximoPasso: PROXIMO_PASSO,
   },
 
   inicio: {
     aprovado: true,
     eyebrow: 'Peneira concluída',
-    headline: { before: 'Você entra pela ', accent: 'Trilha Início', after: '.' },
+    headline: { before: 'Seu perfil é da ', accent: 'Trilha Início', after: '.' },
     leitura:
       'Você está no ponto onde a liga muda mais coisa. Disse que o que trava é {eco} — e é exatamente o que ambiente resolve mais rápido que curso.',
     bullets: [
@@ -485,11 +520,11 @@ export const resultados: Record<string, Resultado> = {
         body: 'Você troca as pessoas em volta. É a alavanca mais forte que existe nessa idade.',
       },
     ],
-    cta: CTA_LABEL_OFERTA,
+    proximoPasso: PROXIMO_PASSO,
   },
 
   // ── Saídas ────────────────────────────────────────────────────────────────
-  // Nenhuma tem botão de compra. Se tivesse, a peneira seria enfeite.
+  // A de investimento ("não tenho como agora") saiu com o preço em 21/10/2026.
 
   'recusa-menor': {
     aprovado: false,
@@ -522,25 +557,6 @@ export const resultados: Record<string, Resultado> = {
     // botão de WhatsApp direto com os fundadores em vez de só lista de espera.
     rodape: 'Você já está na lista. Nada mais a fazer agora.',
   },
-
-  'espera-investimento': {
-    aprovado: false,
-    eyebrow: 'Peneira concluída',
-    headline: { before: 'Melhor a gente ser ', accent: 'direto', after: '.' },
-    leitura:
-      'Você tem perfil. O que não bate é o momento — e entrar numa liga apertando o orçamento é a pior forma de começar. A gente prefere te falar isso agora do que te ver pedindo reembolso em 7 dias.',
-    bullets: [
-      {
-        titulo: 'Lista de espera',
-        body: 'Quando abrir a próxima turma, você recebe o aviso antes da página ir ao ar.',
-      },
-      {
-        titulo: 'Enquanto isso',
-        body: 'Segue a gente no Instagram. O que dá pra entregar de graça, a gente entrega lá.',
-      },
-    ],
-    rodape: 'Sua vaga não some. Ela só espera o seu momento.',
-  },
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -554,7 +570,8 @@ export const resultados: Record<string, Resultado> = {
 // Os cortes eram 70/45 com 11 perguntas e teto de ~120. O corte de 13/09 tirou
 // só perguntas que somavam, então a mesma pessoa passou a pontuar uns 15% menos;
 // os cortes desceram na mesma proporção pra "quente" continuar querendo dizer a
-// mesma coisa: pode pagar e tem tempo.
+// mesma coisa: pode pagar e tem tempo. Desde 21/10 o "pode pagar" vem da renda
+// (pergunta 4), e a pergunta 7 mede se a pessoa quer começar já.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type Temperatura = 'quente' | 'morno' | 'frio'

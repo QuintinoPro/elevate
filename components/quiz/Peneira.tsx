@@ -19,7 +19,6 @@ import {
 import {
   enviarParaPlanilha,
   montarLinha,
-  montarUrlCheckout,
   type DadosPeneira,
   type Respostas,
 } from '@/lib/quiz-envio'
@@ -48,7 +47,10 @@ export function Peneira() {
   const [outros, setOutros] = useState<Record<string, string>>({})
   const [contato, setContato] = useState({ nome: '', whatsapp: '' })
   const [aceite, setAceite] = useState(false)
-  const [urlCheckout, setUrlCheckout] = useState<string | null>(null)
+  // null até o contato ser enviado; 'falhou' só depois das três tentativas.
+  const [envio, setEnvio] = useState<'enviando' | 'ok' | 'falhou' | null>(null)
+  const jaEnviou = useRef(false)
+  const linhaEnviada = useRef<Record<string, string | number> | null>(null)
 
   const foco = useRef<HTMLDivElement>(null)
   const avancoAgendado = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -115,11 +117,6 @@ export function Peneira() {
         setEtapa('resultado')
         return
       }
-      if (opcao?.saida === 'espera-investimento') {
-        // Não passa, mas segue o fluxo até o contato — essa pessoa tem perfil e
-        // vai pra lista de espera de verdade.
-        setSaida(opcao.saida)
-      }
 
       const ultima = indice >= fluxoAtual().length - 1
       if (ultima) irParaContato()
@@ -176,12 +173,27 @@ export function Peneira() {
     setIndice((i) => i - 1)
   }, [etapa, fluxo.length, indice])
 
+  const mandar = useCallback((linha: Record<string, string | number>) => {
+    setEnvio('enviando')
+    void enviarParaPlanilha(linha).then((ok) => setEnvio(ok ? 'ok' : 'falhou'))
+  }, [])
+
   const enviar = useCallback(() => {
+    // Dois cliques no mesmo quadro chegavam a chamar isto duas vezes e gravar a
+    // pessoa em dobro na planilha.
+    if (jaEnviou.current) return
+    jaEnviou.current = true
     setEtapa('apuracao')
-    setUrlCheckout(montarUrlCheckout(dados))
-    void enviarParaPlanilha(montarLinha(dados))
+    linhaEnviada.current = montarLinha(dados)
+    mandar(linhaEnviada.current)
     setTimeout(() => setEtapa('resultado'), apuracao.duracaoMs)
-  }, [dados])
+  }, [dados, mandar])
+
+  // "Enviar de novo" manda a mesma linha: as respostas não mudaram, e a data
+  // quem põe é o script.
+  const reenviar = useCallback(() => {
+    if (linhaEnviada.current) mandar(linhaEnviada.current)
+  }, [mandar])
 
   // A frase do resultado devolve a trava que a pessoa marcou. Se ela saiu antes
   // de chegar lá, cai no inimigo que a página inteira nomeia.
@@ -255,7 +267,8 @@ export function Peneira() {
           resultado={resultados[saida ?? trilha ?? 'inicio']}
           eco={eco}
           nome={contato.nome}
-          urlCheckout={urlCheckout}
+          envio={envio}
+          onReenviar={reenviar}
         />
       )}
     </div>

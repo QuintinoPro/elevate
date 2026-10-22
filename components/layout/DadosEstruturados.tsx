@@ -9,10 +9,9 @@ import { faq } from '@/lib/content'
  *  - `Organization`, que amarra a marca aos perfis do Instagram — é o que
  *    evita a busca por "Elevate League" cair em homônimo.
  *
- * Não declaramos `Product`/`Offer` de propósito: o schema pede disponibilidade
- * e validade do preço, e a página diz justamente que a condição pode mudar sem
- * data. Marcar oferta que a gente não pode sustentar rende penalidade, não
- * clique — quando o checkout existir e o prazo estiver fechado, aí entra.
+ * Não declaramos `Product`/`Offer` de propósito: o schema pede preço, e desde
+ * 21/10/2026 o site não mostra preço nenhum (ver lib/constants.ts). Declarar
+ * no dado estruturado o que a página esconde seria contradizer a estratégia.
  */
 export function DadosEstruturados() {
   const dados = {
