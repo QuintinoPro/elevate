@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/Button'
 import { FlowConverge } from '@/components/ui/FlowConverge'
+import { Logo } from '@/components/ui/Logo'
 import { Section } from '@/components/ui/Section'
 import { SectionHeader } from '@/components/ui/SectionHeader'
-import { CTA_LABEL_OFERTA, PRODUCT, QUIZ_PATH } from '@/lib/constants'
+import { CTA_LABEL_OFERTA, QUIZ_PATH } from '@/lib/constants'
 import { oferta } from '@/lib/content'
 
 /**
@@ -40,7 +41,9 @@ export function Oferta() {
         />
 
         <div className="relative text-center">
-          <p className="text-sm font-bold uppercase tracking-[0.22em] text-accent">{PRODUCT}</p>
+          {/* A marca da liga no lugar do nome do produto (pedido do Lucas,
+              24/10/2026): o card fala pela liga, não por um "Elevate Pro". */}
+          <Logo height={36} className="text-paper" />
           <h3 className="mt-4 text-balance text-2xl font-bold tracking-[-0.02em] sm:text-4xl">
             {oferta.titulo}
           </h3>
