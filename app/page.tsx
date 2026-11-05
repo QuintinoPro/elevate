@@ -2,6 +2,7 @@ import { UtmKeeper } from '@/components/quiz/UtmKeeper'
 import { DadosEstruturados } from '@/components/layout/DadosEstruturados'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import { Experience } from '@/components/sections/Experience'
 import { Faq } from '@/components/sections/Faq'
 import { Fundadores } from '@/components/sections/Fundadores'
 import { Hero } from '@/components/sections/Hero'
@@ -11,10 +12,10 @@ import { OQueE } from '@/components/sections/OQueE'
 import { OQueRecebe } from '@/components/sections/OQueRecebe'
 
 /**
- * Sete seções, nessa ordem, e nada além disso. Cada uma responde uma pergunta
- * da decisão: o que é, o que eu recebo, quem está por trás, isso é pra mim,
- * como eu entro, e o que ainda me trava. Se uma seção nova não
- * responder uma dessas, ela não entra.
+ * Oito seções, nessa ordem, e nada além disso. Cada uma responde uma pergunta
+ * da decisão: o que é, o que eu recebo, quem está por trás, a liga existe fora
+ * da tela, isso é pra mim, como eu entro, e o que ainda me trava. Se uma seção
+ * nova não responder uma dessas, ela não entra.
  */
 export default function Home() {
   return (
@@ -32,6 +33,10 @@ export default function Home() {
         <OQueE />
         <OQueRecebe />
         <Fundadores />
+        {/* Depois das pessoas, onde a liga vai se encontrar. Sem botão: a
+            viagem está "em breve" e o único CTA da página continua sendo a
+            peneira, logo abaixo. */}
+        <Experience />
         {/* A qualificação vem logo antes do cadastro: quem se reconhece nela
             chega no botão já convencido de que a liga é pra ele, e quem não se
             reconhece sai antes — que é o ponto da seção. */}

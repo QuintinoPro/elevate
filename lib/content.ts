@@ -2,8 +2,9 @@
 // Regras (ver PRODUCT.md): nunca "comunidade" — sempre "liga". Nunca prometer
 // faturamento. O produto é o Elevate Pro; a marca é a Elevate League.
 //
-// Estrutura da página: 6 seções. Hero, o que é, o que recebe, quem está por
-// trás, oferta, FAQ. Uma ideia por bloco, frase curta, nada repetido.
+// Estrutura da página: hero, o que é, o que recebe, quem está por trás,
+// Elevate Experience, pra quem é, oferta, FAQ. Uma ideia por bloco, frase
+// curta, nada repetido.
 
 // Headlines vêm quebradas em três para o trecho do meio sair em azul. O grifo
 // cai sempre no que a pessoa ganha, nunca no que ela dispensa.
@@ -156,9 +157,133 @@ export const fundadores = {
       instagram: 'https://www.instagram.com/natashantsc/',
       handle: '@natashantsc',
     },
+    {
+      // Entrou em 05/11/2026, a pedido do Lucas. A Nautt vem antes da 6wings
+      // porque o Lucas achou esse o cargo mais forte dos dois. A foto é de um
+      // painel no Node (hub de inovação Web3), recortada sem o outro
+      // palestrante e sem o telão.
+      nome: 'Marlon Frade',
+      foto: '/brand/marlon.webp',
+      cargos: ['Full Stack Software Engineer na Nautt Finance', 'CTO na 6wings'],
+      bio: 'Engenheiro de software e especialista em tecnologia para produtos digitais.',
+      instagram: 'https://www.instagram.com/marlonfrade/',
+      handle: '@marlonfrade',
+    },
+    {
+      // Entrou em 05/11/2026, a pedido do Lucas. O card leva o perfil
+      // pessoal (@raff_mkt); o da agência é @medrix_oficial.
+      nome: 'Raff',
+      foto: '/brand/raff.webp',
+      cargos: ['Fundador da Agência Medrix'],
+      bio: 'Editor e especialista em criação de conteúdo sobre posicionamento.',
+      instagram: 'https://www.instagram.com/raff_mkt/',
+      handle: '@raff_mkt',
+    },
   ],
   fecho:
     'Além do time, o Elevate receberá convidados e especialistas de diferentes mercados.',
+} as const
+
+// Elevate Experience: as viagens da liga. Entrou em 05/11/2026, a pedido do
+// Lucas, com a primeira edição (réveillon em Floripa) em fase de expectativa.
+// É um carrossel: viagem nova é um item a mais em `edicoes`, na ordem em que
+// deve aparecer. O card "surpresa" no fim é de propósito (pedido do Lucas,
+// 05/11): mostra que vem mais coisa sem dizer o quê, pra gerar procura.
+//
+// Regras enquanto a edição estiver "em breve" (ver
+// docs/elevate-experience-reveillon-floripa.md, na pasta do projeto): nada de
+// preço ou número de vagas, e nada de prometer festa, fogos, passeio ou ceia
+// inclusos. Data só quando o Lucas confirmar: a de Floripa (29/12 a 04/01)
+// foi liberada por ele em 05/11/2026. Sem botão por decisão do Lucas (05/11/2026): o `cta` só entra
+// quando a inscrição abrir.
+export type StatusExperience = 'em-breve' | 'inscricoes-abertas' | 'encerrada'
+
+type EdicaoBase = {
+  id: string
+  status: StatusExperience
+  /** A frase da faixa azul no pé do card. */
+  chamada: string
+  /**
+   * Datas em ISO (aaaa-mm-dd). O card mostra dia/mês; o ano fica no
+   * dateTime do <time>, pra máquina. Sem isto, o card não mostra data.
+   */
+  periodo?: { inicio: string; fim: string }
+  /** Só quando abrir inscrição. Sem ele, o card não tem botão. */
+  cta?: { href: string; label: string }
+}
+
+/** Viagem anunciada: destino com nome e foto. */
+export type EdicaoDestino = EdicaoBase & {
+  tipo: 'destino'
+  /** O nome grande do cartaz. Curto: o tamanho da letra se ajusta a ele. */
+  destino: string
+  /** A faixa azul abaixo do destino (réveillon, carnaval...). Opcional. */
+  ocasiao?: string
+  foto: {
+    /** Caminho sem a largura e a extensão: o componente monta o srcset. */
+    base: string
+    /** Larguras disponíveis em public/, da menor pra maior. */
+    larguras: readonly number[]
+    alt: string
+    /** Crédito exigido pela licença. Aparece pequeno no pé do card. */
+    credito?: string
+    /** object-position da foto. O card é 4:5, então o que conta é o eixo X. */
+    enquadramento?: string
+  }
+}
+
+/** Próxima viagem sem destino revelado: card desfocado, sem foto. */
+export type EdicaoSurpresa = EdicaoBase & {
+  tipo: 'surpresa'
+  /** A faixa branca que fica no lugar do "Edition". */
+  rotulo: string
+}
+
+export type EdicaoExperience = EdicaoDestino | EdicaoSurpresa
+
+export const experiencias = {
+  // "Experiências" e não "Elevate Experience": o nome já vem na faixa azul
+  // de cada card, e repetir em cima e embaixo gastava a primeira leitura.
+  eyebrow: 'Experiências',
+  headline: {
+    before: 'Tem conexão que só acontece ',
+    accent: 'fora da tela',
+    after: '.',
+  } satisfies Headline,
+  intro:
+    'As viagens da liga. Conexões, negócios e experiências fora da rotina, com gente que está no mesmo caminho.',
+  edicoes: [
+    {
+      tipo: 'destino',
+      id: 'floripa-reveillon',
+      destino: 'Floripa',
+      ocasiao: 'Réveillon',
+      status: 'em-breve',
+      chamada: 'Uma nova experiência para a sua virada.',
+      periodo: { inicio: '2026-12-29', fim: '2027-01-04' },
+      foto: {
+        // Praia Mole vista da rampa de parapente, com a Galheta ao fundo. CC0
+        // (domínio público, sem crédito obrigatório), de Papa Pic no
+        // Wikimedia Commons: https://commons.wikimedia.org/wiki/File:Mole_e_Galheta.jpg
+        // Os arquivos já saem cortados em 4:5 (o formato do card), no trecho
+        // da curva da praia: crop 1728x2160 a partir de x=750 da versão de
+        // 3840px. A arte do Instagram usa outra foto da Praia Mole (do
+        // visitefloripa), sem licença confirmada: por isso ela não entrou aqui.
+        // Trocada em 05/11/2026 a pedido do Lucas: a do Campeche, nublada,
+        // não chamava atenção.
+        base: '/experiencias/floripa',
+        larguras: [700, 1100],
+        alt: 'Praia Mole, em Florianópolis, vista do alto: faixa de areia em curva entre o morro verde e o mar.',
+      },
+    },
+    {
+      tipo: 'surpresa',
+      id: 'proximo-destino',
+      rotulo: 'Próximo destino',
+      status: 'em-breve',
+      chamada: 'O próximo destino ainda é segredo.',
+    },
+  ] satisfies readonly EdicaoExperience[],
 } as const
 
 export const paraQuem = {
