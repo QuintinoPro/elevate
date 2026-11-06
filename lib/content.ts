@@ -179,6 +179,35 @@ export const fundadores = {
       instagram: 'https://www.instagram.com/raff_mkt/',
       handle: '@raff_mkt',
     },
+    {
+      // Entrou em 06/11/2026, a pedido do Lucas. O nome saiu do @ (o Lucas
+      // mandou só cargos e perfil): confirmar a grafia. As três empresas que
+      // ele fundou vão numa linha só, senão o card dele ficava com cinco
+      // linhas de cargo e o mais alto da esteira.
+      nome: 'Isaac Lourenço',
+      foto: '/brand/isaac.webp',
+      cargos: [
+        'Fundador da Deep Field, do Estúdio Tekoha e da Minúcia Sites',
+        'Sócio da Doce Terapia',
+        'Head Comercial na Vérten',
+      ],
+      bio: 'Estrategista comercial e empreendedor em marketing e vendas.',
+      instagram: 'https://www.instagram.com/isaac_llourenco/',
+      handle: '@isaac_llourenco',
+    },
+    {
+      // Entrou em 06/11/2026, a pedido do Lucas, que mandou cargos e bio.
+      // "Comunidade TikTok Shop Pro" é o nome do produto dele, por isso o
+      // "comunidade" (a regra de dizer "liga" vale pra Elevate). A foto veio
+      // do site dele (mateusvesely.netlify.app). O TikTok (@mateusveselyy)
+      // fica de fora: o card leva um perfil só.
+      nome: 'Mateus Vesely',
+      foto: '/brand/mateus.webp',
+      cargos: ['Top Creator TikTok Shop', 'Fundador da Comunidade TikTok Shop Pro'],
+      bio: 'Empreendedor, criador de conteúdo e estrategista digital.',
+      instagram: 'https://www.instagram.com/mateusvesely/',
+      handle: '@mateusvesely',
+    },
   ],
   fecho:
     'Além do time, o Elevate receberá convidados e especialistas de diferentes mercados.',
