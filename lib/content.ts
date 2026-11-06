@@ -159,7 +159,8 @@ export const fundadores = {
     },
     {
       // Entrou em 05/11/2026, a pedido do Lucas. A Nautt vem antes da 6wings
-      // porque o Lucas achou esse o cargo mais forte dos dois. A foto é de um
+      // porque o Lucas achou esse o cargo mais forte dos dois (ordem
+      // confirmada por ele em 06/11). A foto é de um
       // painel no Node (hub de inovação Web3), recortada sem o outro
       // palestrante e sem o telão.
       nome: 'Marlon Frade',
@@ -180,10 +181,10 @@ export const fundadores = {
       handle: '@raff_mkt',
     },
     {
-      // Entrou em 06/11/2026, a pedido do Lucas. O nome saiu do @ (o Lucas
-      // mandou só cargos e perfil): confirmar a grafia. As três empresas que
-      // ele fundou vão numa linha só, senão o card dele ficava com cinco
-      // linhas de cargo e o mais alto da esteira.
+      // Entrou em 06/11/2026, a pedido do Lucas. O nome saiu do @ e a grafia
+      // foi confirmada por ele: Lourenço com um L só (o @ é que tem dois).
+      // As três empresas que ele fundou vão numa linha só, senão o card dele
+      // ficava com cinco linhas de cargo e o mais alto da esteira.
       nome: 'Isaac Lourenço',
       foto: '/brand/isaac.webp',
       cargos: [
@@ -215,7 +216,9 @@ export const fundadores = {
       foto: '/brand/arthur.webp',
       enquadramento: '50% 20%',
       cargos: ['Founder do AtendON', 'AI Solutions Architect'],
-      bio: 'Empreendedor e estrategista tecnológico, especializado em arquitetura de sistemas, orquestração de agentes de IA e criação de produtos digitais escaláveis.',
+      // Encurtada a pedido do Lucas (06/11): a versão longa tinha 6 linhas e
+      // deixava todos os cards da esteira 28px mais altos.
+      bio: 'Empreendedor e estrategista tecnológico, especialista em arquitetura de sistemas e agentes de IA.',
       instagram: 'https://www.instagram.com/thuur.ia/',
       handle: '@thuur.ia',
     },
