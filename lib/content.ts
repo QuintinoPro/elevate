@@ -220,13 +220,14 @@ export const fundadores = {
       handle: '@thuur.ia',
     },
     {
-      // Entrou em 06/11/2026, a pedido do Lucas. Sem Instagram por enquanto
-      // (o card fica sem o @ até o Lucas mandar). Foto num rooftop à noite:
+      // Entrou em 06/11/2026, a pedido do Lucas. Foto num rooftop à noite:
       // as pessoas de outras mesas, atrás dele à direita, foram desfocadas.
       nome: 'Rafael Rodrigues',
       foto: '/brand/rafael.webp',
       cargos: ['Fundador da Alpha Tec Desenvolvimento', 'Estudante de empreendedorismo na PUC-Rio'],
       bio: 'Desenvolvedor de sistemas e soluções de BI, IoT e IA para indústrias no Brasil e na China.',
+      instagram: 'https://www.instagram.com/faelrdz_/',
+      handle: '@faelrdz_',
     },
   ],
   fecho:
