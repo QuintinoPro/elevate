@@ -34,10 +34,6 @@ export function FlowConverge({ className = '' }: { className?: string }) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const reduzido =
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
     let w = 0
     let h = 0
     let raf = 0
@@ -134,12 +130,10 @@ export function FlowConverge({ className = '' }: { className?: string }) {
         ctx!.stroke()
         ctx!.setLineDash([])
 
-        if (!reduzido) {
-          c.t += c.velocidade
-          if (c.t > 1) {
-            c.t = 0
-            c.y += (Math.random() - 0.5) * 12
-          }
+        c.t += c.velocidade
+        if (c.t > 1) {
+          c.t = 0
+          c.y += (Math.random() - 0.5) * 12
         }
 
         const pos = bezier(c.t, p0, p1, p2, p3)
@@ -169,7 +163,7 @@ export function FlowConverge({ className = '' }: { className?: string }) {
 
     medir()
     desenhar()
-    if (!reduzido) raf = requestAnimationFrame(tick)
+    raf = requestAnimationFrame(tick)
 
     const ro = new ResizeObserver(() => {
       medir()

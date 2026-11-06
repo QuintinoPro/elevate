@@ -39,8 +39,7 @@ export function Carrossel({ children, rotulo }: { children: React.ReactNode; rot
     const item = el.querySelector('li')
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0
     const largura = item ? item.getBoundingClientRect().width + gap : el.clientWidth * 0.8
-    const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    el.scrollBy({ left: direcao * largura, behavior: semMovimento ? 'auto' : 'smooth' })
+    el.scrollBy({ left: direcao * largura, behavior: 'smooth' })
   }
 
   const temSetas = pode.voltar || pode.avancar

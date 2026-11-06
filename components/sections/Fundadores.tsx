@@ -47,19 +47,22 @@ function CardPessoa({ p }: { p: Pessoa }) {
 
         <p className="mt-3 text-sm leading-relaxed text-paper/55">{p.bio}</p>
 
-        <a
-          href={p.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          // mt-auto: os cards têm número de cargos diferente, e na esteira
-          // todos esticam até a altura do mais alto. Sem isso o @ de cada um
-          // para numa altura e a fileira parece desalinhada.
-          // min-h-11 com o texto no pé: área de toque de 44px sem mudar onde
-          // o @ aparece.
-          className="mt-auto inline-flex min-h-11 items-end self-start pt-4 text-sm text-paper/55 transition-colors hover:text-accent"
-        >
-          {p.handle}
-        </a>
+        {/* Instagram é opcional: tem gente que entra antes de mandar o @. */}
+        {'instagram' in p && (
+          <a
+            href={p.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            // mt-auto: os cards têm número de cargos diferente, e na esteira
+            // todos esticam até a altura do mais alto. Sem isso o @ de cada um
+            // para numa altura e a fileira parece desalinhada.
+            // min-h-11 com o texto no pé: área de toque de 44px sem mudar
+            // onde o @ aparece.
+            className="mt-auto inline-flex min-h-11 items-end self-start pt-4 text-sm text-paper/55 transition-colors hover:text-accent"
+          >
+            {p.handle}
+          </a>
+        )}
       </div>
     </article>
   )

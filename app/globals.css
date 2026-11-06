@@ -85,16 +85,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* Sem regra de prefers-reduced-motion de propósito: decisão do Lucas
+   (06/11/2026). O site anima igual pra todo mundo, inclusive pra quem liga
+   "reduzir movimento" no sistema. A esteira do time tem botão Pausar. */

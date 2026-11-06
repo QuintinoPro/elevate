@@ -294,15 +294,14 @@ export function OrbitalHeroSection({
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    const reduced =
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Anima mesmo com "reduzir movimento" ligado no sistema: decisão do
+    // Lucas (06/11/2026), que vale pro site inteiro.
 
     let width = 0;
     let height = 0;
     let dpr = 1;
     /** Simulation clock, in Earth years since J2000. */
-    let years = reduced ? 1.7 : 0;
+    let years = 0;
     let lastFrame = 0;
     let running = true;
     let visible = true;
@@ -951,7 +950,7 @@ export function OrbitalHeroSection({
       if (!visible) { lastFrame = now; return; }
       const dt = lastFrame ? Math.min(0.05, (now - lastFrame) / 1000) : 0;
       lastFrame = now;
-      if (!props.current.paused && !reduced) {
+      if (!props.current.paused) {
         years += dt / Math.max(0.1, props.current.yearSeconds);
       }
       render(years);
@@ -959,11 +958,11 @@ export function OrbitalHeroSection({
 
     resize();
     render(years);
-    if (!reduced) raf = requestAnimationFrame(tick);
+    raf = requestAnimationFrame(tick);
 
     const ro = new ResizeObserver(() => {
       resize();
-      if (reduced || props.current.paused) render(years);
+      if (props.current.paused) render(years);
     });
     ro.observe(host);
 

@@ -40,8 +40,9 @@ const EMBALO_MAX = 2500
  *
  * Movimento automático precisa de um jeito de parar (WCAG 2.2.2): o botão
  * "Pausar", e ela também para com o foco do teclado num card.
- * Com "reduzir movimento" ligado no sistema, ela não anda sozinha nem tem
- * embalo; só se move quando a pessoa arrasta.
+ * Ela gira mesmo com "reduzir movimento" ligado no sistema: decisão do
+ * Lucas (06/11/2026), que quer a esteira andando pra todo mundo. Quem é
+ * sensível a movimento tem o botão Pausar, que por isso aparece sempre.
  */
 export function Esteira({
   itens,
@@ -71,7 +72,6 @@ export function Esteira({
     v: 0,
     pausada: false,
     foco: false,
-    reduzir: false,
     arrasto: null as null | { id: number; ultimoX: number; ultimoT: number; percorrido: number },
     /** Se o último toque virou arrasto: aí o clique que vem junto é engolido. */
     arrastou: false,
@@ -86,13 +86,6 @@ export function Esteira({
     const jan = janela.current
     if (!el || !jan) return
     const s = estado.current
-
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const lerMovimento = () => {
-      s.reduzir = mq.matches
-    }
-    lerMovimento()
-    mq.addEventListener('change', lerMovimento)
 
     const medir = () => {
       s.metade = el.scrollWidth / 2
@@ -110,12 +103,8 @@ export function Esteira({
       anterior = t
 
       if (!s.arrasto) {
-        if (s.reduzir) {
-          s.v = 0
-        } else {
-          const alvo = s.pausada || s.foco ? 0 : -s.velocidade
-          s.v += (alvo - s.v) * (1 - Math.exp(-ACOMODACAO * dt))
-        }
+        const alvo = s.pausada || s.foco ? 0 : -s.velocidade
+        s.v += (alvo - s.v) * (1 - Math.exp(-ACOMODACAO * dt))
         s.x += s.v * dt
       }
 
@@ -159,7 +148,6 @@ export function Esteira({
       ro.disconnect()
       io.disconnect()
       cancelAnimationFrame(raf)
-      mq.removeEventListener('change', lerMovimento)
       jan.removeEventListener('wheel', roda)
     }
   }, [itensPorMetade, segundosPorItem])
@@ -169,7 +157,7 @@ export function Esteira({
     if (!s.arrasto || s.arrasto.id !== e.pointerId) return
     // Segurou parado antes de soltar: sem embalo, e a esteira só retoma o
     // ritmo devagar a partir dali.
-    if (e.timeStamp - s.arrasto.ultimoT > 80 || s.reduzir) s.v = 0
+    if (e.timeStamp - s.arrasto.ultimoT > 80) s.v = 0
     s.v = Math.max(-EMBALO_MAX, Math.min(EMBALO_MAX, s.v))
     s.arrasto = null
     if (janela.current) janela.current.style.cursor = ''
@@ -272,7 +260,7 @@ export function Esteira({
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end motion-reduce:hidden">
+      <div className="mt-6 flex justify-end">
         <button
           type="button"
           onClick={() => {

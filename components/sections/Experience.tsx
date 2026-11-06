@@ -103,7 +103,7 @@ function Moldura({
         <span className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-paper/25 bg-ink/50 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-paper backdrop-blur-sm">
           <span
             aria-hidden
-            className={`h-1.5 w-1.5 rounded-full bg-accent ${edicao.status === 'em-breve' ? 'motion-safe:animate-pulse' : ''}`}
+            className={`h-1.5 w-1.5 rounded-full bg-accent ${edicao.status === 'em-breve' ? 'animate-pulse' : ''}`}
           />
           {STATUS[edicao.status]}
         </span>

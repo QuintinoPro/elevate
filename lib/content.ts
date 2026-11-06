@@ -208,6 +208,26 @@ export const fundadores = {
       instagram: 'https://www.instagram.com/mateusvesely/',
       handle: '@mateusvesely',
     },
+    {
+      // Entrou em 06/11/2026, a pedido do Lucas. Selfie: o rosto fica baixo
+      // no quadro e o 5:4 a partir do topo cortava o queixo.
+      nome: 'Arthur Müller',
+      foto: '/brand/arthur.webp',
+      enquadramento: '50% 20%',
+      cargos: ['Founder do AtendON', 'AI Solutions Architect'],
+      bio: 'Empreendedor e estrategista tecnológico, especializado em arquitetura de sistemas, orquestração de agentes de IA e criação de produtos digitais escaláveis.',
+      instagram: 'https://www.instagram.com/thuur.ia/',
+      handle: '@thuur.ia',
+    },
+    {
+      // Entrou em 06/11/2026, a pedido do Lucas. Sem Instagram por enquanto
+      // (o card fica sem o @ até o Lucas mandar). Foto num rooftop à noite:
+      // as pessoas de outras mesas, atrás dele à direita, foram desfocadas.
+      nome: 'Rafael Rodrigues',
+      foto: '/brand/rafael.webp',
+      cargos: ['Fundador da Alpha Tec Desenvolvimento', 'Estudante de empreendedorismo na PUC-Rio'],
+      bio: 'Desenvolvedor de sistemas e soluções de BI, IoT e IA para indústrias no Brasil e na China.',
+    },
   ],
   fecho:
     'Além do time, o Elevate receberá convidados e especialistas de diferentes mercados.',
