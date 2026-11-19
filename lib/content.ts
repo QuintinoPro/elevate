@@ -232,6 +232,17 @@ export const fundadores = {
       instagram: 'https://www.instagram.com/faelrdz_/',
       handle: '@faelrdz_',
     },
+    {
+      // Entrou em 19/11/2026, a pedido do Lucas. Nome completo: Tarso Laplagne
+      // Monteiro Cardoso; no card vai o nome curto pra não quebrar linha.
+      nome: 'Tarso Laplagne',
+      foto: '/brand/tarso.webp',
+      enquadramento: '50% 30%',
+      cargos: ['Economista', 'Analista e desenvolvedor de sistemas'],
+      bio: 'Economista que une análise de dados e desenvolvimento de sistemas.',
+      instagram: 'https://www.instagram.com/tarso.lmc/',
+      handle: '@tarso.lmc',
+    },
   ],
   fecho:
     'Além do time, o Elevate receberá convidados e especialistas de diferentes mercados.',
