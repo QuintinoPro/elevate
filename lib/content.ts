@@ -243,6 +243,17 @@ export const fundadores = {
       instagram: 'https://www.instagram.com/tarso.lmc/',
       handle: '@tarso.lmc',
     },
+    {
+      // Entrou em 19/11/2026, a pedido do Lucas. Foto de uma instrução militar,
+      // recortada em 3:4 acima da faixa "Formação Militar" da arte original.
+      nome: 'Victor Rodrigues',
+      foto: '/brand/victor.webp',
+      enquadramento: '50% 20%',
+      cargos: ['Head of Finance no Exército Brasileiro', 'Gestão Financeira e Orçamentária'],
+      bio: 'Empreendedor em logística e distribuição, especialista em Segurança Pública e gestão de recursos.',
+      instagram: 'https://www.instagram.com/victor_henriq02/',
+      handle: '@victor_henriq02',
+    },
   ],
   fecho:
     'Além do time, o Elevate receberá convidados e especialistas de diferentes mercados.',
